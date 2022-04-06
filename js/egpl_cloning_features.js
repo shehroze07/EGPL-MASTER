@@ -45,9 +45,9 @@ function submitcloningfeature(){
        swal.fire({
             title: "Missing !",
             text: 'Please select the event name from the dropdown.',
-
             type: "warning",
             html:true,
+            icon: "warning",
             icon: "warning",
             confirmButtonClass: "btn-success",
             confirmButtonText: "Close"
@@ -62,6 +62,7 @@ function submitcloningfeature(){
             text: 'Please clicked the acknowlegded checkbox.',
             type: "warning",
             html:true,
+            icon: "warning",
             icon: "warning",
             confirmButtonClass: "btn-success",
             confirmButtonText: "Close"
@@ -111,7 +112,6 @@ function cloningfeatureconfrim(){
 
     var url = currentsiteurl+'/';
     var urlnew = url + 'wp-content/plugins/EGPL/cloningfeature.php?contentManagerRequest=cloningfeature';
-
     var datavalidateurl = url + 'wp-content/plugins/EGPL/cloningfeature.php?contentManagerRequest=datavalidateurl';
 
     console.log(urlnew);
@@ -228,6 +228,7 @@ function cloningfeatureconfrim(){
     cloningfeatureslist['clonesiteid'] = cloneportalname;
     data.append('cloningfeatureslist',JSON.stringify(cloningfeatureslist));
     
+
 
     let timerInterval
     Swal.fire({

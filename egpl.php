@@ -5883,9 +5883,6 @@ class PageTemplater {
 
                         'temp/egpl_cloning_features_temp.php'=>'Egpl Cloning',
 
-
-                        'temp/egpl_cloning_features_temp.php'=>'Egpl Cloning',
-
                        
                         
                      

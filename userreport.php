@@ -3859,11 +3859,10 @@ function checktheopratertype($type,$value,$currentvalue){
                     } else if ($type == 'equal') {
                         
 
-                       $compare_operator = ($value == $currentvalue);
-                    } else if ($type == 'contains') {
-                        $compare_operator = strpos($value, $currentvalue) !== false;
 
-                      $compare_operator = (strtolower($value) == strtolower($currentvalue));
+                       $compare_operator = ($value == $currentvalue);
+                    } 
+                      
                     } else if ($type == 'contains') {
                         $compare_operator = strpos(strtolower($value), strtolower($currentvalue)) !== false;
 
@@ -3881,10 +3880,10 @@ function checktheopratertype($type,$value,$currentvalue){
                     }
                     
 
-   // return $compare_operator;
 
-       return $compare_operator;
+         return $compare_operator;
 
+ 
     
 }
 
