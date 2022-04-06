@@ -162,8 +162,8 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                  <div class="form-group row">
                           <label class="col-sm-8 form-control-label"></label>
                           <div class="col-sm-4" >
-                              <button style="float: right;" type="submit" id="addnewproduct" name="addsponsor"  class="btn mycustomwidth btn-success" value="Register">Save</button>
-                             <a style="float: right;margin-right: 5%;" href="<?php echo site_url().'/manage-products/';?>" class="btn mycustomwidth btn-success">Cancel</a>
+                              <button style="float: right;" type="submit" id="addnewproduct" name="addsponsor"  class="btn mycustomwidth btn-success" value="Register" egid="add-new-package">Save</button>
+                             <a style="float: right;margin-right: 5%;" href="<?php echo site_url().'/manage-products/';?>" class="btn mycustomwidth btn-success" egid="cancel">Cancel</a>
                               
                           </div>
                 </div>
@@ -181,7 +181,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <div class="col-sm-9">
                               
                              
-                              <input type="text"  class="form-control" id="ptitle" value="<?php echo $update_product->name; ?>" placeholder="<?php echo $product_name_for_fields_lebal;?> Title" required>
+                              <input type="text"  class="form-control" id="ptitle" value="<?php echo $update_product->name; ?>" placeholder="<?php echo $product_name_for_fields_lebal;?> Title" egid="ptitle" required>
                              
                               <input type="hidden" value="<?php echo $product_name_for_fields_lebal;?>" id="getcatname" >
 
@@ -191,7 +191,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Price <strong>*</strong></label>
                           <div class="col-sm-9">
 
-                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pprice" name="pprice" value="<?php echo $update_product->regular_price; ?>" placeholder="<?php echo $product_name_for_fields_lebal;?> Price" required>
+                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pprice" name="pprice" value="<?php echo $update_product->regular_price; ?>" egid="pprice" placeholder="<?php echo $product_name_for_fields_lebal;?> Price" required>
 
 
                           </div>
@@ -203,7 +203,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <div class="col-sm-9">
                               
                              
-                              <select class="form-control" id="depositsstatus">
+                              <select class="form-control" id="depositsstatus" egid="depositsstatus">
                                   
                                 <?php if (isset($_GET['productid'])) { 
                                   if($get_depositenable_type == "optional"){  ?> 
@@ -294,7 +294,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Publish Status <strong>*</strong></label>
                           <div class="col-sm-9">
 
-                              <select id="pstatus" class="form-control" required>
+                              <select id="pstatus" class="form-control" egid="pstatus" required>
                                      
                                       
                                       <?php if (isset($_GET['productid'])) {
@@ -328,7 +328,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Stock status <strong>*</strong></label>
                           <div class="col-sm-9">
 
-                              <select onchange="checkstockstatus()" id="pstrockstatus" class="form-control" required>
+                              <select onchange="checkstockstatus()" id="pstrockstatus" class="form-control" egid="pstrockstatus" required>
                                  
                                 <?php if(isset($_GET['productid'])){
                                     if($update_product->stock_status == 'instock'){?>
@@ -355,7 +355,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Stock Quantity<strong>*</strong></label>
                           <div class="col-sm-9">
 
-                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" value="<?php echo $update_product->stock_quantity; ?>" name="pquanitity" placeholder="Stock Quantity" required>
+                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" value="<?php echo $update_product->stock_quantity; ?>" name="pquanitity" placeholder="Stock Quantity" egid="pquanitity" required>
 
 
                           </div>
@@ -365,7 +365,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Stock Quantity<strong>*</strong></label>
                           <div class="col-sm-9">
 
-                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" name="pquanitity" placeholder="Stock Quantity" required>
+                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" name="pquanitity" placeholder="Stock Quantity"  egid="pquanitity" required>
 
 
                           </div></div>
@@ -375,7 +375,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                       <div class="form-group row">
                           <label class="col-sm-3 form-control-label"> Image <i data-toggle="tooltip" title="Recommended Max Size: w:500 h:500" class="fa fa-question-circle" aria-hidden="true"></i></label>
                           <div class="col-sm-9" id="changeimageupload" style="display:none;">
-                              <input  type="file" class="form-control" id="updateproductimage" >				
+                              <input  type="file" class="form-control" id="updateproductimage" egid="updateproductimage" >				
                             </div>
                            <?php if (isset($_GET['productid'])) { 
                                
@@ -395,11 +395,11 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                 </div>
                            <?php }else{ ?>
                             <div class="col-sm-9">
-                              <input  type="file" class="form-control" id="productimage" >				
+                              <input  type="file" class="form-control" id="productimage" egid="productimage">				
                             </div>
                            <?php }}else{ ?>
                           <div class="col-sm-9">
-                              <input  type="file" class="form-control" id="productimage" >				
+                              <input  type="file" class="form-control" id="productimage" egid="productimage">				
                             </div>
                           <?php } ?>
                  </div>
@@ -407,7 +407,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Position <i data-toggle="tooltip" title="This determines the order in which this package shows up in the shop based on the numeric order. For example, if you create 3 packages, and you select the position 1,2,3 for each of the package, the package with the position '1' will appear first. Leaving a position blank will default the package by creation date." class="fa fa-question-circle" aria-hidden="true"></i></label>
                           <div class="col-sm-9">
 
-                            <input  id="menu_order" class="form-control"  value="<?php echo $update_product->menu_order; ?>" type="number" min="0" oninput="validity.valid||(value='');" >		
+                            <input  id="menu_order" class="form-control"  value="<?php echo $update_product->menu_order; ?>" type="number" min="0" oninput="validity.valid||(value='');" egid="menu_order">		
 
                           </div>
                       </div>  
@@ -415,7 +415,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Short Description</label>
                           <div class="col-sm-9">
 
-                             <textarea   class="pdescriptionbox"  id="pshortdescription"  ><?php echo $update_product->short_description; ?></textarea>	
+                             <textarea egid="pshortdescription"  class="pdescriptionbox"  id="pshortdescription"  ><?php echo $update_product->short_description; ?></textarea>	
 
 
                           </div>
@@ -427,7 +427,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <div class="col-sm-9">
 
                              
-                              <textarea  class="pdescriptionbox"   id="pdescription"  ><?php echo $update_product->description; ?></textarea>		
+                              <textarea egid="pdescription" class="pdescriptionbox"   id="pdescription"  ><?php echo $update_product->description; ?></textarea>		
 
                           </div>
                     </div>
@@ -453,7 +453,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                     <label class="col-sm-3 form-control-label">Include These Booths In Package Price: </label>
                                     <div class="col-sm-9">
                                            
-								 <select  class="form-control select2"  data-placeholder="Select Booths" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" id="listofbooths" >
+								 <select  class="form-control select2"  data-placeholder="Select Booths" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" id="listofbooths" egid="listofbooths">
 								
                                                                      <option></option>
                                                                      <?php if (isset($_GET['productid'])) { 
@@ -506,7 +506,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                     <label class="col-sm-3 form-control-label">Assign Level <i data-toggle="tooltip" title="If you select a level here, the buyer of this product will be automatically assigned this level on successfully placing the order." class="fa fa-question-circle" aria-hidden="true"></i></label>
                                     <div class="col-sm-9">
                                            
-								 <select  class="form-control" id="roleassign" required>
+								 <select  class="form-control" id="roleassign" egid="roleassign" required>
 								
                                                                      <option></option>
                                                                      <?php if (isset($_GET['productid'])) { 
@@ -547,7 +547,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                     <label class="col-sm-3 form-control-label">Assign Task(s) <i data-toggle="tooltip" title="If you select one or more tasks here, the buyer of this product will be automatically assigned these tasks on successfully placing the order." class="fa fa-question-circle" aria-hidden="true"></i></label>
                                     <div class="col-sm-9">
                                            
-								 <select  class="form-control select2"  data-placeholder="Select Tasks" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" id="selectedtasks" >
+								 <select  class="form-control select2"  data-placeholder="Select Tasks" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" id="selectedtasks" egid="selectedtasks" >
 								
                                                                      <option></option>
                                                                      <?php if (isset($_GET['productid'])) { 
@@ -633,7 +633,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Position <i data-toggle="tooltip" title="This determines the order in which this product shows up in the shop based on the numeric order. For example, if you create 3 products, and you select the position 1,2,3 for each of the products, the product with the position '1' will appear first. Leaving a position blank will default the product by creation date." class="fa fa-question-circle" aria-hidden="true"></i></label>
                           <div class="col-sm-9">
 
-                            <input  id="menu_order" class="form-control"  value="<?php echo $update_product->menu_order; ?>" type="number" min="0" oninput="validity.valid||(value='');" >		
+                            <input  id="menu_order" class="form-control"  value="<?php echo $update_product->menu_order; ?>" type="number" min="0" oninput="validity.valid||(value='');"  egid="menu_order">		
 
                           </div>
                       </div>
@@ -646,8 +646,8 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                      <div class="form-group row">
                           <label class="col-sm-8 form-control-label"></label>
                           <div class="col-sm-4" >
-                              <button style="float: right;" type="submit" id="addnewproduct" name="addsponsor"  class="btn mycustomwidth btn-success" value="Register">Save</button>
-                             <a style="float: right;margin-right: 5%;" href="<?php echo site_url().'/manage-products/';?>" class="btn mycustomwidth btn-success">Cancel</a>
+                              <button style="float: right;" type="submit" id="addnewproduct" name="addsponsor"  class="btn mycustomwidth btn-success" value="Register" egid="add-new-package">Save</button>
+                             <a style="float: right;margin-right: 5%;" href="<?php echo site_url().'/manage-products/';?>" class="btn mycustomwidth btn-success" egid="cancel">Cancel</a>
                               
                           </div>
                 </div>

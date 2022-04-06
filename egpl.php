@@ -5,7 +5,7 @@
  * Plugin Name:       EGPL
  * Plugin URI:        https://github.com/QasimRiaz/EGPL
  * Description:       EGPL
- * Version:           6.09
+ * Version:           6.13
  * Author:            EG
  * License:           GNU General Public License v2
  * Text Domain:       EGPL
@@ -5831,7 +5831,7 @@ class PageTemplater {
                         'temp/welcome_email_template.php' =>  'Welcome Email',
                         'temp/create-role-template.php' =>  'Create New Role',
                         'temp/addcontentmanager-template.php' =>  'Add Content Manager',
-			'temp/edit_content_page.php'     => 'Edit Content',
+			            'temp/edit_content_page.php'     => 'Edit Content',
                         'temp/admin_dashboard.php'     => 'Dashboard',
                         'temp/bulk_download_task_files_template.php'     => 'Download Bulk Email',
                         'temp/user_change_password_template.php'     => 'User Change Password',
@@ -5879,6 +5879,13 @@ class PageTemplater {
                         'temp/admin_view_orders.php'=>'Admin View User Orders',
                         'temp/create-new-page-template.php'=>'Create New Page',
                         'temp/manage-menu-template.php'=>'Manage Menu Template',
+
+
+                        'temp/egpl_cloning_features_temp.php'=>'Egpl Cloning',
+
+
+                        'temp/egpl_cloning_features_temp.php'=>'Egpl Cloning',
+
                        
                         
                      
@@ -7969,25 +7976,6 @@ function isValidEmail($email){
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
-include_once('updater.php');
-
-
-if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
-        $config = array(
-            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
-            'proper_folder_name' => 'EGPL', // this is the name of the folder your plugin lives in
-            'api_url' => 'https://api.github.com/repos/QasimRiaz/EGPL', // the GitHub API url of your GitHub repo
-            'raw_url' => 'https://raw.github.com/QasimRiaz/EGPL/master', // the GitHub raw url of your GitHub repo
-            'github_url' => 'https://github.com/QasimRiaz/EGPL', // the GitHub url of your GitHub repo
-            'zip_url' => 'https://github.com/QasimRiaz/EGPL/zipball/master', // the zip url of the GitHub repo
-            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-            'requires' => '3.0', // which version of WordPress does your plugin require?
-            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
-            'readme' => 'README.md', // which file to use as the readme for the version number
-            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
-        );
-        new WP_GitHub_Updater($config);
-    }
 
 //add_filter('woocommerce_payment_complete_order_status', 'exp_autocomplete_paid_orders', 10, 2);
 add_action('woocommerce_thankyou', 'exp_autocomplete_all_orders',10,2);
@@ -8591,6 +8579,21 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
                                         if($key1 == 0){
     
                                             $currentroleOrder = getroleorder($user_info->roles[0]);
+
+                                            
+                                        }else{
+                                            
+                                            $currentroleOrder = getroleorder($getpackagelevel[$key1-1]);
+                                        }
+                                     
+                                            //   echo 'Qasimriiaz<pre>';
+                                            //   echo $roleName.'<br>';
+                                            //   echo $user_info->roles[0].'<br>';
+                                            //  echo $currentroleName.'<br>';
+                                            //   echo $productroleOrder.'_________';
+                                            //   echo 'Qasimriiazz<pre>';
+                                            
+
                                             
                                         }else{
                                             
@@ -8617,10 +8620,7 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
                                             $responce['assignrole'] = $currentroleName['name'];
                                             $loggin_data['rolename'][] = $currentroleName['name'];
                                             }
-                                }
-                                else{
-                                    echo "UserRole Remain Same";
-                                }
+                             
                                 $counter++; 
                              }
                             //$u = new WP_User($current_user);

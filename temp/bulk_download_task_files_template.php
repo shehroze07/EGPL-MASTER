@@ -23,7 +23,7 @@
     // print_r($result);
     $idx = 5;
     $labelArray = null;
-    $file_upload_list.='<select class="form-control" id="file_upload" ><option value="">Select a Download Field</option>';
+    $file_upload_list.='<select class="form-control" id="file_upload" egid="file_upload" ><option value="">Select a Download Field</option>';
 
    foreach ($taskkeyContent as $taskindex => $taskValue) {
        
@@ -83,7 +83,7 @@
                                         <div class="col-sm-7">
                                            <?php echo $file_upload_list; ?>
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3" egid="download">
                                             <a   class="btn btn-inline mycustomwidth btn-success" onclick="get_all_files()">Download</a>
                                          
 

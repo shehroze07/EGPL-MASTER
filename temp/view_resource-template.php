@@ -48,7 +48,7 @@
                 <h5 class="m-t-lg with-border"></h5>
                  <div class="form-group row">
                                  
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6" egid="create-new-resource" >
                                             <a class="btn btn-lg mycustomwidth btn-success" href="<?php echo $site_url;?>/create-resource/">Create New Resource</a>
                                         
                                         
@@ -88,7 +88,7 @@
                                         
                                         $large_image_url = get_post_meta($post->ID, 'port-descr', 1);
                                         ?> <tr>
-                                            <td style="text-align:center;"><div class="hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"> <i onclick="delete_resource(this)" id="<?php echo $post->ID; ?>"  data-toggle="tooltip" title="Delete Resource" class="hi-icon fusion-li-icon fa fa-times-circle fa-2x" ></i><i data-toggle="tooltip" title="Edit Resource" onclick="edit_resource(this)" id="<?php echo $post->ID; ?>" class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" ></i></div></td>
+                                            <td style="text-align:center;"><div class="hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"> <i egid="delete-resource" onclick="delete_resource(this)" id="<?php echo $post->ID; ?>"  data-toggle="tooltip" title="Delete Resource" class="hi-icon fusion-li-icon fa fa-times-circle fa-2x" ></i><i egid="edit-resource" data-toggle="tooltip" title="Edit Resource" onclick="edit_resource(this)" id="<?php echo $post->ID; ?>" class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" ></i></div></td>
                                             <td id="<?php echo $post->ID . 'U'; ?>"><?php the_title(); ?></td>
                                             <td><a href="<?php echo $custom['excerpt'][0]; ?>" target="_blank"><?php the_title(); ?></a></td>
                                         </tr>

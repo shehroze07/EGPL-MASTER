@@ -513,7 +513,7 @@ width: 200px !important;
                                         
                              
                                 <div class="form-group row">
-                                    <label class="col-sm-2 form-control-label">Change Password <p>(if u want to change or reset password)</p></label>
+                                    <label class="col-sm-2 form-control-label">Change Password <p>(if you want to change or reset password)</p></label>
                                     <div class="col-sm-10">
                                           
                             <input type="password"  class="form-control mymetakey" id="password" name="password" placeholder="Password" value="" >

@@ -71,7 +71,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                     <div class="form-group row">
                         <label class="col-sm-3 form-control-label">Select Import File </label>
                         <div class="col-sm-9">
-                            <input   type="file" class="form-control"  name="Sfile" id="Sfile"  required>
+                            <input   type="file" class="form-control"  name="Sfile" id="Sfile" egid="Sfile" required>
                         </div>
 
                     </div>
@@ -83,7 +83,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                         <div class="col-sm-9">
 
-                            <button type="submit"    id="uploadstatus" class="btn btn-inline mycustomwidth btn-success" value="Upload">Next</button>
+                            <button type="submit"    id="uploadstatus" class="btn btn-inline mycustomwidth btn-success" value="Upload" egid="uploadstatus">Next</button>
 
 
                         </div>

@@ -176,7 +176,7 @@ jQuery(document).ready(function () {
                                 jQuery('.dataTables_filter input').on( 'keyup click', function () {
                                      var searchTerm = this.value.toLowerCase();
                                      regex = '\\b' + searchTerm + '\\b';
-                                     ordertablereport.api().search(regex, true, false).draw();
+                                    //  ordertablereport.api().search(regex, true, false).draw();
                                 } );   
                             });
                     },

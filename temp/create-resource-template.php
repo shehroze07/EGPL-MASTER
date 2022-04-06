@@ -36,7 +36,7 @@
                                     <label class="col-sm-2 form-control-label">Resource Title <strong>*</strong></label>
                                     <div class="col-sm-10">
                                          <div class="form-control-wrapper form-control-icon-left">    
-							<input type="text"  class="form-control" id="Stitle" placeholder="Resource Title"  required>
+							<input type="text"  class="form-control" id="Stitle" placeholder="Resource Title" egid="Stitle" required>
 							 <i class="font-icon fa fa-edit"></i>
                                        </div>
                                     </div>
@@ -44,7 +44,7 @@
                      <div class="form-group row">
                                     <label class="col-sm-2 form-control-label">Resource File <strong>*</strong></label>
                                     <div class="col-sm-10">
-                                          <input  onclick="show_button(this)" type="file" class="form-control"  name="Sfile" id="Sfile"  required>
+                                          <input  onclick="show_button(this)" type="file" class="form-control"  name="Sfile" id="Sfile" egid="Sfile" required>
                                     </div>
                    </div>
                       <h5 class="m-t-lg with-border"></h5>
@@ -52,8 +52,8 @@
                       <div class="form-group row">
 
                             <div class="col-sm-6" style="text-align: left;">
-                                <a href="<?php echo $site_url;?>/all-resources/" class="btn btn-danger btn-lg">Back</a>&nbsp;&nbsp;
-                                <button type="submit" class="btn btn-lg mycustomwidth btn-success">Create</button>
+                                <a href="<?php echo $site_url;?>/all-resources/" class="btn btn-danger btn-lg" egid="back">Back</a>&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-lg mycustomwidth btn-success" egid="create-resource">Create</button>
 
                             </div>
                             <div class="col-sm-6"></div>

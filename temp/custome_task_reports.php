@@ -153,16 +153,16 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                 <div class="tabs-section-nav tabs-section-nav-icons">
                     <div class="tbl">
                         <ul class="nav" role="tablist">
-                            <li class="nav-item" style="width:50%;">
-                                <a class="nav-link active" href="#tabs-1-tab-1" role="tab" data-toggle="tab">
+                            <li class="nav-item" style="width:50%;" egid="report">
+                                <a class="nav-link active" href="#tabs-1-tab-1" role="tab" data-toggle="tab" egid="report">
                                     <span class="nav-link-in">
                                         <i class="fa fa-list-alt"></i>
                                             Report
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#tabs-1-tab-2" role="tab" onclick="get_bulk_email_address_tasks()" data-toggle="tab">
+                            <li class="nav-item" egid="bulk-email">
+                                <a class="nav-link" href="#tabs-1-tab-2" role="tab" onclick="get_bulk_email_address_tasks()" data-toggle="tab" egid="bulk-email">
                                     <span class="nav-link-in">
                                          <i class="fa fa-mail-forward"></i>
                                         
@@ -194,7 +194,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                                 <fieldset class="form-group">
 
-                                                    <select style="width:100%;height:38px;" class="form-control" onchange="customloaduserreport()" id="customloaduserreportss">
+                                                    <select style="width:100%;height:38px;" class="form-control" onchange="customloaduserreport()" id="customloaduserreportss" egid="loadtaskreport">
                                                         <option disabled selected hidden>Load a Report</option>
                                                       
                                                             <?php
@@ -230,7 +230,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             </div>
                              <div class="col-sm-3" >
 
-                                <button   style="margin-top: 9px !important;" class="btn btn-lg mycustomwidth btn-success backtofilter">Customize Report</button>
+                                <button   style="margin-top: 9px !important;" class="btn btn-lg mycustomwidth btn-success backtofilter" egid="customize-report">Customize Report</button>
 
                             </div> 
                             
@@ -264,7 +264,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                         <div class="faq-page-cat-txt">
 
                                             <div class="btn-group">
-                                                <button disabled type="button" id="newsendbulkemailstatus" class="btn btn-inline dropdown-toggle btn-square-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button disabled type="button" id="newsendbulkemailstatus" class="btn btn-inline dropdown-toggle btn-square-icon" egid="bulk-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Bulk Action
                                                     <span class="label label-pill label-danger" id="newbulkemailcounter">0</span>
                                                 </button>
@@ -299,7 +299,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             <div class="col-sm-9" ></div>
                         </div>
                         <div class="form-group row">
-                               <div class="col-sm-12" >
+                               <div class="col-sm-12" > 
                                   <?php echo $userreportcontent;?>
                                </div>
                         </div>
@@ -313,11 +313,11 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 							
 								<fieldset class="form-group">
 									
-                                                                    <select style="width:100%;height:38px;"class="form-control" onchange="templateupdatefilter()" id="templateupdatefilterlist">
+                                                                    <select style="width:100%;height:38px;"class="form-control" onchange="templateupdatefilter()" id="templateupdatefilterlist" egid="templateupdatefilterlist">
                                                                             <option disabled selected hidden>Load a template</option>
                                                                             <option value="defult"></option>
                                                                             <option value="saveCurrentEmailtemplate">Save Current Template As</option>
-                                                                            <optgroup label="Saved Templates" id="emailtemplatelist">
+                                                                            <optgroup label="Saved Templates" id="emailtemplatelist" egid="emailtemplatelist">
 
                                                                                 <?php
                                                                                 foreach ($email_template_data as $key => $value) {
@@ -336,14 +336,14 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 						 <form method="post" action="javascript:void(0);" onSubmit="update_admin_email_template()">    	
 						<div class="form-group">
 							<div class="input-group">
-								<input style="height: 38px;" placeholder="Email Template Name" id="emailtemplate" type="text" class="form-control" required>
+								<input style="height: 38px;" placeholder="Email Template Name" id="emailtemplate" type="text" class="form-control" egid="emailtemplate" required>
 								<div class="input-group-btn">
 									<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
 										
 									
 									<div class="dropdown-menu dropdown-menu-right">
-										<button type="submit"  name="saveemailtemplate"  class="dropdown-item"  ><i class="font-icon fa fa-save" aria-hidden="true"></i> Save</button>
-										<a class="dropdown-item" onclick="removeemailtemplate()"><i class="font-icon fa fa-remove" aria-hidden="true"></i>Delete</a>
+										<button type="submit"  name="saveemailtemplate"  class="dropdown-item" egid="saveemailtemplate" ><i class="font-icon fa fa-save" aria-hidden="true"></i> Save</button>
+										<a class="dropdown-item" onclick="removeemailtemplate()" egid="remove-email-template"><i class="font-icon fa fa-remove" aria-hidden="true"></i>Delete</a>
 										
 									</div>
 								</div>
@@ -377,7 +377,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 								
 								
 								<div class="faq-page-cat-txt">
-                                                                    <a type="button" onclick="back_report()" class="btn btn-inline btn-primary"><i class="font-icon fa fa-chevron-left"></i> Back to report</a>
+                                                                    <a type="button" onclick="back_report()" class="btn btn-inline btn-primary" egid="back-to-report"><i class="font-icon fa fa-chevron-left"></i> Back to report</a>
                                                                    
                                                                 </div>
 							</div>
@@ -393,7 +393,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                     <div class="col-sm-3">
                                         
                                        <div class="form-control-wrapper form-control-icon-left">
-								<input type="text" id="fromname" class="form-control" placeholder="Name" required>
+								<input type="text" id="fromname" class="form-control" placeholder="Name" egid="fromname" required>
 								<i class="font-icon fa fa-arrow-right"></i>
 							</div>
                                     </div>
@@ -411,7 +411,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                         <label class="col-sm-2 form-control-label">Reply-To <i style="cursor: pointer;" title = 'Please input an email address. When the recipient hits Reply on the message, this email address will be selected to receive their reply.' class="reporticon font-icon fa fa-question-circle"></i></label>
                                         <div class="col-sm-10">
                                             <div class="form-control-wrapper form-control-icon-left">    
-                                                <input type="text"  class="form-control" id="replaytoemailadd" placeholder="Reply To Email address" value="<?php echo $sponsor_info[$loadreportname]['replaytoemailadd']; ?>" >
+                                                <input type="text"  class="form-control" id="replaytoemailadd" egid="replaytoemailadd" placeholder="Reply To Email address" value="<?php echo $sponsor_info[$loadreportname]['replaytoemailadd']; ?>" >
                                                 <i class="fa fa-mail-reply"></i>	
                                             </div>
                                         </div>
@@ -423,7 +423,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                     <label class="col-sm-2 form-control-label">BCC <i style="cursor: pointer;" title='Please input an (only one) email address. All outgoing Welcome emails will be blind carbon copied to this address.'class="reporticon font-icon fa fa-question-circle"></i></label>
                                     <div class="col-sm-10">
                                             <div class="form-control-wrapper form-control-icon-left">
-								<input type="text"  class="form-control" id="BCC" placeholder="BCC" >
+								<input type="text"  class="form-control" id="BCC" placeholder="BCC" egid="BCC" >
 								<i class="font-icon fa fa-copy"></i>
 							</div>
                                         
@@ -443,7 +443,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                     <label class="col-sm-2 form-control-label">Subject <strong>*</strong></label>
                                     <div class="col-sm-10">
                                          <div class="form-control-wrapper form-control-icon-left">
-								<input type="text"  class="form-control" id="emailsubject" placeholder="Subject" required>
+								<input type="text"  class="form-control" id="emailsubject" placeholder="Subject" egid="emailsubject" required>
 								<i class="font-icon fa fa-edit"></i>
 							</div>
                                     
@@ -452,9 +452,9 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                  
                                 
                                 <div class="form-group row">
-                                    <label class="col-sm-2 form-control-label">Message <strong>*</strong> <p style="margin-top: 53px" id="sponsor_meta_keys"><a class="btn btn-sm btn-primary mergefieldbutton" style="cursor: pointer;" onclick="welcome_available_merge_fields()">Insert Merge Fields</a></p></label>
+                                    <label class="col-sm-2 form-control-label">Message <strong>*</strong> <p style="margin-top: 53px" id="sponsor_meta_keys"><a class="btn btn-sm btn-primary mergefieldbutton" style="cursor: pointer;" onclick="welcome_available_merge_fields()" egid="insert-merge-fields">Insert Merge Fields</a></p></label>
                                     <div class="col-sm-10">
-                                        <p class="form-control-static"><textarea id="bodytext"></textarea></p>
+                                        <p class="form-control-static"><textarea id="bodytext" egid="bodytext"></textarea></p>
                                         
                                        
                                     </div>
@@ -462,7 +462,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                   <div class="form-group row">
                                     <label class="col-sm-2 form-control-label"> </label>
                                     <div class="col-sm-6">
-                                        <button type="submit" class="btn btn-lg mycustomwidth btn-success">Preview & Send</button> 
+                                        <button type="submit" class="btn btn-lg mycustomwidth btn-success" egid="preview-and-send">Preview & Send</button> 
                                         
                                        
                                     </div>

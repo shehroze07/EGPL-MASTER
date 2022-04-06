@@ -60,16 +60,16 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                     <div class="tabs-section-nav tabs-section-nav-icons">
                         <div class="tbl">
                             <ul class="nav" role="tablist">
-                                <li class="nav-item" style="width: 50%;">
-                                    <a class="nav-link active reloadclass" href="#tabs-1-tab-1" role="tab" data-toggle="tab">
+                                <li class="nav-item" style="width: 50%;" egid="report"> 
+                                    <a class="nav-link active reloadclass" href="#tabs-1-tab-1" role="tab" data-toggle="tab" egid="report">
                                         <span class="nav-link-in">
                                             <i class="fa  fa-list-alt" ></i>
                                             Report
                                         </span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#tabs-1-tab-2" role="tab" data-toggle="tab">
+                                <li class="nav-item" egid="customize-report">
+                                    <a class="nav-link" href="#tabs-1-tab-2" role="tab" data-toggle="tab" egid="customize-report">
                                         <span class="nav-link-in">
                                             <i class="fa fa-filter"></i>
                                             Customize Report
@@ -93,11 +93,11 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 							
 								<fieldset class="form-group">
 									
-                                                                    <select style="width:100%;height:38px;"class="form-control" onchange="loadorderreport('')" id="loadorderreport">
+                                                                    <select style="width:100%;height:38px;"class="form-control" onchange="loadorderreport('')" id="loadorderreport" egid="loadorderreport">
                                                                             <option disabled selected hidden>Load a Report</option>
                                                                            
                                                                             <option value="defult">Save Current Template As</option>
-                                                                            <optgroup label="Saved Templates" id="loadorderreportlist">
+                                                                            <optgroup label="Saved Templates" id="loadorderreportlist" egid="loadorderreportlist">
 
                                                                                 <?php
                                                                                 foreach ($order_reportsaved_list as $key => $value) {
@@ -116,14 +116,14 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 						 <form method="post" action="javascript:void(0);" onSubmit="order_report_savefilters()">    	
 						<div class="form-group">
 							<div class="input-group">
-								<input style="height: 38px;" placeholder="Report Name" id="orderreportname" type="text" class="form-control" required>
+								<input style="height: 38px;" placeholder="Report Name" id="orderreportname" type="text" class="form-control" egid="orderreportname" required>
 								<div class="input-group-btn">
-									<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" egid="action">
 										Action
 									</button>
 									<div class="dropdown-menu dropdown-menu-right">
-										<button type="submit"  name="saveorderreport"  class="dropdown-item"  ><i class="font-icon fa fa-save" aria-hidden="true"></i> Save</button>
-										<a class="dropdown-item" onclick="removeeorderreport()"><i class="font-icon fa fa-remove" aria-hidden="true"></i>Delete</a>
+										<button type="submit"  name="saveorderreport"  class="dropdown-item" egid="save-order-report" ><i class="font-icon fa fa-save" aria-hidden="true"></i> Save</button>
+										<a class="dropdown-item" onclick="removeeorderreport()" egid="delete-order-report"><i class="font-icon fa fa-remove" aria-hidden="true"></i>Delete</a>
 										
 									</div>
 								</div>
@@ -141,12 +141,12 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 			
 			</section><!--.faq-page-->
                        <h5 class="m-t-lg with-border">Filters</h5>
-                            <div id="builder"></div>
+                            <div id="builder" egid="order-report-filters"></div>
                        <h5 class="m-t-lg with-border">Show Columns</h5>
                              <div class="form-group row">
                                  
                                 <div class="col-sm-12" >
-                                    <select class="select2"  data-placeholder="Select Columns" title="Select Columns" id="orderreportcolumns" data-allow-clear="true" data-toggle="tooltip" multiple="multiple">
+                                    <select class="select2"  data-placeholder="Select Columns" title="Select Columns" id="orderreportcolumns" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" egid="orderreportcolumns">
                                     
                                     </select>
 
@@ -156,13 +156,13 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                              <div class="form-group row">
                                  
                                 <div class="col-sm-6" >
-                                    <select class="select2"  data-placeholder="Select Columns"  id="orderbycolumnsname" data-allow-clear="true" >
+                                    <select class="select2"  data-placeholder="Select Columns"  id="orderbycolumnsname" data-allow-clear="true" egid="orderbycolumnsname" >
                                     
                                     </select>
 
                                 </div>
                                  <div class="col-sm-6" >
-                                    <select class="select2"  id="sortingtype" data-allow-clear="true">
+                                    <select class="select2"  id="sortingtype" data-allow-clear="true" egid="sortingtype">
                                         
                                         <option value='asc'>Asending</option>
                                         <option value='desc' selected="selected">Descending</option>
@@ -175,8 +175,8 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             <div class="form-group row">
                                 
                                 <div class="col-sm-6" style="text-align: left;">
-                                    <button class="btn btn-danger btn-lg  resetorderfilters">Reset</button>&nbsp;&nbsp;
-                                    <button class="btn btn-lg mycustomwidth btn-success" onclick="request_getapplyfiltersonordereport()">Run Report</button>
+                                    <button class="btn btn-danger btn-lg  resetorderfilters" egid="reset-filters">Reset</button>&nbsp;&nbsp;
+                                    <button class="btn btn-lg mycustomwidth btn-success" onclick="request_getapplyfiltersonordereport()" egid="run-report">Run Report</button>
 
                                 </div>
                                 <div class="col-sm-6"></div>
@@ -198,7 +198,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                                 <fieldset class="form-group">
 
-                                                    <select style="width:100%;height:38px;" class="form-control" onchange="customeloadorderreport()" id="customeloadorderreport">
+                                                    <select style="width:100%;height:38px;" class="form-control" onchange="customeloadorderreport()" id="customeloadorderreport" egid="customeloadorderreport">
                                                         <option disabled selected hidden>Load a Report</option>
                                                         <option value="" selected="selected">All Orders</option>
                                                              <?php
@@ -235,7 +235,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             </div>
                              <div class="col-sm-3" >
 
-                                <button   style="margin-top: 9px !important;" class="btn btn-lg mycustomwidth btn-success backtofilter">Customize Report</button>
+                                <button   style="margin-top: 9px !important;" class="btn btn-lg mycustomwidth btn-success backtofilter" egid="customized-report">Customize Report</button>
 
                             </div> 
                             
@@ -337,7 +337,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
     <script type="text/javascript" src="/wp-content/plugins/EGPL/js/doT.js?v=2.18"></script>
     <script type="text/javascript" src="/wp-content/plugins/EGPL/js/interact.js?v=2.18"></script>
     <script type="text/javascript" src="/wp-content/plugins/EGPL/js/query-builder.js?v=2.18"></script>
-    <script type="text/javascript" src="/wp-content/plugins/EGPL/js/product-order-report.js?v=2.20"></script>
+    <script type="text/javascript" src="/wp-content/plugins/EGPL/js/product-order-report.js?v=2.21"></script>
     
     
     
