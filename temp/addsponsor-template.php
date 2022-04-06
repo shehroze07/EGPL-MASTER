@@ -128,6 +128,16 @@
 
         width: 200px !important;
     }
+
+    .select2-selection__rendered{
+        
+        color: #a9a4a4 !important;
+    }
+
+    #select2-Role-container {
+
+    color: #000 !important;
+}
     </style>
 
           <select id="hiddenlistemaillist" style="display: none;">
@@ -356,7 +366,7 @@
                                              
                                              <div class="col-sm-10">
                                              <?php if($additional_fields[$key]['multiselect'] == 'chekced') {?>
-                                              <select class="select2 mycustomedropdown"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
+                                              <select class="select2 form-control mycustomedropdown" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
                                                     <?php  foreach ($all_roles as $key => $name) { 
                                                         
                                                         
@@ -370,8 +380,13 @@
                                               </select>
                                              <?php }else {?>
                                                     
-                                                    <select class="select2 mycustomedropdown"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
-
+                                                    <select class="select2 form-control mycustomedropdown" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
+                                                        <?php
+                                                            if(!empty($additional_fields[$key]['fieldplaceholder'])){
+                                                           
+                                                                echo '<option value="" hidden selected disabled>'.$additional_fields[$key]["fieldplaceholder"].'</option>';
+                                                                
+                                                            }?>
                                                        <?php  foreach ($all_roles as $key => $name) { 
                                                         
                                                         
@@ -534,7 +549,7 @@
                                             <div class="col-sm-8">
                                              
                                              <?php if(($additional_fields[$key]['multiselect'] == "checked")&&($additional_fields[$key]['BoothSettingsField'] != 'checked')) {?>
-                                              <select class="select2 mycustomedropdown mymetakey"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
+                                              <select class="select2 form-control mycustomedropdown mymetakey" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
                                                     <?php foreach ($additional_fields[$key]['options'] as $key=>$value){ ?>
                                                   
                                                          <option value='<?php echo $value->label;?>'><?php echo $value->label;?></option>
@@ -544,8 +559,14 @@
                                               </select>
                                              <?php }else {?>
                                                 
-                                                    <select class="select2 mycustomedropdown mymetakey"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
-
+                                                    <select class="select2 form-control mycustomedropdown mymetakey" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
+                                                    <?php 
+                                                       
+                                                       if(!empty($additional_fields[$key]['fieldplaceholder'])){
+                                                          
+                                                          echo '<option value="" hidden selected disabled >'.$additional_fields[$key]["fieldplaceholder"].'</option>';
+                                                          
+                                                      }?>
                                                        <?php foreach ($additional_fields[$key]['options'] as $key=>$value){ ?>
                                                   
                                                          <option value='<?php echo $value->label;?>'><?php echo $value->label;?></option>
@@ -919,4 +940,5 @@ jQuery('#navigate').on('click',function(){
     window.location.href=newurl;
   
 })
+
 </script>

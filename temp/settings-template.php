@@ -221,50 +221,7 @@ $exhibitorEntryLevel[7]['description'] = 'This will be the Confirmation page aft
  
 
            <style>
-        
-        .egmb-10{margin-bottom: 10px;}
-        .egmb-20{margin-bottom: 20px;}
-        .radio input{visibility: unset;}
-        .egradio-inline{display: inline;}
-        .egcolor{color:red;}
-        .row{margin-left: 0px;}
-
-         .previewDivselectedImage{
-            border: solid lightgray 1px;
-            height: auto;
-            width: auto;
-        }
-         .eg-optional{
-        
-        background: linear-gradient(to right, #1f9bd9, #99d2f2 200%);
-        border: 2px solid #53b2e4;
-/*        cursor: not-allowed;*/
-    }
-    .sweet-alert p{color:#333 !important;}
-    .eg-requried{
-        
-        background: linear-gradient(to right, #b2b2b2, #c3c2c2 200%);
-        border: 2px solid #b6b6b6;
-/*        cursor: not-allowed;*/
-    }
-    .eg-optional-type-2{
-        
-        background: linear-gradient(to right, #ff9800, #ef8d22 200%);
-        border: 2px solid #ff9800;
-/*        cursor: move;*/
-    }
-    .eg-boxed{
-        
-        height: 210px;
-        margin-bottom: 20px;
-        padding: 20px;
-        color:#fff;
-        
-        
-        padding: 20px;
-        border-radius: 50px 20px;
-        box-shadow: 0 8px 8px -4px #ccc;
-    }
+       
     .switch {
   position: absolute;
   margin-left:385px;
@@ -366,13 +323,7 @@ input:checked + .slider:before {
     font-weight: bold;
     color: #009879;
 }
-    .eg-editlink{
-        
-        
-        text-decoration: underline !important;
-        
-    }
-    .eg-editlink a{color:#fff !important;}
+   
     /* .toggle.btn{
     width: 110px;
     min-height: 34px;

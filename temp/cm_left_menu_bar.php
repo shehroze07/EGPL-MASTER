@@ -132,6 +132,10 @@ $getsiteurl = get_site_url();
                                             <i class="font-icon fa fa-sticky-note-o"></i>
                                             <span class="lbl">Release Notes</span>
                                         </a>
+                                        <a class="dropdown-item" target="_blank" href="<?php echo $site_url; ?>/clone-features/">
+                                            <i class="font-icon fa fa-clone"></i>
+                                            <span class="lbl">Clone</span>
+                                        </a>
                                         <div class="dropdown-divider"></div>
                                         
                                         <a class="dropdown-item" href="<?php echo $site_url; ?>/logout/">

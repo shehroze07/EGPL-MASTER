@@ -191,6 +191,29 @@ function update_user_meta_custome(elem,typeoftask) {
     var elementType = jQuery("#my" + value).is("input[type='file']"); //jQuery(this).prev().prop('tagName');
     var curdate = new Date();
     var usertimezone = curdate.getTimezoneOffset()/60;
+        // code by Shehroze start
+        var dropdown_val = jQuery("#" +value ).val();
+        
+ 
+        
+             if (dropdown_val == "None" ) {
+                 jQuery("body").css({'cursor':'default'});
+                 swal({
+                     title: "Warning",
+                     text: "You must select a value before submitting",
+                     type: "warning",
+                     confirmButtonClass: "btn-warning",
+                     confirmButtonText: "Ok"
+                 });
+ 
+                 return false;
+                 
+             }
+            else {
+                // do something
+             }
+ 
+     // code by Shehroze end
     if (elementType == false) {
         
         var pattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,15}(:[0-9]{1,5})?(\/.*)?$/g;
@@ -638,7 +661,7 @@ function remove_task_value_readyfornew(e,typeoftask){
          
           swal({
             title: "Are you sure?",
-            text: 'You want to remove your submission?',
+            text: 'Remove current submission',
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger mr-2",
@@ -702,7 +725,7 @@ function remove_task_value_readyfornew(e,typeoftask){
          
          swal({
             title: "Are you sure?",
-            text: 'You want to remove your submission?',
+            text: 'Remove current submission',
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-danger",
