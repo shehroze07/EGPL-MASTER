@@ -26,6 +26,8 @@ $getsiteurl = get_site_url();
         $getcodeurl2 = str_replace("/","-",$getcodeurl1);
         include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         $virtualpluginstatus = get_option('Activated_VirtualEGPL');
+
+        $site_id = get_current_blog_id();
         
       
 ?>
@@ -203,7 +205,7 @@ $getsiteurl = get_site_url();
                                     <h6 style="text-align: left;color:#000;margin-top: 10px;font-weight: bolder;" >
                                         
                                         
-                                        <a style="color:#000;" href="<?php echo $site_url; ?>" target="_blank"><?php echo $blog_title;?></a>
+                                        <a style="color:#000;" href="<?php echo $site_url; ?>" target="_blank"><?php echo $blog_title;?></a>&nbsp<span class="site-id">Event Id # <?php echo $site_id;?></span>
                                         
                                     </h6>
 	                           
