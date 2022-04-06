@@ -22,10 +22,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                 <div class="tbl">
                     <div class="tbl-row">
                         <div class="tbl-cell">
-                            <h3>Cloning Features</h3>
-
-
-                            
+                            <h3>Portal Clone Settings</h3>
 
                         </div>
                     </div>
@@ -35,7 +32,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
             <div class="box-typical box-typical-padding">
                
                <p>
-               You can select the event name from drop down which you want to clone event data to this new event.Please read the descriptions carefully and add the only what you need.
+               This is where you can clone content and configurations from another portal to this one. Select the event from the drop down and then choose which area(s) you want to clone/copy/migrate over. Please read the descriptions carefully, <b>these actions cannot be undone</b>.
             </p>
                
                <h5 class="m-t-lg with-border"></h5>
@@ -85,7 +82,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 									    <div class="col-sm-3">
 										    <h2>Event Settings</h2> </div>
 									        <div class="col-sm-6">
-										        <p>Add this if you want to export selected event details like location, date and site theme colors, favicon, header image to the site .This will also export entry wizard flow settings as well as booth queue settings.</p>
+										        <p>Includes event dates, address, colors, and graphic assets. Includes Registration Configurations and Booth Management Settings.</p>
 	    									    <p class="eg-editlink-2"><a href="<?php echo site_url().'/admin-settings/';?>" target="_blank">Event Settings</a></p>
 											</div>
                                             <div class="col-sm-3">
@@ -99,38 +96,15 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                      </td>
                                  </tr>
-
-                                 <tr>
-                                     <td>
-
-                                    <div class="saveeverything eg-boxed-2 row eg-optional-2 reports">
-									    <div class="col-sm-3">
-										    <h2>Reports</h2> </div>
-									        <div class="col-sm-6">
-										    <p>
-                                            Add this if  you want to export selected event saved templates including task report , user report and order report to this event.</p>
-	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/user-report-result/';?>" target="_blank">Reports</a></p>
-											</div>
-                                            <div class="col-sm-3">
-                                            <input type="checkbox" class="toggle-one eg-toggle-2 hidecursor" id="reportsstatus" data-toggle="toggle" data-on="Append" data-off="Override" data-onstyle="success" disabled>
-											    <input type="checkbox" class="toggle-one eg-toggle-2" id="reports" data-toggle="toggle" data-on="Added" data-off="Skip" data-onstyle="success" ></div>
-								            </div>
-                                        </div>   
-									 </div>
-
-                                     </td>
-                                 </tr>
-
-
                                  <tr>
                                      <td>
 
                                     <div class="saveeverything eg-boxed-2 row eg-optional-2 menupages">
 									    <div class="col-sm-3">
-										    <h2>Menu Pages & Navigation</h2> </div>
+										    <h2>Menu Navigation</h2> </div>
 									        <div class="col-sm-6">
 										    <p>
-                                            Add this if you want to export selected event menus and their corresponding links to this new event.</p>
+                                            Includes all custom pages and the current menu navigation settings.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/manage-menu/';?>" target="_blank">Menu Pages & Navigation</a></p>
 											</div>
 											<div class="col-sm-3">
@@ -142,6 +116,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                      </td>
                                  </tr>
+
                                  <tr>
                                      <td>
 
@@ -150,7 +125,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 										    <h2>Levels</h2> </div>
 									        <div class="col-sm-6">
 										    <p>
-                                            Add this if you want to export selected event levels to this new event.</p>
+                                            Includes all Levels.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/add-new-level/';?>" target="_blank">Levels</a></p>
 											</div>
 											<div class="col-sm-3">
@@ -166,33 +141,12 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                  <tr>
                                      <td>
 
-                                    <div class="saveeverything eg-boxed-2 row eg-optional-2 users">
-									    <div class="col-sm-3">
-										    <h2>Users</h2> </div>
-									        <div class="col-sm-6">
-										    <p>
-                                            Add this option if you want to export selected event users information including First name, Last Name, Company Name, Level,Last login.</p>
-	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/user-report-result/';?>" target="_blank">Users</a></p>
-											</div>
-                                            <div class="col-sm-3">
-                                            <input type="checkbox" class="toggle-one eg-toggle-2" id="usersstatus" data-toggle="toggle" data-on="Append" data-off="Override" data-onstyle="success" >
-											    <input type="checkbox" class="toggle-one eg-toggle-2" id="users" data-toggle="toggle" data-on="Added" data-off="Skip" data-onstyle="success" ></div>
-								            </div>
-                                        </div>  
-								    </div>
-
-                                     </td>
-                                 </tr>
-                                
-                                 <tr>
-                                     <td>
-
                                     <div class="saveeverything eg-boxed-2 row eg-optional-2 tasks">
 									    <div class="col-sm-3">
 										    <h2>Tasks</h2> </div>
 									        <div class="col-sm-6">
 										    <p>
-                                            Add this option if you want to export tasks which was declared in selected event.</p>
+                                            Includes all Tasks.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/bulk-edit-task/';?>" target="_blank">Tasks</a></p>
 											</div>
 											<div class="col-sm-3">
@@ -208,34 +162,12 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                  <tr>
                                      <td>
 
-                                    <div class="saveeverything eg-boxed-2 row eg-optional-2 userfields">
-									    <div class="col-sm-3">
-										    <h2>User Fields</h2> </div>
-									        <div class="col-sm-6">
-										    <p>
-                                            Add this option if you want to export the selected event, custom user fields.User fields are registartion form fields through which we take data from our potential exhibitors at the time of entry wizard flow.</p>
-	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/user-fields/';?>" target="_blank">User Fields</a></p>
-											</div>
-											<div class="col-sm-3">
-                                            <input type="checkbox" class="toggle-one eg-toggle-2 hidecursor" id="userfieldsstatus" data-toggle="toggle" data-on="Append" data-off="Override" data-onstyle="success" disabled>
-											    <input type="checkbox" class="toggle-one eg-toggle-2" id="userfields" data-toggle="toggle"  data-on="Added" data-off="Skip" data-onstyle="success" ></div>
-								            </div>
-                                        </div>  
-								    </div>
-                                    
-
-                                     </td>
-                                 </tr>
-
-                                 <tr>
-                                     <td>
-
                                     <div class="saveeverything eg-boxed-2 row eg-optional-2 resources">
 									    <div class="col-sm-3">
 										    <h2>Resources</h2> </div>
 									        <div class="col-sm-6">
 										    <p>
-                                            Add this option if you want to export the resources of selected event.</p>
+                                            Includes all Resources.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/all-resources/';?>" target="_blank">Resources</a></p>
 											</div>
 											<div class="col-sm-3">
@@ -256,7 +188,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 										    <h2>Shop</h2> </div>
 									        <div class="col-sm-6">
 										    <p>
-                                            Add this option if you want to export selected events packages and Addons. Packages and Addons are shown at entry wizard flow.</p>
+                                            Includes all Packages & Add-Ons.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/manage-products/';?>" target="_blank">Shop</a></p>
 											</div>
 											<div class="col-sm-3">
@@ -268,6 +200,75 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                      </td>
                                  </tr>
+                                 <tr>
+                                     <td>
+
+                                    <div class="saveeverything eg-boxed-2 row eg-optional-2 reports">
+									    <div class="col-sm-3">
+										    <h2>Reports</h2> </div>
+									        <div class="col-sm-6">
+										    <p>
+                                            Includes all custom saved reports.</p>
+	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/user-report-result/';?>" target="_blank">Reports</a></p>
+											</div>
+                                            <div class="col-sm-3">
+                                            <input type="checkbox" class="toggle-one eg-toggle-2 hidecursor" id="reportsstatus" data-toggle="toggle" data-on="Append" data-off="Override" data-onstyle="success" disabled>
+											    <input type="checkbox" class="toggle-one eg-toggle-2" id="reports" data-toggle="toggle" data-on="Added" data-off="Skip" data-onstyle="success" ></div>
+								            </div>
+                                        </div>   
+									 </div>
+
+                                     </td>
+                                 </tr>
+
+
+                                 
+                               
+                                 <tr>
+                                     <td>
+
+                                    <div class="saveeverything eg-boxed-2 row eg-optional-2 users">
+									    <div class="col-sm-3">
+										    <h2>Users</h2> </div>
+									        <div class="col-sm-6">
+										    <p>
+                                            Includes all users. Note that this function will only clone the basic user information with the record: First Name, Last Name, Company Name, Level, & Email.</p>
+	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/user-report-result/';?>" target="_blank">Users</a></p>
+											</div>
+                                            <div class="col-sm-3">
+                                            <input type="checkbox" class="toggle-one eg-toggle-2" id="usersstatus" data-toggle="toggle" data-on="Append" data-off="Override" data-onstyle="success" >
+											    <input type="checkbox" class="toggle-one eg-toggle-2" id="users" data-toggle="toggle" data-on="Added" data-off="Skip" data-onstyle="success" ></div>
+								            </div>
+                                        </div>  
+								    </div>
+
+                                     </td>
+                                 </tr>
+                                
+                                
+                                 <tr>
+                                     <td>
+
+                                    <div class="saveeverything eg-boxed-2 row eg-optional-2 userfields">
+									    <div class="col-sm-3">
+										    <h2>User Fields</h2> </div>
+									        <div class="col-sm-6">
+										    <p>
+                                            Includes all custom user fields.</p>
+	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/user-fields/';?>" target="_blank">User Fields</a></p>
+											</div>
+											<div class="col-sm-3">
+                                            <input type="checkbox" class="toggle-one eg-toggle-2 hidecursor" id="userfieldsstatus" data-toggle="toggle" data-on="Append" data-off="Override" data-onstyle="success" disabled>
+											    <input type="checkbox" class="toggle-one eg-toggle-2" id="userfields" data-toggle="toggle"  data-on="Added" data-off="Skip" data-onstyle="success" ></div>
+								            </div>
+                                        </div>  
+								    </div>
+                                    
+
+                                     </td>
+                                 </tr>
+
+                                
 
                                  <tr>
                                      <td>
@@ -277,7 +278,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 										    <h2>Floor Plan</h2> </div>
 									        <div class="col-sm-6">
 										    <p>
-                                            Add this option if you want to export selected event floorplan data including booths, tags, and legend lables etc.</p>
+                                            Includes floor plan design, booths, booth tags, and legend labels.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/admin-settings/';?>" target="_blank">Floor Plan</a></p>
 											</div>
 											<div class="col-sm-3">
@@ -304,7 +305,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             
                                     <div style="display: flex;">
                                        <input id="termscondition" type="checkbox"  requried>
-                                       <label style="margin-left: 9px;">By clicking, I acknowlegde that I have read and understand carefully.<span style="color:red;">*</span>.</label><br>
+                                       <label style="margin-left: 9px;">I acknowledge that performing the "Clone" function may result in losing data and/or configurations currently in this portal based on my selections.</label><br>
                                     </div>
                         </div>
 
