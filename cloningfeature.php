@@ -6,7 +6,6 @@ if ($_GET['contentManagerRequest'] == 'cloningfeature') {
     cloningfeature($_POST);
     die();
     
-
 }else if ($_GET['contentManagerRequest'] == 'datavalidateurl') {
     
     require_once('../../../wp-load.php');
@@ -26,9 +25,9 @@ function datavalidateurl($requestData){
         $responce = [];
 
         
-        if($requestData['users'] == "checked"){
+        if($requestData['users'] == "checked" || $requestData['users'] == "checked-add"){
 
-            if($requestData['levelsstatus'] == 'checked'){
+            if($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add'){
 
                 $responce['users']['msg'] =  'success';
     
@@ -39,34 +38,69 @@ function datavalidateurl($requestData){
             }
         }
 
-        if($requestData['levels'] == "checked"){
+        if($requestData['levels'] == "checked" || $requestData['levels'] == "checked-add"){
 
-        
-            $responce['levels']['msg'] = $validating->validatelevels($requestData);
+            $responce['levels']['msg'] =  'success';
+            //$responce['levels']['msg'] = $validating->validatelevels($requestData);
         }
 
         if($requestData['tasks'] == "checked"){
 
+            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
+
+                $responce['tasks']['msg'] =  'success';
+
+            }else{
+
+                $responce['tasks']['msg'] = $validating->validatetasks($requestData);
+
+            }
         
-            $responce['tasks']['msg'] = $validating->validatetasks($requestData);
+            
         }
 
         if($requestData['Shop'] == "checked"){
 
-        
-            $responce['Shop']['msg'] = $validating->validateshop($requestData);
+            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') ){
+
+                $responce['Shop']['msg'] =  'success';
+
+            }else{
+
+                $responce['Shop']['msg'] = $validating->validateshop($requestData);
+
+            }
+
+           
         }
 
         if($requestData['florrplan'] == "checked"){
 
-        
-            $responce['florrplan']['msg'] = $validating->validatefloorplan($requestData);
+            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
+
+                $responce['florrplan']['msg'] =  'success';
+
+            }else{
+
+                $responce['florrplan']['msg'] = $validating->validatefloorplan($requestData);
+
+            }
+
+            
         }
 
         if($requestData['userfields'] == "checked"){
 
-        
-            $responce['userfields']['msg'] = $validating->validateuserfields($requestData);
+            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
+
+                $responce['userfields']['msg'] =  'success';
+
+            }else{
+
+                $responce['userfields']['msg'] = $validating->validateuserfields($requestData);
+
+            }
+            
         }
 
 
@@ -108,7 +142,6 @@ function datavalidateurl($requestData){
     }
     die();
 
-
 }
 
 function cloningfeature($requestData){
@@ -130,14 +163,14 @@ function cloningfeature($requestData){
         if($requestData['eventsettings'] == "checked"){
 
             
-            $responce['eventsettings'] = $cloningfeatures->cloneeventsettings($requestData['eventsettingsstatus']);
+            $responce['eventsettings'] = $cloningfeatures->cloneeventsettings($requestData['eventsettings']);
 
         }
 
         
         if($requestData['reports'] == "reports"){
 
-            $responce['reports'] = $cloningfeatures->clonereports($requestData['reportsstatus']);
+            $responce['reports'] = $cloningfeatures->clonereports($requestData['reports']);
 
         }
 
@@ -145,53 +178,54 @@ function cloningfeature($requestData){
         if($requestData['menupages'] == "checked"){
 
             
-             $responce['menupages'] = $cloningfeatures->clonemenupages($requestData['menupagesstatus']);
+             $responce['menupages'] = $cloningfeatures->clonemenupages($requestData['menupages']);
         }
 
         
         if($requestData['users'] == "checked"){
 
             
-            $responce['users'] = $cloningfeatures->cloneusers($requestData['usersstatus']);
+            $responce['users'] = $cloningfeatures->cloneusers($requestData['users']);
         }
 
         if($requestData['levels'] == "checked"){
 
             
-            $responce['levels'] = $cloningfeatures->cloneLevel($requestData['levelsstatus']);
+            $responce['levels'] = $cloningfeatures->cloneLevel($requestData['levels']);
         }
 
         if($requestData['tasks'] == "checked"){
 
             
-            $responce['tasks'] = $cloningfeatures->clonetasks($requestData['tasksstatus']);
+            $responce['tasks'] = $cloningfeatures->clonetasks($requestData['tasks']);
         }
 
         if($requestData['resources'] == "checked"){
 
             
-            $responce['resources'] = $cloningfeatures->cloneresources($requestData['resourcesstatus']);
+            $responce['resources'] = $cloningfeatures->cloneresources($requestData['resources']);
         }
 
         if($requestData['Shop'] == "checked"){
 
             
-            $responce['Shop'] = $cloningfeatures->cloneShop($requestData['Shopstatus']);
+            $responce['Shop'] = $cloningfeatures->cloneShop($requestData['Shop']);
         }
 
         if($requestData['florrplan'] == "checked"){
 
             
-            $responce['florrplan'] = $cloningfeatures->cloneflorrplan($requestData['florrplanstatus']);
+            $responce['florrplan'] = $cloningfeatures->cloneflorrplan($requestData['florrplan']);
         }
 
         if($requestData['userfields'] == "checked"){
 
             
-            $responce['userfields'] = $cloningfeatures->cloneuserfields($requestData['userfieldsstatus']);
+            $responce['userfields'] = $cloningfeatures->cloneuserfields($requestData['userfields']);
         }
       
-        print_r($responce);
+        echo json_encode($responce);
+        die();
 
 
 

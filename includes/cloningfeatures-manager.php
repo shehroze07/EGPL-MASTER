@@ -97,6 +97,8 @@ class ClonefeatureManager {
         switch_to_blog($this->$clonesiteID);
         $usersData = $this->getAllUsers($this->$clonesiteID);
 
+
+        
         restore_current_blog();
         $this->createAllusers(get_current_blog_id(),$usersData);
 
@@ -906,7 +908,7 @@ class ClonefeatureManager {
         foreach ($userdata as $userkey => $usermeta) {
 
             
-            $responce = $this->checkuserlevel($siteID,$usermeta['level']);
+            //$responce = $this->checkuserlevel($siteID,$usermeta['level']);
            
             $leavel[strtolower($usermeta['level'])] = 1;
             if (add_user_to_blog($siteID, $usermeta['ID'], $usermeta['level'])) {
@@ -1314,7 +1316,6 @@ class ClonefeatureManager {
         return $createdmenuid;
     }
 
-
     public function validateusers($validationrules){
 
         $siteID = $this->$clonesiteID;
@@ -1332,7 +1333,7 @@ class ClonefeatureManager {
             foreach ($get_all_roles as $key => $item) {
 
                 if ($item['name'] == $userdata['level']) {
-                    echo $userdata['level'];
+                   
                     $message = "success";
 
                 }
@@ -1369,14 +1370,153 @@ class ClonefeatureManager {
 
     public function validatetasks($validationrules){
 
+        $gettasksList = $this->getAlltasks($this->$clonesiteID);
+        $listofalllevels = $this->listofcurretnsitelevels();
+        $currentsiteID = get_current_blog_id();
+
+       
 
 
+        foreach ($gettasksList as $taskkey => $taskmeta) {
+
+            $taskroleslist = $taskmeta['roles'];
+            $taskuserslist = $taskmeta['usersids'];
+
+            
+            if(!empty($taskroleslist)){
+            foreach($taskroleslist as $roleindex=>$rolekey){
+                if($rolekey != 'all' && $rolekey != 'contentmanager'){
+                        
+                    if (!in_array($rolekey, $listofalllevels)){
+
+                        $userresult['level'][$taskkey]['msg'][$rolekey] = "levelmissing";
+
+                    }
+                }
+            }}
+            if(!empty($taskuserslist)){
+
+                foreach($taskuserslist as $userindex=>$userID){
+
+                    $sites   = get_blogs_of_user($userID);
+                    $userresult['users'][$userindex]['msg'] = "notmatched";
+                    foreach($sites as $sitesIndex=>$sitesdata){
+
+                        if($currentsiteID == $sitesdata->userblog_id){
+
+                            $userresult['users'][$userindex]['msg'] = "matched";
+
+                        }
+
+                         
+
+                    }
+                }
+            }
+
+
+        }
+        if(empty($userresult)){
+
+            $userresult = 'success';
+        }
+        return $userresult;
         
     }
 
     public function validateshop($validationrules){
 
+        $siteID = $this->$clonesiteID;
+        $allproductslist = $this->getAllproducts($siteID);
+        $currentsiteID = get_current_blog_id();
+        $listofalllevels = $this->listofcurretnsitelevels();
 
+        foreach ($allproductslist as $productkey => $productmeta) {
+
+
+            $listoflevele = $productmeta['productlevel'];
+            $userslistofvisable = $productmeta['alg_wc_pvbur_visible'];
+            $visableuserslist = $productmeta['alg_wc_pvbur_uservisible'];
+            $selectedboothlist = $productmeta['list_of_selected_booth'];
+            $taskslist = $productmeta['seletedtaskKeys'];
+            $message = "Some Levels are missing.";
+
+            if(!empty($listoflevele)){
+
+                if (in_array($listoflevele, $listofalllevels)){
+
+
+                }else{
+
+                    $userresult['level']['msg'] = "levelmissing";
+                }
+
+            }
+
+            if(!empty($visableuserslist)){
+
+                foreach($visableuserslist as $userkey=>$userID){
+                   
+                    $sites   = get_blogs_of_user($userID);
+
+                    $userresult['users'][$userkey]['msg'] = "notmatched";
+                    foreach($sites as $sitesIndex=>$sitesdata){
+
+                        if($currentsiteID == $sitesdata->userblog_id){
+
+                            $userresult['users'][$userkey]['msg'] = "matched";
+
+                        }
+
+                         
+
+                    }
+
+                }
+
+            }
+            if(!empty($taskslist['selectedtasks'])){
+
+                foreach($taskslist['selectedtasks'] as $taskkey=>$taskID){
+
+                    $result = get_post_meta( $taskID, 'value' , true);
+                    if(empty($result)){
+
+                        $userresult['tasks'][$taskkey]['msg'] = "missingtasks";
+
+                    }
+
+                }
+
+            }
+            if(!empty($userslistofvisable)){
+                
+                foreach($userslistofvisable as $levelindex=>$levelkey){
+                    
+                    if($levelkey != 'all' && $levelkey != 'contentmanager'){
+                    
+                        if (!in_array($levelkey, $listofalllevels)){
+
+                            $userresult['level']['msg'] = "levelmissing";
+
+                        }
+                    }
+
+                }
+
+            }
+
+
+        }
+
+        if(empty($userresult)){
+
+            $userresult = 'success';
+        }
+
+        return $userresult;
+
+        
 
         
     }
@@ -1395,6 +1535,20 @@ class ClonefeatureManager {
         
     }
 
+    public function listofcurretnsitelevels(){
+
+        $get_all_roles_array = 'wp_'.get_current_blog_id().'_user_roles';
+        $get_all_roles = get_option($get_all_roles_array);
+        $listofArray = [];
+        foreach ($get_all_roles as $key => $item) {
+
+            $listofArray[] = $key;
+
+        }
+
+        return $listofArray;
+
+    }
     
 
 }

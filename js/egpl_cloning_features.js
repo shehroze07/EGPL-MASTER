@@ -45,10 +45,8 @@ function submitcloningfeature(){
        swal.fire({
             title: "Missing !",
             text: 'Please select the event name from the dropdown.',
-            type: "warning",
-            html:true,
             icon: "warning",
-            icon: "warning",
+           
             confirmButtonClass: "btn-success",
             confirmButtonText: "Close"
         });
@@ -60,10 +58,8 @@ function submitcloningfeature(){
         swal.fire({
             title: "Missing !",
             text: 'Please clicked the acknowlegded checkbox.',
-            type: "warning",
-            html:true,
             icon: "warning",
-            icon: "warning",
+           
             confirmButtonClass: "btn-success",
             confirmButtonText: "Close"
         });
@@ -75,15 +71,12 @@ function submitcloningfeature(){
         
           Swal.fire({
             title: 'Are you sure?',
-            text: "This action will replace your settings with the selected site.",
-            type: "warning",
-            showDenyButton: true,
-            showCancelButton: true,
+            text: 'This action cannot be undone and is only advised before going live with your portal. Clicking "Confirm" will add and/or completely override data and configurations in this current portal based on your selections.',
             icon: "warning",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: 'Yes',
-            denyButtonText: `No`,
+            
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: `Cancel`,
           }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
@@ -116,111 +109,82 @@ function cloningfeatureconfrim(){
 
     console.log(urlnew);
    
-    if(jQuery("#eventsettings").prop("checked")){
+    if(jQuery("#eventsettings2").prop("checked") || jQuery("#eventsettings3").prop("checked")){
 
         cloningfeatureslist['eventsettings'] = 'checked';
-        if(jQuery("#eventsettingsstatus").prop("checked")){
-
-            cloningfeatureslist['eventsettingsstatus'] = 'checked';
-        }
-        
        
 
-    } if(jQuery("#reports").prop("checked")){
+    } if(jQuery("#reports2").prop("checked") || jQuery("#reports3").prop("checked")){
 
        
-       
-        cloningfeatureslist['reports'] = 'checked';
-       
-        if(jQuery("#reportsstatus").prop("checked")){
+       cloningfeatureslist['reports'] = 'checked';
 
-            cloningfeatureslist['reportsstatus'] = 'checked';
-        }
 
-    } if(jQuery("#menupages").prop("checked")){
+    } if(jQuery("#menupages2").prop("checked") || jQuery("#menupages3").prop("checked")){
 
        
        
         cloningfeatureslist['menupages'] = 'checked';
        
-        if(jQuery("#menupagesstatus").prop("checked")){
+       
 
-            cloningfeatureslist['menupagesstatus'] = 'checked';
-        }
-
-    } if(jQuery("#users").prop("checked")){
+    } if(jQuery("#users2").prop("checked") || jQuery("#users3").prop("checked")){
 
         
       
         cloningfeatureslist['users'] = 'checked';
         
-        if(jQuery("#usersstatus").prop("checked")){
+        if(jQuery("#users2").prop("checked")){
 
-            cloningfeatureslist['usersstatus'] = 'checked';
+            cloningfeatureslist['users'] = 'checked-add';
         }
 
-    } if(jQuery("#levels").prop("checked")){
+    } if(jQuery("#levels2").prop("checked") || jQuery("#levels3").prop("checked")){
 
         
         
         cloningfeatureslist['levels'] = 'checked';
         
-        if(jQuery("#levelsstatus").prop("checked")){
+        if(jQuery("#levels2").prop("checked")){
 
-            cloningfeatureslist['levelsstatus'] = 'checked';
+            cloningfeatureslist['levels'] = 'checked-add';
         }
 
-    }if(jQuery("#tasks").prop("checked")){
+    }if(jQuery("#tasks2").prop("checked") || jQuery("#tasks3").prop("checked")){
 
         cloningfeatureslist['tasks'] = 'checked';
        
-        if(jQuery("#tasksstatus").prop("checked")){
+        
 
-            cloningfeatureslist['tasksstatus'] = 'checked';
-        }
-
-    } if(jQuery("#resources").prop("checked")){
+    } if(jQuery("#resources2").prop("checked") || jQuery("#resources3").prop("checked")){
 
         
        
         cloningfeatureslist['resources'] = 'checked';
        
-        if(jQuery("#resourcesstatus").prop("checked")){
+       
 
-            cloningfeatureslist['resourcesstatus'] = 'checked';
-        }
-
-    } if(jQuery("#Shop").prop("checked")){
+    } if(jQuery("#Shop2").prop("checked") || jQuery("#Shop3").prop("checked")){
 
     
         
         cloningfeatureslist['Shop'] = 'checked';
        
-        if(jQuery("#Shopstatus").prop("checked")){
 
-            cloningfeatureslist['Shopstatus'] = 'checked';
-        }
-
-    } if(jQuery("#florrplan").prop("checked")){
+    } if(jQuery("#florrplan2").prop("checked") || jQuery("#florrplan3").prop("checked")){
 
         
         cloningfeatureslist['florrplan'] = 'checked';
         
-        if(jQuery("#florrplanstatus").prop("checked")){
-
-            cloningfeatureslist['florrplanstatus'] = 'checked';
-        }
+       
 
     }
-    if(jQuery("#userfields").prop("checked")){
+    if(jQuery("#userfields2").prop("checked") || jQuery("#userfields3").prop("checked")){
 
         
         cloningfeatureslist['userfields'] = 'checked';
         
-        if(jQuery("#userfieldsstatus").prop("checked")){
-
-            cloningfeatureslist['userfieldsstatus'] = 'checked';
-        }
+      
 
     }
     
@@ -230,25 +194,7 @@ function cloningfeatureconfrim(){
     
 
 
-    let timerInterval
-    Swal.fire({
-    title: 'Auto close alert!',
-    html: 'I will close in <b></b> milliseconds.',
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: () => {
-        Swal.showLoading()
-        const b = Swal.getHtmlContainer().querySelector('b')
-        timerInterval = setInterval(() => {
-        b.textContent = Swal.getTimerLeft()
-        }, 100)
-    },
-    willClose: () => {
-        clearInterval(timerInterval)
-
-
-
-    
+    console.log(data);
 
 
     let timerInterval
@@ -257,6 +203,9 @@ function cloningfeatureconfrim(){
     html: '<div class="popupcontent"><p>Please wait data is validating...</p></div>',
     timerProgressBar: true,
     icon: 'info',
+    showCancelButton: true,
+    cancelButtonText: `Cancel`,
+    //allowOutsideClick: false,
     didOpen: () => {
         Swal.showLoading()
         const b = Swal.getHtmlContainer().querySelector('p');
@@ -287,13 +236,18 @@ function cloningfeatureconfrim(){
 
                     jQuery(".popupcontent").empty();
                     jQuery(".popupcontent").append(appendmessage);
+
+                    jQuery(".popupcontent").append('<p>Are you want to continue or cancel ?</p>');
+                    jQuery(".swal2-confirm").text("Continue");
                     Swal.hideLoading();
                    
 
                 }else{
 
-
-
+                    //jQuery(".popupcontent").empty();
+                    //jQuery(".popupcontent").append('<p>Please wait data is cloning...</p>');
+                    //var responce = cloningfeaturesconfrim(cloningfeatureslist);
+                    //console.log(responce);
 
                 }
                 
@@ -307,9 +261,23 @@ function cloningfeatureconfrim(){
     }
     }).then((result) => {
     /* Read more about handling dismissals below */
-    if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer')
-    }
+    Swal.fire({
+        title: 'Data cloning... !',
+        html: '<div class="popupcontent"><p>Please wait data is cloning...</p></div>',
+        timerProgressBar: true,
+        //allowOutsideClick: false,
+        icon: 'info',
+        didOpen: () => {
+
+            //Swal.showLoading();
+            //cloningfeaturesconfrim(cloningfeatureslist);
+           
+        }
+        
+    
+
+        });
+    
     });
 
    
@@ -317,7 +285,21 @@ function cloningfeatureconfrim(){
    
       
 
-   /* jQuery.ajax({
+  
+            
+
+}
+function cloningfeaturesconfrim(dataobject){
+
+
+    var data = new FormData();
+    
+
+    var url = currentsiteurl+'/';
+    var urlnew = url + 'wp-content/plugins/EGPL/cloningfeature.php?contentManagerRequest=cloningfeature';
+    data.append('cloningfeatureslist',JSON.stringify(dataobject));
+
+      jQuery.ajax({
         url: urlnew,
         data: data,
         cache: false,
@@ -326,13 +308,26 @@ function cloningfeatureconfrim(){
         type: 'POST',
         success: function (data) {
             
-            console.log(cloningfeatureslist);
-            
-            
-            
-        } });*/
-            
+            console.log(data);
 
+
+            Swal.fire({
+                title: 'Completed !',
+                html: 'Selected Data has been cloned successfully.',
+                icon: 'success',
+                confirmButton: "btn-success",
+                confirmButtonText: "Close"
+               
+                }).then((result) => {
+
+                    location.reload();
+
+
+                });
+           
+            
+            
+        } });
+
+        
 }
-
-
