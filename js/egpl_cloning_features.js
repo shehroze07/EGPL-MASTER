@@ -73,7 +73,7 @@ function submitcloningfeature(){
             title: 'Are you sure?',
             text: 'This action cannot be undone and is only advised before going live with your portal. Clicking "Confirm" will add and/or completely override data and configurations in this current portal based on your selections.',
             icon: "warning",
-            
+            confirmButtonColor: '#86cceb',
             showCancelButton: true,
             confirmButtonText: 'Confirm',
             cancelButtonText: `Cancel`,
@@ -199,13 +199,14 @@ function cloningfeatureconfrim(){
 
     let timerInterval
     Swal.fire({
-    title: 'Data Validation !',
-    html: '<div class="popupcontent"><p>Please wait data is validating...</p></div>',
+    title: 'Data Validation in Progress',
+    html: '<div class="popupcontent"><p>Please wait while your choices are validated</p></div>',
     timerProgressBar: true,
     icon: 'info',
     showCancelButton: true,
-    cancelButtonText: `Cancel`,
-    //allowOutsideClick: false,
+    cancelButtonText: `Abort`,
+    confirmButtonColor: '#86cceb',
+    allowOutsideClick: false,
     didOpen: () => {
         Swal.showLoading()
         const b = Swal.getHtmlContainer().querySelector('p');
@@ -224,30 +225,132 @@ function cloningfeatureconfrim(){
                 var appendmessage = "";
                 jQuery.each( message, function( i, item ) {
 
-                    if(item.msg !="success"){
+                  
+                    if(i == 'Shop'){
+
+                        if(item.msg !== "success"){
+
+                        jQuery.each( item.msg, function( j, object ) {
+
+                            console.log(j);
+                            console.log(object); 
+
+                            if(j == "level"){
+
+                            
+                                if(object == "missinglevels"){
+
+                                    appendmessage += '<p style="font-size:15px;color:red;">Shop products have dependencies on Levels which are not part of the current selection.</p>';
+                                   
+                                }
+                           
+                            }else if(j == 'users'){
+
+                           
+
+                                if(object == "missingusers"){
+    
+                                    appendmessage += '<p style="font-size:15px;color:red;">Shop products have dependencies on Users which are not part of the current selection.</p>';
+                                    
+                                }
+    
+                           
+
+                            }else if( j == 'tasks'){
+
+                           
+
+                                if(object == "missingtasks"){
+    
+                                    appendmessage += '<p style="font-size:15px;color:red;">Shop products have dependencies on Tasks which are not part of the current selection.</p>';
+                                   
+                                }
+    
+                           
+
+                            }
+                        });
+                        
+                      }
+                      
+
+                    }else if(i == 'tasks'){
+
+
+                        console.log(item.msg);
+
+                        if(item.msg !== "success"){
+
+
+                            console.log(item.msg);
+                              
+                            
+
+                            jQuery.each( item.msg, function( j, object ) {
+
+                                console.log(j);   
+                                console.log(object); 
+
+                            if(j == "level"){
+
+                            
+                                if(object == "missinglevels"){
+
+                                    appendmessage += '<p style="font-size:15px;color:red;">Tasks have dependencies on Levels which are not part of the current selection.</p>';
+                                   
+                                }
+                           
+                            }else if(j == 'users'){
+
+                           
+
+                                if(object == "missingusers"){
+    
+                                    appendmessage += '<p style="font-size:15px;color:red;">Tasks have dependencies on Users which are not part of the current selection.</p>';
+                                    
+                                }
+    
+                           
+
+                            }
+
+
+
+                            });
+                        }
+
+                    }else{
+
+                        if(item.msg !="success"){
                        
-                        appendmessage += '<p style="font-size:15px;color:red;">'+item.msg+'</p>';
+                            appendmessage += '<p style="font-size:15px;color:red;">'+item.msg+'</p>';
+    
+                        }
+
+
                     }
+
+                    
 
                 });
                
-                
+                console.log(appendmessage);
                 if(appendmessage !=""){
 
                     jQuery(".popupcontent").empty();
                     jQuery(".popupcontent").append(appendmessage);
 
-                    jQuery(".popupcontent").append('<p>Are you want to continue or cancel ?</p>');
-                    jQuery(".swal2-confirm").text("Continue");
+                    jQuery(".popupcontent").append('<p>Do you still want to execute the clone operation without including the above dependencies?</p>');
+                    jQuery(".swal2-confirm").text("Execute");
                     Swal.hideLoading();
                    
 
                 }else{
 
-                    //jQuery(".popupcontent").empty();
-                    //jQuery(".popupcontent").append('<p>Please wait data is cloning...</p>');
-                    //var responce = cloningfeaturesconfrim(cloningfeatureslist);
-                    //console.log(responce);
+                    jQuery(".popupcontent").empty();
+                    jQuery(".popupcontent").append('<p>Please wait while the selected objects are cloned.</p>');
+                    var responce = cloningfeaturesconfrim(cloningfeatureslist);
+                    console.log(responce);
 
                 }
                 
@@ -261,22 +364,26 @@ function cloningfeatureconfrim(){
     }
     }).then((result) => {
     /* Read more about handling dismissals below */
-    Swal.fire({
-        title: 'Data cloning... !',
-        html: '<div class="popupcontent"><p>Please wait data is cloning...</p></div>',
-        timerProgressBar: true,
-        //allowOutsideClick: false,
-        icon: 'info',
-        didOpen: () => {
 
-            //Swal.showLoading();
-            //cloningfeaturesconfrim(cloningfeatureslist);
-           
+    if(result.value){
+            Swal.fire({
+                title: 'Executing Clone Operation',
+                html: '<div class="popupcontent"><p>Please wait while the selected objects are cloned.</p></div>',
+                timerProgressBar: true,
+                confirmButtonColor: '#86cceb',
+                //allowOutsideClick: false,
+                icon: 'info',
+                didOpen: () => {
+
+                    Swal.showLoading();
+                    cloningfeaturesconfrim(cloningfeatureslist);
+                
+                }
+                
+            
+
+            });
         }
-        
-    
-
-        });
     
     });
 
@@ -312,11 +419,12 @@ function cloningfeaturesconfrim(dataobject){
 
 
             Swal.fire({
-                title: 'Completed !',
-                html: 'Selected Data has been cloned successfully.',
+                title: 'Completed!',
+                html: 'Selected objects have been cloned successfully.',
                 icon: 'success',
                 confirmButton: "btn-success",
-                confirmButtonText: "Close"
+                confirmButtonText: "Close",
+                confirmButtonColor: '#86cceb',
                
                 }).then((result) => {
 

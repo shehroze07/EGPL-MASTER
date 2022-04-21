@@ -3,6 +3,7 @@
 if ($_GET['contentManagerRequest'] == 'cloningfeature') {
     
     require_once('../../../wp-load.php');
+
     cloningfeature($_POST);
     die();
     
@@ -22,7 +23,7 @@ function datavalidateurl($requestData){
 
         $requestData = json_decode(stripslashes($requestData['cloningfeatureslist']), true);
         $validating = new ClonefeatureManager($requestData['clonesiteid']);
-        $responce = [];
+        $responce = array();
 
         
         if($requestData['users'] == "checked" || $requestData['users'] == "checked-add"){
@@ -91,24 +92,18 @@ function datavalidateurl($requestData){
 
         if($requestData['userfields'] == "checked"){
 
-            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
-
+           
                 $responce['userfields']['msg'] =  'success';
 
-            }else{
-
-                $responce['userfields']['msg'] = $validating->validateuserfields($requestData);
-
-            }
+           
             
         }
-
 
 
         if($requestData['resources'] == "checked"){
 
         
-            $responce['resources']['msg'] = 'suceess';
+            $responce['resources']['msg'] = 'success';
         }
 
         if($requestData['eventsettings'] == "checked"){
@@ -120,14 +115,14 @@ function datavalidateurl($requestData){
 
         if($requestData['reports'] == "reports"){
 
-            $responce['reports']['msg'] = 'suceess';
+            $responce['reports']['msg'] = 'success';
 
         }
 
         if($requestData['menupages'] == "checked"){
 
         
-            $responce['menupages']['msg'] = 'suceess';
+            $responce['menupages']['msg'] = 'success';
         }
 
        echo json_encode($responce);
@@ -168,7 +163,7 @@ function cloningfeature($requestData){
         }
 
         
-        if($requestData['reports'] == "reports"){
+        if($requestData['reports'] == "checked"){
 
             $responce['reports'] = $cloningfeatures->clonereports($requestData['reports']);
 
@@ -182,13 +177,13 @@ function cloningfeature($requestData){
         }
 
         
-        if($requestData['users'] == "checked"){
+        if($requestData['users'] == "checked" || $requestData['users'] == "checked-add"){
 
             
             $responce['users'] = $cloningfeatures->cloneusers($requestData['users']);
         }
 
-        if($requestData['levels'] == "checked"){
+        if($requestData['levels'] == "checked" || $requestData['levels'] == "checked-add"){
 
             
             $responce['levels'] = $cloningfeatures->cloneLevel($requestData['levels']);

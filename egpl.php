@@ -5879,10 +5879,7 @@ class PageTemplater {
                         'temp/admin_view_orders.php'=>'Admin View User Orders',
                         'temp/create-new-page-template.php'=>'Create New Page',
                         'temp/manage-menu-template.php'=>'Manage Menu Template',
-
-
                         'temp/egpl_cloning_features_temp.php'=>'Egpl Cloning',
-
                        
                         
                      
@@ -8576,21 +8573,6 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
                                         if($key1 == 0){
     
                                             $currentroleOrder = getroleorder($user_info->roles[0]);
-
-                                            
-                                        }else{
-                                            
-                                            $currentroleOrder = getroleorder($getpackagelevel[$key1-1]);
-                                        }
-                                     
-                                            //   echo 'Qasimriiaz<pre>';
-                                            //   echo $roleName.'<br>';
-                                            //   echo $user_info->roles[0].'<br>';
-                                            //  echo $currentroleName.'<br>';
-                                            //   echo $productroleOrder.'_________';
-                                            //   echo 'Qasimriiazz<pre>';
-                                            
-
                                             
                                         }else{
                                             
@@ -8617,7 +8599,10 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
                                             $responce['assignrole'] = $currentroleName['name'];
                                             $loggin_data['rolename'][] = $currentroleName['name'];
                                             }
-                             
+                                }
+                                else{
+                                    echo "UserRole Remain Same";
+                                }
                                 $counter++; 
                              }
                             //$u = new WP_User($current_user);
@@ -9357,6 +9342,12 @@ add_action('rest_api_init', function() {
 	]);
         
         
+        register_rest_route('w1/v1', 'cventgetrequest', [
+		'methods' => 'POST',
+		'callback' => 'cventgetrequest',
+	]);
+        
+        
         register_rest_route('w1/v1', 'getuserinfo', [
 		'methods' => 'POST',
 		'callback' => 'getuserinfo',
@@ -9928,6 +9919,83 @@ function getorders(){
     
 }
 
+function cventgetrequest(){
+    
+    try {
+    
+      
+    //$newContactUserData =   json_decode(get_option("cventuserdata"));
+      
+    //echo '<pre>';
+    //print_r($newContactUserData);exit;
+     
+     
+     
+    $newContactUserData =  json_decode(file_get_contents('php://input')) ;
+    
+    
+    //update_option("cventuserdata",$newContactUserData);
+    
+    
+   $lastInsertId = contentmanagerlogging('Cvent Action Create User', "Admin Action", "", "", "", $newContactUserData);
+ 
+   
+    
+    if(!empty($newContactUserData)){
+        
+        
+    
+        
+        //foreach($newContactUserData as $usersdata2=>$userdata){
+            
+            
+           
+                
+                
+                $userinformationupdatearray['username']  = $newContactUserData->Semail;
+                $userinformationupdatearray['Semail'] = $newContactUserData->Semail;
+                $userinformationupdatearray['Role'] = $newContactUserData->role;
+                $userinformationupdatearray['external_reference_id_zapier']  = $newContactUserData->cvent_id;
+                $userinformationupdatearray['first_name']  = $newContactUserData->first_name;
+                $userinformationupdatearray['last_name']  =$newContactUserData->last_name;
+                $userinformationupdatearray['company_name']  = $newContactUserData->company_name;
+                $userinformationupdatearray['confirmation_number']  = $newContactUserData->confirmation_number;
+                $userinformationupdatearray['send_welcome_email']  = $newContactUserData->send_welcome_email;
+                $userinformationupdatearray['register_date']  = $newContactUserData->register_date;
+                
+                $userinformationupdatearray = (object)$userinformationupdatearray;
+                $lastInsertId = contentmanagerlogging('testin', "Admin Action", "", "", "", $userinformationupdatearray);
+    
+            //print_r($userinformationupdatearray);exit;
+            
+                $resultRegistratedUser[$usersdata]['result'] = CreateNewUser($userinformationupdatearray);
+            
+            
+            
+            
+        //}
+        
+        
+    }else{
+        
+        $resultRegistratedUser["error"] = "Something went going wrong. Please Connect with App administrative.";
+        
+    }
+    
+    
+    
+    return (object)$resultRegistratedUser;
+    
+    }catch (Exception $e) {
+
+      
+
+        return $e;
+    }
+    
+    
+}
+
 function createuser(){
     
     try {
@@ -10289,7 +10357,11 @@ function CreateNewUser($newContactUserData){
         
         updateregistredUserMeta($user_id,$newContactUserData,$role);
         
-        custome_email_send($user_id,$newContactUserData->Semail,"welcome_email_template");
+        
+        if($newContactUserData->send_welcome_email == true){
+            custome_email_send($user_id,$newContactUserData->Semail,"welcome_email_template");
+        }
+        
         //update_user_option($user_id, 'profile_updated', $t*1000);
         
         if (add_user_to_blog($blogid, $user_id, $role)) {
@@ -10318,6 +10390,10 @@ function CreateNewUser($newContactUserData){
 			   
 			   $message['message'] = $userregister_responce['errors']['invalid_username'][0];
 		   }
+                   
+                   $message['username'] = $newContactUserData->username;
+                   $message['email'] = $newContactUserData->Semail;
+                   
         
         } 
     } else {
@@ -10356,7 +10432,9 @@ function CreateNewUser($newContactUserData){
                     $useremail='';
                     
                     updateregistredUserMeta($user_id,$newContactUserData,$role);
-                    custome_email_send($user_id,$email,"welcome_email_template");
+                    if($newContactUserData->send_welcome_email == true){
+                        custome_email_send($user_id,$email,"welcome_email_template");
+                    }
                     $t=time();
                     //update_user_option($user_id, 'profile_updated', $t*1000);
                     
@@ -10384,7 +10462,9 @@ function CreateNewUser($newContactUserData){
 function updateregistredUserMeta($userID,$userMetaData,$role){
     
     try {
-    
+        
+        //$lastInsertId = contentmanagerlogging('$userMetaData', "Admin Action", "", "", "", $userMetaData);
+        
         foreach($userMetaData as $keyIndex=>$valueDataIndex){
             
             if (is_numeric($valueDataIndex)) {
@@ -11017,6 +11097,7 @@ function gettasktype($taskkey){
     }
     return $getOrginalData;
 }
+
 
 ///-----------------Expogenie API Endpoints ---------------------///
 

@@ -23,11 +23,41 @@ class ClonefeatureManager {
         $clonedEventSiteSettings = get_option("ContenteManager_Settings");
         $clonedEntryWizardSettings = get_option("custome_exhibitor_flow_settings_data");
         $clonedFloorplanQueueSettings = get_option("floorPlanSettings");
+        $wizardsettings = get_option("exhibitorentryflowstatus");
         
         
         restore_current_blog();
 
-        if(!empty($getclonedsitesettings)){
+        $loginpageID = get_page_by_path('login');
+        $landingpageID = get_page_by_path('landing-page');
+        $applicationflowstatus = $wizardsettings['status'];
+
+       
+
+        if ($applicationflowstatus == "checked") {
+
+           
+
+           if (!empty($landingpageID)) {
+            
+             
+               update_option('page_on_front', $landingpageID->ID);
+               update_option('show_on_front', 'page');
+           }
+       } else {
+
+     
+           if (!empty($loginpageID)) {
+         
+               update_option('page_on_front', $loginpageID->ID);
+               update_option('show_on_front', 'page');
+           }
+       }
+
+
+       
+
+        if(!empty($clonedEventSiteSettings)){
             update_option("ContenteManager_Settings", $clonedEventSiteSettings);
         }
         
@@ -37,6 +67,10 @@ class ClonefeatureManager {
 
         if(!empty($clonedFloorplanQueueSettings)){
             update_option("floorPlanSettings", $clonedFloorplanQueueSettings);
+        }
+
+        if(!empty($wizardsettings)){
+            update_option("exhibitorentryflowstatus", $wizardsettings);
         }
 
         return 'done';
@@ -57,6 +91,10 @@ class ClonefeatureManager {
         
         
         restore_current_blog();
+
+       
+
+
         if(!empty($clonedUsersTaskReports)){
             update_option("ContenteManager_userstasksreport_settings", $clonedUsersTaskReports);
         }
@@ -100,6 +138,13 @@ class ClonefeatureManager {
 
         
         restore_current_blog();
+
+        if($datastatus == "checked"){
+
+            $this->removeallusers(get_current_blog_id());
+
+        }
+
         $this->createAllusers(get_current_blog_id(),$usersData);
 
         return 'done';
@@ -116,7 +161,48 @@ class ClonefeatureManager {
 
         restore_current_blog();
         
-        update_option ($get_all_roles_array, $get_all_roles);
+      
+
+        if($datastatus == "checked"){
+
+            $get_all_roles_array2 = 'wp_'.get_current_blog_id().'_user_roles';
+            update_option ($get_all_roles_array2, $get_all_roles);
+
+        }else if($datastatus == "checked-add"){
+
+
+            $listofalllevels = $this->listofcurretnsitelevels();
+            $get_all_roles_array2 = 'wp_'.get_current_blog_id().'_user_roles';
+            $get_all_roles2 = get_option($get_all_roles_array2);
+          
+            foreach ($get_all_roles as $key => $item) {
+
+                if($item['name'] != "Administrator" && $item['name'] != "Content Manager"){
+                    if (!in_array($key, $listofalllevels)){
+
+                        
+                        $role_key=strtolower($item['name']);
+                        $remove_space_role_kye=str_replace(" ","_",$role_key);
+
+                        $get_all_roles2[$remove_space_role_kye]['name'] =  ucfirst($item['name']);
+                        $get_all_roles2[$remove_space_role_kye]['capabilities']['unfiltered_upload'] =  1;//ucfirst($newrolename);
+                        $get_all_roles2[$remove_space_role_kye]['capabilities']['upload_files'] =  1;//ucfirst($newrolename);
+                        $get_all_roles2[$remove_space_role_kye]['capabilities']['level_0'] =  1;
+                        $get_all_roles2[$remove_space_role_kye]['capabilities']['read'] =  1;
+                        
+                        update_option ($get_all_roles_array2, $get_all_roles2);
+    
+                    }
+                }
+
+            }
+
+
+
+        }
+
+
+        
         
         return 'done';
 
@@ -204,6 +290,8 @@ class ClonefeatureManager {
 
     public function cloneFlorrplan($datastatus){
 
+        
+
         switch_to_blog($this->$clonesiteID);
         
         $floorPlanSettings = get_option("floorPlanSettings");
@@ -254,6 +342,10 @@ class ClonefeatureManager {
         $defaultImage = get_site_url()."/wp-content/plugins/floorplan/icon01.png";
         $productpicID = $this->uploadImage($defaultImage);
         $responce = $demo->createAllBoothPorducts($id,$newboothjson,$FloorplanXml[0],$productpicID);
+
+
+        $cleanfloorplan = $this->cleanfloorplanxml();
+
         return 'done';
 
 
@@ -555,11 +647,13 @@ class ClonefeatureManager {
         $get_all_resources = get_posts( $args );
 
 
+       
+
         foreach ($get_all_resources as $resourcesIndex => $resourcesValue){
 
             
-            $ResourceID = $resourcesValue->ID;
-            wp_delete_post( $ResourceID, true );
+            wp_trash_post($resourcesValue->ID);
+          
 
         }
 
@@ -731,14 +825,15 @@ class ClonefeatureManager {
         foreach ($all_products->products as $single_product) {
 
 
-            
+           
             $product_id = $single_product->id;
-            
+            $update_product = wc_get_product( $product_id );
+            $getproduct_detail = $woocommerce_object->products->get( $product_id );
 
             if($getproduct_detail->product->categories[0] == 'Packages' || $getproduct_detail->product->categories[0] == 'Add-ons' || $getproduct_detail->product->categories[0] == 'Package' || $getproduct_detail->product->categories[0] == 'Add-on'){
 
-
-                wp_delete_post( $product_id, true );
+                wp_trash_post($product_id);
+                
                 
             }
         }
@@ -758,6 +853,7 @@ class ClonefeatureManager {
         
         
         foreach ($listofclonedproducts as $productkey => $productmeta) {
+
 
 
             if($productmeta['stock_status'] == 'instock'){
@@ -833,7 +929,17 @@ class ClonefeatureManager {
             $term_ids =[$productmeta['catgories']];
             $objProduct->set_category_ids($term_ids); //Set the product categories.                   | array $term_ids List of terms IDs.
             $objProduct->set_tag_ids($term_ids); //Set the product tags.                              | array $term_ids List of terms IDs.
-            $objProduct->set_image_id($productmeta['imageurl']); //Set main image ID.                                         | int|string $image_id Product image id.
+            
+            if ( !function_exists( 'download_url' ) ) { 
+                require_once ABSPATH . '/wp-admin/includes/file.php'; 
+            } 
+              
+          
+            
+            $uploadimgID = $this->upload_file_wp($productmeta['imageurl']);
+
+           
+            $objProduct->set_image_id($uploadimgID); //Set main image ID.                                         | int|string $image_id Product image id.
         
             $new_product_id = $objProduct->save(); //Saving the data to create new product, it will return product ID.
             update_post_meta( $new_product_id, '_list_of_selected_booth', $productmeta['list_of_selected_booth'] );
@@ -854,6 +960,32 @@ class ClonefeatureManager {
 
 
     }
+
+
+    public function removeallusers($siteId){
+
+
+        switch_to_blog($siteId);
+
+        $args['role__not_in']= 'Administrator';
+        $user_query = new WP_User_Query( $args );
+        $authors = $user_query->get_results();
+
+
+        foreach ($authors as $userobjectId) {
+
+            $userId =  $userobjectId->ID;
+            
+           
+            remove_user_from_blog($userId, $siteId,1); 
+
+        }
+
+
+        restore_current_blog();
+        return 'success';
+    }
+
 
     public function getAllUsers($siteId){
 
@@ -883,6 +1015,7 @@ class ClonefeatureManager {
             $usermeta['company_name'] = get_user_option( 'company_name' , $userId);
             $usermeta['Semail'] = get_user_option('Semail', $userId);
             $usermeta['level'] = $all_roles[$user_data->roles[0]]['name'];
+            $usermeta['levelkey'] = $user_data->roles[0];
 
             $AllUserData[]= $usermeta;                    
 
@@ -902,17 +1035,31 @@ class ClonefeatureManager {
 
         $user_ID = get_current_user_id();
         
+        $listofalllevels = $this->listofcurretnsitelevels();
 
-
+        
+       
        
         foreach ($userdata as $userkey => $usermeta) {
 
             
             //$responce = $this->checkuserlevel($siteID,$usermeta['level']);
            
-            $leavel[strtolower($usermeta['level'])] = 1;
-            if (add_user_to_blog($siteID, $usermeta['ID'], $usermeta['level'])) {
+            
 
+            
+            if (!in_array($usermeta['levelkey'], $listofalllevels)){
+
+                $usermeta['levelkey'] = "subscriber";
+
+            }
+
+           
+
+            if (add_user_to_blog($siteID, $usermeta['ID'], $usermeta['levelkey'])) {
+                
+                $leavel =[];
+                $leavel[strtolower($usermeta['levelkey'])] = 1;
                 update_user_option($usermeta['ID'], 'first_name', $usermeta['first_name']);
                 update_user_option($usermeta['ID'], 'last_name', $usermeta['last_name']);
                 update_user_option($usermeta['ID'], 'company_name', $usermeta['company_name']);
@@ -921,6 +1068,13 @@ class ClonefeatureManager {
 
             }
             
+
+
+
+            //$user_data = get_userdata($usermeta['ID']);
+
+           
+
 
         }
 
@@ -1067,13 +1221,13 @@ class ClonefeatureManager {
         $menu = wp_get_nav_menu_object($locations[$menu_name]);
         $menuitems = wp_get_nav_menu_items($menu->term_id, array('order' => 'DESC'));
         $AllmenupagesData = [];
-        $menumeta = [];
+        
 
 
         foreach ($menuitems as $item){
 
 
-
+            $menumeta = [];
             $link = $item->url;
             $title = $item->title;
             $menu_item_id = $item->ID;
@@ -1111,7 +1265,13 @@ class ClonefeatureManager {
             }
 
             if($link == "#"){
+
+               
+                
+
+                $childmenuitem = [];
                 foreach ($menuitems as $items){
+                   
 
                     if($item->ID == $items->menu_item_parent){
 
@@ -1149,7 +1309,8 @@ class ClonefeatureManager {
                 
             }
 
-
+            //echo '<pre>';
+            //print_r($menumeta);
 
             if(empty($menumeta['menu_item_parent']) || $menumeta['menu_item_parent'] == 'undefined'){
                 $AllmenupagesData[] = $menumeta;
@@ -1243,6 +1404,13 @@ class ClonefeatureManager {
 	    $menuitems = wp_get_nav_menu_items($menu->term_id, array('order' => 'DESC'));
         $main_menu_id = $menu->term_id;
 
+
+        //echo '<pre>';
+        //print_r($listofallmenuitems);exit;
+
+
+
+
         foreach ($listofallmenuitems as $menukey => $menumeta) {
 
            
@@ -1279,10 +1447,18 @@ class ClonefeatureManager {
             $parentID = $menuarray['menu_item_parent'];
         }
 
+        
+       
 
-        if($menumeta['page_type'] == 'page'){
+
+        if($menuarray['page_type'] == 'page'){
+
 
             $page = get_page_by_path($menuarray['linkedpageslug']);
+
+           
+
+
             $argu = array(
                 'menu-item-title' => $menuarray['title'],
                 'menu-item-object' => 'page',
@@ -1293,11 +1469,14 @@ class ClonefeatureManager {
                 'menu-item-parent-id' => $parentID,
                 'menu-item-status' => 'publish');
 
+              
+
                 $createdmenuid = wp_update_nav_menu_item($main_menu_id, 0, $argu);
 
         }else{
 
-            
+          
+
             $createdmenuid = wp_update_nav_menu_item($main_menu_id, 0, array(
                 'menu-item-title' => $menuarray['title'],
                 'menu-item-type' => 'custom',
@@ -1326,7 +1505,7 @@ class ClonefeatureManager {
 
 
        
-        $message = "Some Levels are missing.";
+        $message = "Users have dependencies on Levels which are not part of the current selection.";
         foreach($validateresult as $userkey=>$userdata){
 
            
@@ -1351,22 +1530,9 @@ class ClonefeatureManager {
 
     }
 
-    public function validatelevelsdatabothsites($currentsiteID){
+   
 
-
-
-
-
-
-
-    }
-
-    public function validatelevels($validationrules){
-
-
-
-        
-    }
+    
 
     public function validatetasks($validationrules){
 
@@ -1374,7 +1540,7 @@ class ClonefeatureManager {
         $listofalllevels = $this->listofcurretnsitelevels();
         $currentsiteID = get_current_blog_id();
 
-       
+        $userresult  = [];
 
 
         foreach ($gettasksList as $taskkey => $taskmeta) {
@@ -1383,28 +1549,28 @@ class ClonefeatureManager {
             $taskuserslist = $taskmeta['usersids'];
 
             
-            if(!empty($taskroleslist)){
+            if(!empty($taskroleslist) && ($validationrules['levels'] != 'checked' && $validationrules['levels'] != 'checked-add')){
             foreach($taskroleslist as $roleindex=>$rolekey){
                 if($rolekey != 'all' && $rolekey != 'contentmanager'){
                         
                     if (!in_array($rolekey, $listofalllevels)){
 
-                        $userresult['level'][$taskkey]['msg'][$rolekey] = "levelmissing";
+                        $userresult['level'] = "missinglevels";
 
                     }
                 }
             }}
-            if(!empty($taskuserslist)){
+            if(!empty($taskuserslist) && ($validationrules['users'] != 'checked' && $validationrules['users'] != 'checked-add')){
 
                 foreach($taskuserslist as $userindex=>$userID){
 
                     $sites   = get_blogs_of_user($userID);
-                    $userresult['users'][$userindex]['msg'] = "notmatched";
+                    $userresult['users'] = "missingusers.";
                     foreach($sites as $sitesIndex=>$sitesdata){
 
                         if($currentsiteID == $sitesdata->userblog_id){
 
-                            $userresult['users'][$userindex]['msg'] = "matched";
+                            $userresult['users'] = "success";
 
                         }
 
@@ -1439,33 +1605,42 @@ class ClonefeatureManager {
             $visableuserslist = $productmeta['alg_wc_pvbur_uservisible'];
             $selectedboothlist = $productmeta['list_of_selected_booth'];
             $taskslist = $productmeta['seletedtaskKeys'];
-            $message = "Some Levels are missing.";
+            $message = "Some Levels are missing associate with prodcuts.";
 
-            if(!empty($listoflevele)){
+            if(!empty($listoflevele) && ($validationrules['levels'] != 'checked' && $validationrules['levels'] != 'checked-add')){
 
                 if (in_array($listoflevele, $listofalllevels)){
 
 
                 }else{
 
-                    $userresult['level']['msg'] = "levelmissing";
+                    $userresult['level'] = "missinglevels";
                 }
 
             }
+            
+           
 
-            if(!empty($visableuserslist)){
+           
+            if(!empty($visableuserslist) && ($validationrules['users'] != 'checked-add' && $validationrules['users'] != 'checked')){
+
+               
+
 
                 foreach($visableuserslist as $userkey=>$userID){
                    
                     $sites   = get_blogs_of_user($userID);
 
-                    $userresult['users'][$userkey]['msg'] = "notmatched";
+                    //$userresult['users'][$userkey]['msg'] = "missingusers";
                     foreach($sites as $sitesIndex=>$sitesdata){
 
                         if($currentsiteID == $sitesdata->userblog_id){
 
-                            $userresult['users'][$userkey]['msg'] = "matched";
+                            $userresult['users'][$userkey] = "success";
 
+                        }else{
+
+                            $userresult['users'] = "missingusers";
                         }
 
                          
@@ -1475,21 +1650,22 @@ class ClonefeatureManager {
                 }
 
             }
-            if(!empty($taskslist['selectedtasks'])){
+            if(!empty($taskslist['selectedtasks']) && $validationrules['tasks'] != 'checked'){
 
                 foreach($taskslist['selectedtasks'] as $taskkey=>$taskID){
 
                     $result = get_post_meta( $taskID, 'value' , true);
+                   
                     if(empty($result)){
 
-                        $userresult['tasks'][$taskkey]['msg'] = "missingtasks";
+                        $userresult['tasks'] = "missingtasks";
 
                     }
 
                 }
 
             }
-            if(!empty($userslistofvisable)){
+            if(!empty($userslistofvisable) && ($validationrules['levels'] != 'checked' && $validationrules['levels'] != 'checked-add')){
                 
                 foreach($userslistofvisable as $levelindex=>$levelkey){
                     
@@ -1497,7 +1673,7 @@ class ClonefeatureManager {
                     
                         if (!in_array($levelkey, $listofalllevels)){
 
-                            $userresult['level']['msg'] = "levelmissing";
+                            $userresult['level'] = "missinglevels";
 
                         }
                     }
@@ -1523,17 +1699,41 @@ class ClonefeatureManager {
 
     public function validatefloorplan($validationrules){
 
+        switch_to_blog($this->$clonesiteID);
+        $floorPlanSettings = get_option("floorPlanSettings");
+        $contentmanager_settings = get_option( 'ContenteManager_Settings' );
+        $ClonedFloorplanID = $contentmanager_settings['ContentManager']['floorplanactiveid'];
+        $sellboothsjson    = get_post_meta( $ClonedFloorplanID, 'sellboothsjson', true );
+
+        restore_current_blog();
+
+        $listofalllevels = $this->listofcurretnsitelevels();
+
+    
+
+        foreach($sellboothsjson as $productindex=>$productmeta){
+
+            if(!empty($productmeta['boothlevel']) && ($validationrules['levels'] != 'checked' && $validationrules['levels'] != 'checked-add')){
+                if (!in_array($productmeta['boothlevel'], $listofalllevels)){
+
+                    $userresult['floorplan']['msg'] = "Floorplan booths have dependencies on Levels which are not part of the current selection..";
+                    break;
+                }
+            }
 
 
-        
+        }
+
+        if(empty($userresult)){
+
+            $userresult = 'success';
+        }
+
+        return $userresult;
+
     }
 
-    public function validateuserfields($validationrules){
-
-
-
-        
-    }
+   
 
     public function listofcurretnsitelevels(){
 
@@ -1551,4 +1751,154 @@ class ClonefeatureManager {
     }
     
 
+    public function cleanfloorplanxml(){
+
+        $woocommerce_rest_api_keys = get_option( 'ContenteManager_Settings' );
+        $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
+        $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true )); 
+        $FloorplanXml = get_post_meta( $foolrplanID, 'floorplan_xml', true );  
+        $FloorplanXml = str_replace('"n<','<',$FloorplanXml);
+        $FloorplanXml= str_replace('>n"','>',$FloorplanXml);
+        $xml=simplexml_load_string($FloorplanXml) or die("Error: Cannot create object");
+        $currentIndex = 0;
+
+        
+        foreach ($xml->root->MyNode as $cellIndex=>$CellValue){
+                                        
+            $cellboothlabelvalue = $CellValue->attributes();
+            $getCellStylevalue = $xml->root->MyNode[$currentIndex]->mxCell->attributes();
+
+          
+           
+
+            $att = "boothOwner";
+            $styleatt = 'style';
+                
+            $owenerid = $xml->root->MyNode[$currentIndex]->attributes()->$att;
+           
+            if($owenerid != 'none'){
+
+                $getCellStyle = $getCellStylevalue['style'];
+                $xml->root->MyNode[$currentIndex]->attributes()->$att = 'none';
+                if(isset($cellboothlabelvalue['legendlabels']) && !empty($cellboothlabelvalue['legendlabels'])){
+
+                    
+                    $getlabelID = ''.$cellboothlabelvalue['legendlabels'];
+                    
+                    foreach ($boothTypesLegend as $boothlabelIndex=>$boothlabelValue){
+                        if($boothlabelValue->ID ==  $getlabelID){
+
+                            $createdproductPrice = $boothlabelValue->colorcode;
+                            if($createdproductPrice != "none"){
+
+                                $NewfillColor = $createdproductPrice;
+                                $getCellStyleArray = explode(';',$getCellStyle);
+
+                               
+                                    foreach ($getCellStyleArray as $styleIndex=>$styleValue){
+                                        if($styleValue != 'DefaultStyle1'){
+                                            $styledeepCheck = explode('=',$styleValue);
+                                            if($styledeepCheck[0] == 'fillColor'){
+                                                $oldfillcolortext = $styleValue;
+                                            }
+                                        }
+                                    }
+
+                            }else{
+
+                                    $getCellStyleArray = explode(';',$getCellStyle);
+                                    foreach ($getCellStyleArray as $styleIndex=>$styleValue){
+
+
+                                        if($styleValue != 'DefaultStyle1'){
+
+                                            $styledeepCheck = explode('=',$styleValue);
+
+                                            if($styledeepCheck[0] == 'uno'){
+
+                                                $NewfillColor = $styledeepCheck[1];
+
+                                            }else if($styledeepCheck[0] == 'fillColor'){
+
+                                                $oldfillcolortext = $styleValue;
+                                            }
+
+
+                                        }
+
+
+                                    }
+                            }
+                        }
+                       
+                    }
+        
+                }else{
+            
+                       
+                        $getCellStyleArray = explode(';',$getCellStyle);
+
+                        
+
+                        foreach ($getCellStyleArray as $styleIndex=>$styleValue){
+                            if($styleValue != 'DefaultStyle1'){
+                                $styledeepCheck = explode('=',$styleValue);
+                                if($styledeepCheck[0] == 'uno'){
+                                    $NewfillColor = $styledeepCheck[1];
+                                }else if($styledeepCheck[0] == 'fillColor'){
+                                    $oldfillcolortext = $styleValue;
+                                }
+                            }
+                        }
+
+                       
+                }
+
+               
+                $getCellStyle = str_replace($oldfillcolortext,'fillColor='.$NewfillColor,$getCellStyle);
+                $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
+                
+            }
+            $currentIndex++;
+
+            
+        }
+
+        $getresultforupdat = str_replace('<?xml version="1.0"?>',"",$xml->asXML());
+        update_post_meta( $foolrplanID, 'floorplan_xml', json_encode($getresultforupdat));
+          
+    }
+
+    
+    function upload_file_wp($file_url) {
+
+        if (!filter_var($file_url, FILTER_VALIDATE_URL)) {
+            return false;
+        }
+        $contents = @file_get_contents($file_url);
+        if ($contents === false) {
+            return false;
+        }
+        $upload = wp_upload_bits(basename($file_url), null, $contents);
+        if (isset($upload['error']) && $upload['error']) {
+            return false;
+        }
+        $type = '';
+        if (!empty($upload['type'])) {
+            $type = $upload['type'];
+        } else {
+            $mime = wp_check_filetype($upload['file']);
+            if ($mime) {
+                $type = $mime['type'];
+            }
+        }
+        $attachment = array('post_title' => basename($upload['file']), 'post_content' => '', 'post_type' => 'attachment', 'post_mime_type' => $type, 'guid' => $upload['url']);
+        $id = wp_insert_attachment($attachment, $upload['file']);
+        //wp_update_attachment_metadata($id, wp_generate_attachment_metadata($id, $upload['file']));
+        return $id;
+    
+    }
+        
+    
+    
 }
