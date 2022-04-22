@@ -185,12 +185,12 @@ $getsiteurl = get_site_url();
     
    
 
-                                <div class="dropdown" style="margin-top: 5px;margin-right: 4px;" egid="button-help">
+                                <!-- <div class="dropdown" style="margin-top: 5px;margin-right: 4px;" egid="button-help">
                                     <button  class="btn btn-rounded " id="btn-help" onclick="embadhelpvidoe()" type="button" style="width: 100px;height: 30px;padding: 0 12px; font-size: .8125rem;line-height: 28px;">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Help 
                                     </button>
                                     
-                                </div>
+                                </div> -->
 
 
     							 <div class="dropdown" style="margin-top: 5px;margin-right: 4px;" egid="button-contact">
@@ -313,7 +313,7 @@ $getsiteurl = get_site_url();
                        <li class="mythemestyle" egid="email-templates"> 
 	                <a href="<?php echo $site_url; ?>/welcome-email/">
 	                   <i class="font-icon fa fa-envelope"></i>
-	                    <span class="lbl menumargine">Welcome Email</span>
+	                    <span class="lbl menumargine">Email Templates</span>
 	                </a>
 	            </li>
 	            <li class="mythemestyle" egid="content-editor">
