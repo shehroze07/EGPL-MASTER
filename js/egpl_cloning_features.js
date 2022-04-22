@@ -203,8 +203,9 @@ function cloningfeatureconfrim(){
     html: '<div class="popupcontent"><p>Please wait while your choices are validated</p></div>',
     timerProgressBar: true,
     icon: 'info',
+    showConfirmButton: false,
     showCancelButton: true,
-    cancelButtonText: `Abort`,
+    cancelButtonText: `Close`,
     confirmButtonColor: '#86cceb',
     allowOutsideClick: false,
     didOpen: () => {
@@ -340,8 +341,8 @@ function cloningfeatureconfrim(){
                     jQuery(".popupcontent").empty();
                     jQuery(".popupcontent").append(appendmessage);
 
-                    jQuery(".popupcontent").append('<p>Do you still want to execute the clone operation without including the above dependencies?</p>');
-                    jQuery(".swal2-confirm").text("Execute");
+                    jQuery(".popupcontent").append('<p>Please change your selections and try again</p>');
+                    //jQuery(".swal2-confirm").text("Execute");
                     Swal.hideLoading();
                    
 

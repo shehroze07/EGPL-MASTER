@@ -41,7 +41,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                 
                     <div class="form-group row" >
                         <div class="col-sm-1">
-                            <label>Select Event </label>
+                        <label>From Event Portal </label>
                         </div>
                         <div class="col-sm-10">
                              <select class="select2" id="usersportals" egid="usersportals" data-placeholder="Select Event" requried>
@@ -94,12 +94,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                             Skip
                                         </label>
                                         </div>
-                                        <div class="form-check disabled myradiobtn">
-                                        <input class="form-check-input" type="radio" name="eventsettings" id="eventsettings2" egid="eventsettings2" value="add" disabled>
-                                        <label class="form-check-label mylabel" for="eventsettings2">
-                                            Add
-                                        </label>
-                                        </div>
+                                    
                                         <div class="form-check myradiobtn">
                                         <input class="form-check-input" type="radio" name="eventsettings" id="eventsettings3" egid="eventsettings3" value="override" >
                                         <label class="form-check-label mylabel" for="eventsettings3">
@@ -119,10 +114,10 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                     <div class="saveeverything eg-boxed-2 row eg-optional-2 menupages" egid="menupages">
 									    <div class="col-sm-3">
-										    <h2>Menu Navigation</h2> </div>
+                                        <h2>Pages, Content, & Menu</h2> </div>
 									        <div class="col-sm-7">
 										    <p>
-                                            Includes all custom pages and the current menu navigation settings.</p>
+                                            Includes all standard page content, custom pages and their content, and the current menu navigation. </p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/manage-menu/';?>" target="_blank">Menu Pages & Navigation</a></p>
 											</div>
 											<div class="col-sm-2">
@@ -132,12 +127,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                     Skip
                                                 </label>
                                                 </div>
-                                                <div class="form-check disabled myradiobtn">
-                                                <input class="form-check-input" type="radio" name="menupages" id="menupages2" egid="menupages2" value="add" disabled>
-                                                <label class="form-check-label mylabel" for="menupages2">
-                                                    Add
-                                                </label>
-                                                </div>
+                                           
                                                 <div class="form-check myradiobtn">
                                                 <input class="form-check-input" type="radio" name="menupages" id="menupages3" egid="menupages3" value="override" >
                                                 <label class="form-check-label mylabel" for="menupages3">
@@ -210,12 +200,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                     Skip
                                                 </label>
                                                 </div>
-                                                <div class="form-check disabled myradiobtn">
-                                                <input class="form-check-input" type="radio" name="tasks" id="tasks2" egid="tasks2" value="add" disabled>
-                                                <label class="form-check-label mylabel" for="tasks2">
-                                                    Add
-                                                </label>
-                                                </div>
+                                              
                                                 <div class="form-check myradiobtn">
                                                 <input class="form-check-input" type="radio" name="tasks" id="tasks3" egid="tasks3" value="override" >
                                                 <label class="form-check-label mylabel" for="tasks3">
@@ -250,12 +235,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                     Skip
                                                 </label>
                                                 </div>
-                                                <div class="form-check disabled myradiobtn">
-                                                <input class="form-check-input" type="radio" name="resources" id="resources2" egid="resources2" value="add" disabled>
-                                                <label class="form-check-label mylabel" for="resources2">
-                                                    Add
-                                                </label>
-                                                </div>
+                                           
                                                 <div class="form-check myradiobtn">
                                                 <input class="form-check-input" type="radio" name="resources" id="resources3" egid="resources3" value="override" >
                                                 <label class="form-check-label mylabel" for="resources3">
@@ -288,12 +268,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                         Skip
                                                     </label>
                                                     </div>
-                                                    <div class="form-check disabled myradiobtn">
-                                                    <input class="form-check-input" type="radio" name="Shop" id="Shop2" egid="Shop2" value="add" disabled>
-                                                    <label class="form-check-label mylabel" for="Shop2">
-                                                        Add
-                                                    </label>
-                                                    </div>
+                                         
                                                     <div class="form-check myradiobtn">
                                                     <input class="form-check-input" type="radio" name="Shop" id="Shop3" egid="Shop3" value="override" >
                                                     <label class="form-check-label mylabel" for="Shop3">
@@ -326,12 +301,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                         Skip
                                                     </label>
                                                     </div>
-                                                    <div class="form-check disabled myradiobtn">
-                                                    <input class="form-check-input" type="radio" name="reports" id="reports2" egid="reports2" value="add" disabled>
-                                                    <label class="form-check-label mylabel" for="reports2">
-                                                        Add
-                                                    </label>
-                                                    </div>
+                                          
                                                     <div class="form-check myradiobtn">
                                                     <input class="form-check-input" type="radio" name="reports" id="reports3" egid="reports3" value="override" >
                                                     <label class="form-check-label mylabel" for="reports3">
@@ -374,12 +344,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                         Add
                                                     </label>
                                                     </div>
-                                                    <div class="form-check myradiobtn">
-                                                    <input class="form-check-input" type="radio" name="users" id="users3" egid="users3" value="override" >
-                                                    <label class="form-check-label mylabel" for="users3">
-                                                    Override
-                                                    </label>
-                                            </div>
+                                         
 
                                         </div>
                                       
@@ -407,12 +372,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                         Skip
                                                     </label>
                                                     </div>
-                                                    <div class="form-check disabled myradiobtn">
-                                                    <input class="form-check-input" type="radio" name="userfields" id="userfields2" egid="userfields2" value="add" disabled>
-                                                    <label class="form-check-label mylabel" for="userfields2">
-                                                        Add
-                                                    </label>
-                                                    </div>
+                                           
                                                     <div class="form-check myradiobtn">
                                                     <input class="form-check-input" type="radio" name="userfields" id="userfields3" egid="userfields3" value="override" >
                                                     <label class="form-check-label mylabel" for="userfields3">
@@ -446,13 +406,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                     <label class="form-check-label mylabel" for="florrplan1">
                                                         Skip
                                                     </label>
-                                                    </div>
-                                                    <div class="form-check disabled myradiobtn">
-                                                    <input class="form-check-input" type="radio" name="florrplan2" id="florrplan2" egid="florrplan2" value="add" disabled>
-                                                    <label class="form-check-label mylabel" for="florrplan2">
-                                                        Add
-                                                    </label>
-                                                    </div>
+                                            
                                                     <div class="form-check myradiobtn">
                                                     <input class="form-check-input" type="radio" name="florrplan3" id="florrplan3" egid="florrplan3" value="override" >
                                                     <label class="form-check-label mylabel" for="florrplan3">
@@ -504,7 +458,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
         include 'cm_footer.php';
         ?>
             
-        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=3.47"></script>    
+        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=4.16"></script>    
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
        
