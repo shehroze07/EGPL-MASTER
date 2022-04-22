@@ -1040,7 +1040,6 @@ table.dataTable tbody td {
 .toast__btn:hover {
   opacity: 0.8;
 }
-
 .egmb-10{margin-bottom: 10px;}
         .egmb-20{margin-bottom: 20px;}
         .radio input{visibility: unset;}
@@ -1134,5 +1133,8 @@ table.dataTable tbody td {
     }
     .eg-editlink-2 a{color:rgb(0, 0, 0) !important;}
     .hidecursor{cursor: auto !important;}
-    
+   
+    .mylabel{
 
+        display: contents !important;
+    }
