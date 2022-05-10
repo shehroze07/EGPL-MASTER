@@ -5,7 +5,7 @@
  * Plugin Name:       EGPL
  * Plugin URI:        https://github.com/QasimRiaz/EGPL
  * Description:       EGPL
- * Version:           6.13
+ * Version:           6.05
  * Author:            EG
  * License:           GNU General Public License v2
  * Text Domain:       EGPL
@@ -5831,7 +5831,7 @@ class PageTemplater {
                         'temp/welcome_email_template.php' =>  'Welcome Email',
                         'temp/create-role-template.php' =>  'Create New Role',
                         'temp/addcontentmanager-template.php' =>  'Add Content Manager',
-			            'temp/edit_content_page.php'     => 'Edit Content',
+			'temp/edit_content_page.php'     => 'Edit Content',
                         'temp/admin_dashboard.php'     => 'Dashboard',
                         'temp/bulk_download_task_files_template.php'     => 'Download Bulk Email',
                         'temp/user_change_password_template.php'     => 'User Change Password',
@@ -5879,7 +5879,8 @@ class PageTemplater {
                         'temp/admin_view_orders.php'=>'Admin View User Orders',
                         'temp/create-new-page-template.php'=>'Create New Page',
                         'temp/manage-menu-template.php'=>'Manage Menu Template',
-                        'temp/egpl_cloning_features_temp.php'=>'Egpl Cloning',
+                        'temp/ordermanagment/create-new-order-template.php'=>'Create New Order Template',
+                        'temp/ordermanagment/edit-order-template.php'=>'Edit Order Template',
                        
                         
                      
@@ -7970,6 +7971,25 @@ function isValidEmail($email){
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
+include_once('updater.php');
+
+
+if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
+        $config = array(
+            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+            'proper_folder_name' => 'EGPL', // this is the name of the folder your plugin lives in
+            'api_url' => 'https://api.github.com/repos/QasimRiaz/EGPL', // the GitHub API url of your GitHub repo
+            'raw_url' => 'https://raw.github.com/QasimRiaz/EGPL/master', // the GitHub raw url of your GitHub repo
+            'github_url' => 'https://github.com/QasimRiaz/EGPL', // the GitHub url of your GitHub repo
+            'zip_url' => 'https://github.com/QasimRiaz/EGPL/zipball/master', // the zip url of the GitHub repo
+            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+            'requires' => '3.0', // which version of WordPress does your plugin require?
+            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+            'readme' => 'README.md', // which file to use as the readme for the version number
+            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+        );
+        new WP_GitHub_Updater($config);
+    }
 
 //add_filter('woocommerce_payment_complete_order_status', 'exp_autocomplete_paid_orders', 10, 2);
 add_action('woocommerce_thankyou', 'exp_autocomplete_all_orders',10,2);
@@ -8552,142 +8572,143 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
                                 //   print_r($email_template_data['Booth Turn Email']['fromname']);
                                 //   print_r($email_template_data['welcome_email_template']);exit;
                                   
-                        if(!empty($getpackagelevel)){
+                                if(!empty($getpackagelevel)){
                          
-                            $counter=0;
-                            foreach($getpackagelevel as $key1=>$roleName){
-
-                                $productroleOrder = getroleorder($roleName);
-                                //$get_Ovveride_check = get_post_meta( $porduct_ids_array[$counter],"overrideCheck",true );//Ovveride Check to override user level
-                                // echo "---";
-                                // echo $get_Ovveride_check;
-                                
-                                        //  echo 'QasimriaZ<pre>';
-                                        //  echo $productroleOrder;
-                                        //  echo 'QasimriaZ<pre>';
-                                if ($user_info->roles[0] != 'administrator' && $user_info->roles[0] != 'contentmanager' ) {
-                                    
-                                    $u = new WP_User($current_user);
-                                    $currentroleName = $u->get_role();
-                                    
-                                        if($key1 == 0){
-    
-                                            $currentroleOrder = getroleorder($user_info->roles[0]);
+                                    $counter=0;
+                                    foreach($getpackagelevel as $key1=>$roleName){
+        
+                                        $productroleOrder = getroleorder($roleName);
+                                        //$getproduct_detail = $woocommerce->products->get( $porduct_ids_array[$counter] );
+                                        //$get_Ovveride_check = get_post_meta( $porduct_ids_array[$counter],"overrideCheck",true );//Ovveride Check to override user level
+                                        // echo "---";
+                                        //echo $get_Ovveride_check;
+                                        
+                                                //  echo 'QasimriaZ<pre>';
+                                                  //echo $porduct_ids_array[$counter];
+                                                //  echo 'QasimriaZ<pre>';
+                                        if ($user_info->roles[0] != 'administrator' && $user_info->roles[0] != 'contentmanager' ) {
                                             
-                                        }else{
+                                            $u = new WP_User($current_user);
+                                            $currentroleName = $u->get_role();
                                             
-                                            $currentroleOrder = getroleorder($getpackagelevel[$key1-1]);
-                                        }
-                                     
-                                            //   echo 'Qasimriiaz<pre>';
-                                            //   echo $roleName.'<br>';
-                                            //   echo $user_info->roles[0].'<br>';
-                                            //  echo $currentroleName.'<br>';
-                                            //   echo $productroleOrder.'_________';
-                                            //   echo 'Qasimriiazz<pre>';
-                                            
-                                            if($productroleOrder < $currentroleOrder) {
-
-                                                $u->set_role($roleName);
-                                                $responce['assignrole'] = $roleName;
-                                                $loggin_data['rolename'][] = $roleName;
-                                                    
-                                                    // echo $roleName.'Orderuu___________________';
-                                            } else 
-                                            {
-
-                                            $responce['assignrole'] = $currentroleName['name'];
-                                            $loggin_data['rolename'][] = $currentroleName['name'];
-                                            }
-                                }
-                                else{
-                                    echo "UserRole Remain Same";
-                                }
-                                $counter++; 
-                             }
-                            //$u = new WP_User($current_user);
-                            //$u->set_role($getpackagelevel);
-                            //$loggin_data['rolename'][] = $getpackagelevel;
-                            //echo 'Qasimriaz_________';
+                                                if($key1 == 0){
             
-                        }else{
-                            
-                                
-                                //echo 'Qasimriaz<pre>';
-                                //print_r($assign_role);
-                                $counter=0;
-                                foreach($assign_role as $key=>$roleName){
-
-                                    $productroleOrder = getroleorder($roleName);
-
-                                    $getproduct_detail = $woocommerce->products->get( $porduct_ids_array[$counter] );
-                                    if($getproduct_detail->product->categories[0] == 'Add-ons'){
-
-                                        if ($user_info->roles[0] != 'administrator' && $user_info->roles[0] != 'contentmanager') {
+                                                    $currentroleOrder = getroleorder($user_info->roles[0]);
+                                                    
+                                                }else{
+                                                    
+                                                    $currentroleOrder = getroleorder($getpackagelevel[$key1-1]);
+                                                }
+                                             
+                                                    //   echo 'Qasimriiaz<pre>';
+                                                    //   echo $roleName.'<br>';
+                                                    //   echo $user_info->roles[0].'<br>';
+                                                    //  echo $currentroleName.'<br>';
+                                                    //   echo $productroleOrder.'_________';
+                                                    //   echo 'Qasimriiazz<pre>';
+                                                    
+                                                    if($productroleOrder < $currentroleOrder) {
         
-                                            $u = new WP_User($current_user);
-                                            $currentroleName = $u->get_role();
-                                            
-                                            if($key == 0){ 
-                                                $currentroleOrder = getroleorder($user_info->roles[0]);                                        
-                                            }else{                                         
-                                                $currentroleOrder = getroleorder($assign_role[$key-1]);
-                                            }
-
-                                            // echo $productroleOrder;
-                                            // echo $currentroleOrder;
-                                            if ($productroleOrder < $currentroleOrder) {
-                                                // echo"IN HERE";
-                                                $u->set_role($roleName);
-                                                $responce['assignrole'] = $roleName;
-                                                $loggin_data['rolename'][] = $roleName;                                      
-                                                // echo $roleName.'___________________';
-                                            } else {
-
-                                                $responce['assignrole'] = $currentroleName['name'];
-                                                $loggin_data['rolename'][] = $currentroleName['name'];
-                                            }
-                                        }
-
-
-                                    }else{
-
-                                        $get_Ovveride_check = get_post_meta( $porduct_ids_array[$counter],"overrideCheck",true );
-
-                                        if ($user_info->roles[0] != 'administrator' && $user_info->roles[0] != 'contentmanager' && $get_Ovveride_check=='0') {
-
-                                            $u = new WP_User($current_user);
-                                            $currentroleName = $u->get_role();
-                                            
-                                            if($key == 0){ 
-                                                $currentroleOrder = getroleorder($user_info->roles[0]);                                        
-                                            }else{                                         
-                                                $currentroleOrder = getroleorder($assign_role[$key-1]);
-                                            }
-                                            // echo $roleName.'<br>';
-                                            // echo $user_info->roles[0].'<br>';
-                                            // echo $currentroleOrder.'<br>';
-                                            // echo $productroleOrder.'_________';
-                                            // exit;
-                                            if ($productroleOrder < $currentroleOrder) {
-                                                $u->set_role($roleName);
-                                                $responce['assignrole'] = $roleName;
-                                                $loggin_data['rolename'][] = $roleName;                                      
-                                                //echo $roleName.'___________________';
-                                            } else {
-
-                                                $responce['assignrole'] = $currentroleName['name'];
-                                                $loggin_data['rolename'][] = $currentroleName['name'];
-                                            }
-                                        }
-
-                                    }
-
+                                                        $u->set_role($roleName);
+                                                        $responce['assignrole'] = $roleName;
+                                                        $loggin_data['rolename'][] = $roleName;
+                                                            
+                                                            // echo $roleName.'Orderuu___________________';
+                                                    } else 
+                                                    {
         
-                                $counter++;
-                            }
-                            
-                        }
+                                                    $responce['assignrole'] = $currentroleName['name'];
+                                                    $loggin_data['rolename'][] = $currentroleName['name'];
+                                                    }
+                                        }
+                                        else{
+                                            echo "UserRole Remain Same";
+                                        }
+                                        $counter++; 
+                                     }
+                                    //$u = new WP_User($current_user);
+                                    //$u->set_role($getpackagelevel);
+                                    //$loggin_data['rolename'][] = $getpackagelevel;
+                                    //echo 'Qasimriaz_________';
+                    
+                                }else{
+                                    
+                                        
+                                        // echo 'Qasimriaz<pre>';
+                                        // print_r($assign_role);
+                                        $counter=0;
+                                        foreach($assign_role as $key=>$roleName){
+        
+                                            $productroleOrder = getroleorder($roleName);
+                                             $getproduct_detail = $woocommerce->products->get( $porduct_ids_array[$counter] );
+                                                if($getproduct_detail->product->categories[0] == 'Add-ons'){
+                                                    // echo "-ADD_ONS--";
+                                                    if ($user_info->roles[0] != 'administrator' && $user_info->roles[0] != 'contentmanager') {
+        
+                                                        $u = new WP_User($current_user);
+                                                        $currentroleName = $u->get_role();
+                                                        
+                                                        if($key == 0){ 
+                                                            $currentroleOrder = getroleorder($user_info->roles[0]);                                        
+                                                        }else{                                         
+                                                            $currentroleOrder = getroleorder($assign_role[$key-1]);
+                                                        }
+                                                        if ($productroleOrder < $currentroleOrder) {
+                                                            $u->set_role($roleName);
+                                                            $responce['assignrole'] = $roleName;
+                                                            $loggin_data['rolename'][] = $roleName;                                      
+                                                            //echo $roleName.'___________________';
+                                                        } else {
+        
+                                                            $responce['assignrole'] = $currentroleName['name'];
+                                                            $loggin_data['rolename'][] = $currentroleName['name'];
+                                                        }
+                                                    }else{
+                                                    echo "UserRole Remain Same";
+                                                
+                                                    }
+                                                }else{
+                                                    $get_Ovveride_check = get_post_meta( $porduct_ids_array[$counter],"overrideCheck",true );//Ovveride Check to override user level
+                                                    //echo $get_Ovveride_check;
+                                                    //  echo 'QasimriaZ<pre>';
+                                                    // echo $porduct_ids_array[$counter];
+                                                    //  echo $get_Ovveride_check;
+                                            
+                                                    if ($user_info->roles[0] != 'administrator' && $user_info->roles[0] != 'contentmanager' && $get_Ovveride_check=='0') {
+        
+                                                            $u = new WP_User($current_user);
+                                                            $currentroleName = $u->get_role();
+                                                            
+                                                            if($key == 0){ 
+                                                                $currentroleOrder = getroleorder($user_info->roles[0]);                                        
+                                                            }else{                                         
+                                                                $currentroleOrder = getroleorder($assign_role[$key-1]);
+                                                            }
+                                                            // echo $roleName.'<br>';
+                                                            // echo $user_info->roles[0].'<br>';
+                                                            // echo $currentroleOrder.'<br>';
+                                                            // echo $productroleOrder.'_________';
+                                                            // exit;
+                                                            if ($productroleOrder < $currentroleOrder) {
+                                                                $u->set_role($roleName);
+                                                                $responce['assignrole'] = $roleName;
+                                                                $loggin_data['rolename'][] = $roleName;                                      
+                                                                //echo $roleName.'___________________';
+                                                            } else {
+        
+                                                                $responce['assignrole'] = $currentroleName['name'];
+                                                                $loggin_data['rolename'][] = $currentroleName['name'];
+                                                            }
+                                                    }else{
+                                                        echo "UserRole Remain Same";
+                                                
+                                                    }
+                                                    
+                                                }
+                                                $counter++;
+                                        }
+                                    
+                                }
             
                             
                             if(!empty($latestProductsValue['selectedtasks'])){  
@@ -9342,12 +9363,6 @@ add_action('rest_api_init', function() {
 	]);
         
         
-        register_rest_route('w1/v1', 'cventgetrequest', [
-		'methods' => 'POST',
-		'callback' => 'cventgetrequest',
-	]);
-        
-        
         register_rest_route('w1/v1', 'getuserinfo', [
 		'methods' => 'POST',
 		'callback' => 'getuserinfo',
@@ -9919,83 +9934,6 @@ function getorders(){
     
 }
 
-function cventgetrequest(){
-    
-    try {
-    
-      
-    //$newContactUserData =   json_decode(get_option("cventuserdata"));
-      
-    //echo '<pre>';
-    //print_r($newContactUserData);exit;
-     
-     
-     
-    $newContactUserData =  json_decode(file_get_contents('php://input')) ;
-    
-    
-    //update_option("cventuserdata",$newContactUserData);
-    
-    
-   $lastInsertId = contentmanagerlogging('Cvent Action Create User', "Admin Action", "", "", "", $newContactUserData);
- 
-   
-    
-    if(!empty($newContactUserData)){
-        
-        
-    
-        
-        //foreach($newContactUserData as $usersdata2=>$userdata){
-            
-            
-           
-                
-                
-                $userinformationupdatearray['username']  = $newContactUserData->Semail;
-                $userinformationupdatearray['Semail'] = $newContactUserData->Semail;
-                $userinformationupdatearray['Role'] = $newContactUserData->role;
-                $userinformationupdatearray['external_reference_id_zapier']  = $newContactUserData->cvent_id;
-                $userinformationupdatearray['first_name']  = $newContactUserData->first_name;
-                $userinformationupdatearray['last_name']  =$newContactUserData->last_name;
-                $userinformationupdatearray['company_name']  = $newContactUserData->company_name;
-                $userinformationupdatearray['confirmation_number']  = $newContactUserData->confirmation_number;
-                $userinformationupdatearray['send_welcome_email']  = $newContactUserData->send_welcome_email;
-                $userinformationupdatearray['register_date']  = $newContactUserData->register_date;
-                
-                $userinformationupdatearray = (object)$userinformationupdatearray;
-                $lastInsertId = contentmanagerlogging('testin', "Admin Action", "", "", "", $userinformationupdatearray);
-    
-            //print_r($userinformationupdatearray);exit;
-            
-                $resultRegistratedUser[$usersdata]['result'] = CreateNewUser($userinformationupdatearray);
-            
-            
-            
-            
-        //}
-        
-        
-    }else{
-        
-        $resultRegistratedUser["error"] = "Something went going wrong. Please Connect with App administrative.";
-        
-    }
-    
-    
-    
-    return (object)$resultRegistratedUser;
-    
-    }catch (Exception $e) {
-
-      
-
-        return $e;
-    }
-    
-    
-}
-
 function createuser(){
     
     try {
@@ -10357,11 +10295,7 @@ function CreateNewUser($newContactUserData){
         
         updateregistredUserMeta($user_id,$newContactUserData,$role);
         
-        
-        if($newContactUserData->send_welcome_email == true){
-            custome_email_send($user_id,$newContactUserData->Semail,"welcome_email_template");
-        }
-        
+        custome_email_send($user_id,$newContactUserData->Semail,"welcome_email_template");
         //update_user_option($user_id, 'profile_updated', $t*1000);
         
         if (add_user_to_blog($blogid, $user_id, $role)) {
@@ -10390,10 +10324,6 @@ function CreateNewUser($newContactUserData){
 			   
 			   $message['message'] = $userregister_responce['errors']['invalid_username'][0];
 		   }
-                   
-                   $message['username'] = $newContactUserData->username;
-                   $message['email'] = $newContactUserData->Semail;
-                   
         
         } 
     } else {
@@ -10432,9 +10362,7 @@ function CreateNewUser($newContactUserData){
                     $useremail='';
                     
                     updateregistredUserMeta($user_id,$newContactUserData,$role);
-                    if($newContactUserData->send_welcome_email == true){
-                        custome_email_send($user_id,$email,"welcome_email_template");
-                    }
+                    custome_email_send($user_id,$email,"welcome_email_template");
                     $t=time();
                     //update_user_option($user_id, 'profile_updated', $t*1000);
                     
@@ -10462,9 +10390,7 @@ function CreateNewUser($newContactUserData){
 function updateregistredUserMeta($userID,$userMetaData,$role){
     
     try {
-        
-        //$lastInsertId = contentmanagerlogging('$userMetaData', "Admin Action", "", "", "", $userMetaData);
-        
+    
         foreach($userMetaData as $keyIndex=>$valueDataIndex){
             
             if (is_numeric($valueDataIndex)) {
@@ -11097,7 +11023,6 @@ function gettasktype($taskkey){
     }
     return $getOrginalData;
 }
-
 
 ///-----------------Expogenie API Endpoints ---------------------///
 

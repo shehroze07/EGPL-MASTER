@@ -266,7 +266,7 @@ try{
                  
 	         
 	         update_post_meta($results, 'page_visibility', $public_visibility);
-             update_post_meta($results, 'page_type', $request['type']);
+                 update_post_meta($results, 'page_type', $request['type']);
 	         //echo $results;
 	        //echo $public_visibility; 
 
@@ -335,7 +335,7 @@ try{
 	                'menu-item-type' => 'post_type',
 	                'menu-item-url' => home_url( '/'.$post->post_name.'/' ), 
 	                'menu-item-position'  => $menuorder,
-                    'menu-item-parent-id' => $parentID,
+                        'menu-item-parent-id' => $parentID,
 	                'menu-item-status' => 'publish');
 
 	                $results = wp_update_nav_menu_item($main_menu_id, $menu_item_id, $argu);

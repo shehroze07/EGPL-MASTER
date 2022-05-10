@@ -23,7 +23,7 @@ class EGPLCustomeFunctions {
             'order'            => 'DESC',
             'post_type'        => 'egpl_custome_fields',
             'post_status'      => 'draft',
-	      );
+	);
         $listOFcustomfieldsArray = get_posts( $args );
         
       

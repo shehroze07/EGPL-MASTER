@@ -69,7 +69,7 @@ $editor_id = 'mycustomeditor';
                             <label class="col-sm-2 form-control-label">Add New Page <strong>*</strong></label>
                             <div class="col-sm-7">
   <div class="form-control-wrapper form-control-icon-left">    
-                                <input type="text"  class="form-control" id="pagename" placeholder="Page Name" value="" egid="pagename" required>
+                                <input type="text"  class="form-control" id="pagename" placeholder="Page Name" value="" required>
  <i class="font-icon fa fa-edit"></i>
  </div>
                             </div>
@@ -83,14 +83,14 @@ $editor_id = 'mycustomeditor';
                             <div>
                                       <label class="col-sm-2 form-control-label">Content <strong>*</strong></label>
                                     <div class="col-sm-7">
-                                        <textarea id="mycustomeditor" egid="mycustomeditor"></textarea>
+                                        <textarea id="mycustomeditor"></textarea>
                                     </div>
                                 </div>
                             </div>
                                   <div class="form-group row">
                                      <label class="col-sm-2 form-control-label"></label>
                                  <div class="col-sm-6">
-                                <button type="submit" id="page"  name="addsponsor"  class="btn btn-inline mycustomwidth btn-success" value="Register" style="text-align: center;" egid="create-page">Create Page</button>
+                                <button type="submit" id="page"  name="addsponsor"  class="btn btn-inline mycustomwidth btn-success" value="Register" style="text-align: center;">Create Page</button>
                               
                             </div>
                         </div>

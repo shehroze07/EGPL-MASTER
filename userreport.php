@@ -558,7 +558,7 @@ function gettasksreport($data) {
          $columns_headers[4]['type'] = 'date';
          $columns_headers[4]['title'] = 'Submitted On';
          
-         $columns_headers[5]['key'] = $site_prefix.'company_name';
+         $columns_headers[5]['key'] = $site_prefix.'compnay_name';
          $columns_headers[5]['type'] = 'string';
          $columns_headers[5]['title'] = 'Company';
          
@@ -738,7 +738,9 @@ function getusersreport($data) {
         $additional_fields = $GetAllcustomefields->getAllcustomefields();
         usort($additional_fields, 'sortByOrder');
 
-    
+        if($additional_fields[0]['fieldID'] == 17368 ){
+            unset($additional_fields[0]);
+         }
         // echo "<pre>";
         // print_r($additional_fields);
         
@@ -1295,7 +1297,7 @@ function custometasksreport() {
        
         foreach($search_filter_array as $filter){
             
-            if($filter->id == $site_prefix."company_name" ){
+            if($filter->id == $site_prefix."compnay_name" ){
                 
                
                 $taskcompanyname['value'] = $filter->value;
@@ -1418,7 +1420,7 @@ function custometasksreport() {
                
                 foreach ($all_roles as $roleKey=>$roleName){
                     
-                    if(strtolower($roleName['name']) == strtolower($filter->value)){
+                    if($roleName['name'] == $filter->value){
                         
                         $args['role']=  $roleKey;
                         
@@ -1429,7 +1431,7 @@ function custometasksreport() {
                 
                 $filter_apply_array['key']=$filter->id;
                 $filter_apply_array['value']=$filter->value;
-                // $filter_apply_array['type']='CHAR';
+                $filter_apply_array['type']='CHAR';
                 $filter_apply_array['compare']=$compare_operator;
             }
         }   
@@ -1497,7 +1499,7 @@ function custometasksreport() {
          $columns_list_defult_user_report[0]['type'] = 'display';
          $columns_list_defult_user_report[0]['title'] = 'Action';
          
-          $columns_list_defult_user_report[1]['key'] = $site_prefix.'company_name';
+          $columns_list_defult_user_report[1]['key'] = $site_prefix.'compnay_name';
          $columns_list_defult_user_report[1]['type'] = 'string';
          $columns_list_defult_user_report[1]['title'] = 'Company';
          
@@ -1566,18 +1568,18 @@ function custometasksreport() {
                     $compare_operator_name = checktheopratertype($taskfilterName['operator'],$value_label,$taskfilterName['value']);
                 }
                 
-                // if(!empty($taskcompanyname)){
+                if(!empty($taskcompanyname)){
                     
-                //     $compare_operator_name = checktheopratertype($taskcompanyname['operator'],$value_label,$taskcompanyname['value']);
-                // }
-                // if(!empty($tasklastname)){
+                    $compare_operator_name = checktheopratertype($taskcompanyname['operator'],$value_label,$taskcompanyname['value']);
+                }
+                if(!empty($tasklastname)){
                     
-                //     $compare_operator_name = checktheopratertype($tasklastname['operator'],$value_label,$tasklastname['value']);
-                // }
-                // if(!empty($taskfirstname)){
+                    $compare_operator_name = checktheopratertype($tasklastname['operator'],$value_label,$tasklastname['value']);
+                }
+                if(!empty($taskfirstname)){
                     
-                //     $compare_operator_name = checktheopratertype($taskfirstname['operator'],$value_label,$taskfirstname['value']);
-                // }
+                    $compare_operator_name = checktheopratertype($taskfirstname['operator'],$value_label,$taskfirstname['value']);
+                }
                 
              
                 
@@ -2962,17 +2964,7 @@ function userreportresultdraw() {
                 $column_row['Welcome Email Sent On'] = $last_send_welcome_timestamp;
                 $column_row['Status'] = $all_meta_for_user[$site_prefix.'selfsignupstatus'][0];
                 $column_row['Booth Number'] = rtrim($thisBoothNumber, ',');
-
-                // my code Shehroze
                 $column_row['User ID'] = $aid->ID;
-                $cm_user_ID = get_current_user_id();
-                if($column_row['User ID'] == $cm_user_ID){ 
-  
-                  $column_row['Action'] = '<div style="width: 140px !important;float: left !important;" class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a href="'.$site_url.'/edit-user/?sponsorid=' . $aid->ID . '"  data-toggle="tooltip" title="Edit User Profile"><i  class="hi-icon fusion-li-icon fa fa-pencil-square-o" ></i></a><a   href="'.$site_url.'/edit-sponsor-task/?sponsorid=' . $aid->ID . '" data-toggle="tooltip" title="User Tasks"><i class="hi-icon fusion-li-icon fa fa-th-list" ></i></a><a onclick="new_userview_profile(this)" id="' . $unique_id . '" name="viewprofile"   title="View Profile" data-toggle="tooltip" ><i class="hi-icon fusion-li-icon fa fa-eye" ></i></a><a style="display:none;" onclick="delete_sponsor_meta(this)" id="' . $aid->ID . '" name="delete-sponsor" data-toggle="tooltip"  title="Remove User" ><i class="hi-icon fusion-li-icon fa fa-times-circle" ></i></a></div>';
-  
-                }
-                // my code Shehroze
-                
                if($virtualpluginstatus === 'VirtualEGPL/virtualegpl.php') {
                    
                 if(empty($getuserstatus)){
@@ -3858,9 +3850,9 @@ function checktheopratertype($type,$value,$currentvalue){
                         
                     } else if ($type == 'equal') {
                         
-                      $compare_operator = (strtolower($value) == strtolower($currentvalue));
+                       $compare_operator = ($value == $currentvalue);
                     } else if ($type == 'contains') {
-                        $compare_operator = strpos(strtolower($value), strtolower($currentvalue)) !== false;
+                        $compare_operator = strpos($value, $currentvalue) !== false;
                     }else if ($type == 'is_empty') {
 
                         $compare_operator = ($value == "");
@@ -3874,7 +3866,7 @@ function checktheopratertype($type,$value,$currentvalue){
                         $compare_operator = ($value >= $currentvalue[0] && $value <= $currentvalue[1]);
                     }
                     
-       return $compare_operator;
+   // return $compare_operator;
     
 }
 

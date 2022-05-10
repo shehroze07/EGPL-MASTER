@@ -1,4 +1,4 @@
-Current Version:6.09
+Current Version:6.05
 
 -------------------27-09-2019---Main release 3.40-------------- Release Items
 

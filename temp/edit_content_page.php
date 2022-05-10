@@ -82,7 +82,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                     <label class="col-sm-2 form-control-label">Select <strong>*</strong></label>
                                     <div class="col-sm-10">
                                         
-                          <select name="getallPages" id="getallPagesContent" onchange="this.form.submit()" class="form-control" egid="getallPagesContent">
+                          <select name="getallPages" id="getallPagesContent" onchange="this.form.submit()" class="form-control">
                             
                               <option value=""> </option>
                            <?php
@@ -150,7 +150,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                     <label class="col-sm-2 form-control-label">Title <strong>*</strong></label>
                                     <div class="col-sm-10">
                                          <div class="form-control-wrapper form-control-icon-left">    
-							<input type="text"  class="form-control" id="pagetitle" placeholder="Title" value="<?php echo $page_data->post_title; ?>" egid="pagetitle" required>
+							<input type="text"  class="form-control" id="pagetitle" placeholder="Title" value="<?php echo $page_data->post_title; ?>" required>
 							<i class="font-icon fa fa-arrow-right"></i>	
                                        </div>
                                     </div>
@@ -158,7 +158,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                   <div class="form-group row">
                                     <label class="col-sm-2 form-control-label">Content <strong>*</strong></label>
                                     <div class="col-sm-10">
-                                        <textarea id="mycustomeditor" egid="mycustomeditor"><?php echo $content?></textarea>
+                                        <textarea id="mycustomeditor"><?php echo $content?></textarea>
                                     </div>
                    </div>
                     <div class="form-group row">

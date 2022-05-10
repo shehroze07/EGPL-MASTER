@@ -90,13 +90,13 @@
                                     <label class="col-sm-2 form-control-label">Email <strong>*</strong></label>
                                     <div class="col-sm-5">
                                         <div class="form-control-wrapper form-control-icon-left">     
-					<input type="email"  class="form-control" id="Semail" placeholder="Email" egid="Semail" required>
+					<input type="email"  class="form-control" id="Semail" placeholder="Email" required>
                                           <i class="font-icon fa fa-envelope-o"></i>                     
                                         </div>
                                     </div>
                                     <div class="col-sm-5">
                                         
-                                        <a class="btn btn-inline" onclick="checkemailaddressalreadyexist()" egid="lookup-user">Lookup User</a>
+                                        <a class="btn btn-inline" onclick="checkemailaddressalreadyexist()" >Lookup User</a>
                                         
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@
                                     <label class="col-sm-2 form-control-label">First Name <strong>*</strong></label>
                                     <div class="col-sm-10">
                                           <div class="form-control-wrapper form-control-icon-left">    
-								<input type="text"  class="form-control mymetakey" id="first_name" name="first_name" placeholder="First Name" egid="first_name" required>
+								<input type="text"  class="form-control mymetakey" id="first_name" name="first_name" placeholder="First Name" required>
 						<i class="font-icon  fa fa-pencil"></i>
                                                                	
                                         </div>
@@ -114,7 +114,7 @@
                                     <label class="col-sm-2 form-control-label">Last Name <strong>*</strong></label>
                                     <div class="col-sm-10">
                                          <div class="form-control-wrapper form-control-icon-left">    
-								<input type="text"  class="form-control mymetakey" id="last_name" name="last_name" placeholder="Last Name" egid="last_name" required>
+								<input type="text"  class="form-control mymetakey" id="last_name" name="last_name" placeholder="Last Name" required>
 					<i class="font-icon  fa fa-pencil"></i>
                                          </div>			
                                         
@@ -124,7 +124,7 @@
                                     <label class="col-sm-2 form-control-label">Company Name <strong>*</strong></label>
                                     <div class="col-sm-10">
                                          <div class="form-control-wrapper form-control-icon-left">    
-								<input type="text"  class="form-control mymetakey" id="company_name" name="company_name" placeholder="Company Name" egid="company_name" required>
+								<input type="text"  class="form-control mymetakey" id="company_name" name="company_name" placeholder="Company Name" required>
 					<i class="font-icon  fa fa-pencil"></i>
                                          </div>			
                                         
@@ -155,7 +155,7 @@
                         <div class="col-sm-2"></div>
                             <div class="col-sm-6">
                                 <div class="checkbox" id="checknewuserdiv">
-                                    <input  type="checkbox" id="checknewuser" egid="checknewuser">Send Welcome Email<br/>
+                                    <input  type="checkbox" id="checknewuser">Send Welcome Email<br/>
                                     
                                    
                                 </div>
@@ -190,7 +190,7 @@
                   <div class="form-group row">
                                     <label class="col-sm-2 form-control-label"></label>
                                     <div class="col-sm-6">
-                                             <button type="submit"  name="addsponsor"  class="btn btn-lg mycustomwidth btn-success" value="Register" egid="create-admin">Create</button>
+                                             <button type="submit"  name="addsponsor"  class="btn btn-lg mycustomwidth btn-success" value="Register">Create</button>
                                             
                                         
                                     </div>

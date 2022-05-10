@@ -89,7 +89,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                             <fieldset class="form-group">
 
-                                                <select style="width:100%;height:38px;"class="form-control" onchange="loaduserreport()" id="loaduserreport" egid="loadtaskreport">
+                                                <select style="width:100%;height:38px;"class="form-control" onchange="loaduserreport()" id="loaduserreport">
                                                     <option disabled selected hidden>Load a Report</option>
                                                    
                                                     <option value="defult">Save Current Template As</option>
@@ -112,14 +112,14 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                             <form method="post" action="javascript:void(0);" onSubmit="user_taskreport_savefilters()">    	
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <input style="height: 38px;" placeholder="Report Name" id="userreportname" type="text" class="form-control" egid="taskreportname" required>
+                                                        <input style="height: 38px;" placeholder="Report Name" id="userreportname" type="text" class="form-control" required>
                                                         <div class="input-group-btn">
                                                             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 Action
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <button type="submit"  name="saveuserreport"  class="dropdown-item" egid="save-task-report"  ><i class="font-icon fa fa-save" aria-hidden="true"></i> Save</button>
-                                                                <a class="dropdown-item" onclick="removeeuserreport()" egid="delete-task-report"><i class="font-icon fa fa-remove" aria-hidden="true"></i>Delete</a>
+                                                                <button type="submit"  name="saveuserreport"  class="dropdown-item"  ><i class="font-icon fa fa-save" aria-hidden="true"></i> Save</button>
+                                                                <a class="dropdown-item" onclick="removeeuserreport()"><i class="font-icon fa fa-remove" aria-hidden="true"></i>Delete</a>
 
                                                             </div>
                                                         </div>
@@ -137,12 +137,12 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                         </section><!--.faq-page-->
                         <h5 class="m-t-lg with-border">Filters</h5>
-                        <div id="builder" egid="task-report-filters"></div>
+                        <div id="builder"></div>
                         <h5 class="m-t-lg with-border">Show Columns</h5>
                         <div class="form-group row">
 
                             <div class="col-sm-12" >
-                                <select class="select2"  data-placeholder="Select Columns" title="Select Columns" id="userreportcolumns" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" egid="taskreportcolumns">
+                                <select class="select2"  data-placeholder="Select Columns" title="Select Columns" id="userreportcolumns" data-allow-clear="true" data-toggle="tooltip" multiple="multiple">
                                     <optgroup label="Fields" id="usercontactfields"></optgroup>
                                   
                                 </select>
@@ -153,14 +153,14 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                         <div class="form-group row">
 
                             <div class="col-sm-6" >
-                                <select class="select2"  data-placeholder="Select Columns"  id="userbycolumnsname" data-allow-clear="true" egid="taskbycoloumnsname" >
+                                <select class="select2"  data-placeholder="Select Columns"  id="userbycolumnsname" data-allow-clear="true" >
                                     <optgroup label="Fields" id="usercontactfieldssortby"></optgroup>
                                    
                                 </select>
 
                             </div>
                             <div class="col-sm-6" >
-                                <select class="select2"  id="sortingtype" data-allow-clear="true" egid="sortingtype">
+                                <select class="select2"  id="sortingtype" data-allow-clear="true">
 
                                     <option value='asc'>Ascending</option>
                                     <option value='desc' selected="selected">Descending</option>
@@ -173,8 +173,8 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                         <div class="form-group row">
 
                             <div class="col-sm-6" style="text-align: left;">
-                                <button class="btn btn-danger btn-lg  resetuserfilters" egid="reset-filters">Reset</button>&nbsp;&nbsp;
-                                <button class="btn btn-lg mycustomwidth btn-success drawdatatable" egid="run-report">Run Report</button>
+                                <button class="btn btn-danger btn-lg  resetuserfilters">Reset</button>&nbsp;&nbsp;
+                                <button class="btn btn-lg mycustomwidth btn-success drawdatatable">Run Report</button>
 
                             </div>
                             <div class="col-sm-6"></div>

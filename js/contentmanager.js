@@ -1059,8 +1059,24 @@ function conform_remove_sponsor(idsponsor){
             type: 'POST',
             success: function(data) {
  
+                
+               console.log(data);
+
+                if(data == 'This user is Content Manager'){
+
+                    jQuery('body').css('cursor', 'default');
+                    swal({
+                        title: "INFO",
+                        text: "This user is Content Manager, cannot be Deleted!",
+                        type: "info",
+                        confirmButtonClass: "btn-success"
+                    });
+              
+                }
+
+            
                 // jQuery('body').css('cursor', 'default');
-         
+             else {
                 //  location.reload();
                  var sName = settingArray.ContentManager['sponsor_name'];
                  var msg;
@@ -1085,7 +1101,10 @@ function conform_remove_sponsor(idsponsor){
                 location.reload();
             }
             );
-      
+                 
+        }    
+                
+                
             },error: function (xhr, ajaxOptions, thrownError) {
                      swal({
 					title: "Error",

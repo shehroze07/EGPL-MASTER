@@ -137,7 +137,7 @@ height: 50% !important;
                     <div class="col-sm-6">
                    
                               
-                       <select class="specialsearchfilter select2" id="customers_select_search" egiid="customers_select_search" data-placeholder="Quick Search"  data-allow-clear="true" style="width:95%;border: #d6e2e8 solid 1px; height: 36px; border-radius: 3px;  padding-left: 10px;">
+                       <select class="specialsearchfilter select2" id="customers_select_search" data-placeholder="Quick Search"  data-allow-clear="true" style="width:95%;border: #d6e2e8 solid 1px; height: 36px; border-radius: 3px;  padding-left: 10px;">
    
                            <option value=""></option>
                      <?php  foreach ($tasktitle_list as $Qkey=>$Qvalue){ ?>
@@ -156,8 +156,8 @@ height: 50% !important;
                         
 
 
-                        <a  name="addsponsor"   style="margin-left: 2%;float: right;"class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register" egid="add-new-task">Add New Task</a>
-                        <button  style="float: right;" type="submit" name="savealltask" id="savealltask" class="btn btn-lg mycustomwidth btn-success" value="Register" egid="savealltask">Save All Changes</button>
+                        <a  name="addsponsor"   style="margin-left: 2%;float: right;"class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register">Add New Task</a>
+                        <button  style="float: right;" type="submit" name="savealltask" id="savealltask" class="btn btn-lg mycustomwidth btn-success" value="Register">Save All Changes</button>
                         
                     </div>
                 </div>
@@ -320,17 +320,17 @@ height: 50% !important;
                                     <?php }?>
                                         <td><div class="hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a">
                                                 
-                                                <i data-toggle="tooltip" class="hi-icon fa fa-clone saveeverything" id="<?php echo $task_code; ?>" onclick="clonebulk_task(this)" title="Create a clone" egid="clone-task"></i>
-                                                <i  data-toggle="tooltip" title="Advanced" name="<?php echo $task_code; ?>" onclick="bulktasksettings(this)" class="hi-icon fusion-li-icon fa fa-gears" egid="advanced"></i>
+                                                <i data-toggle="tooltip" class="hi-icon fa fa-clone saveeverything" id="<?php echo $task_code; ?>" onclick="clonebulk_task(this)" title="Create a clone" ></i>
+                                                <i  data-toggle="tooltip" title="Advanced" name="<?php echo $task_code; ?>" onclick="bulktasksettings(this)" class="hi-icon fusion-li-icon fa fa-gears" ></i>
                                                 <?php if($value['SystemTask'] != "checked") {?>
-                                                <i  data-toggle="tooltip" title="Remove this task" name="<?php echo $task_code; ?>" onclick="removebulk_task(this)" class="hi-icon fusion-li-icon fa fa-times-circle" egid="remove-task" ></i>
+                                                <i  data-toggle="tooltip" title="Remove this task" name="<?php echo $task_code; ?>" onclick="removebulk_task(this)" class="hi-icon fusion-li-icon fa fa-times-circle" ></i>
                                                 <?php }?>
 												
 												<?php if($value['SystemTask'] == "checked") {?>
 												 <i  data-toggle="tooltip" title='This highlighted task is a "System Task". If you use this task on your Task Page, that means whatever value users submit to this task will automatically show up in the pop-up of their assigned booth(s) once assigned. By default they are not assigned to any Level, and you can configure most of the settings such as the due date and description, however they cannot be deleted. For more details on how these are used, please contact support@expo-genie.com'  name="" onclick="" class="hi-icon fusion-li-icon fa fa-question-circle" ></i>
                                                 <?php }?>
                                             </div> </td>
-                                        <td><input <?php if($value['SystemTask'] == "checked") {echo 'readonly="true" title="This is a system task. Changing its title is not allowed"';}else{echo 'title="Title"';} ?> type="text" style="margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $task_code; ?>-title" class="form-control" name="tasklabel" placeholder="Title" data-toggle="tooltip" title="Title" value="<?php echo $value['label']; ?>" egid="task-title" required> 
+                                        <td><input <?php if($value['SystemTask'] == "checked") {echo 'readonly="true" title="This is a system task. Changing its title is not allowed"';}else{echo 'title="Title"';} ?> type="text" style="margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $task_code; ?>-title" class="form-control" name="tasklabel" placeholder="Title" data-toggle="tooltip" title="Title" value="<?php echo $value['label']; ?>" required> 
                                             <span><input type="hidden" id="row-<?php echo $task_code; ?>-key"  value="<?php echo $key; ?>" ></span>
                                             <span><input <?php if($value['taskCode'] == "COL") { echo "value='accept=.png'";}else{echo "value='".$value['taskattrs']."'";}?>type="hidden" id="row-<?php echo $task_code; ?>-attribute"   ></span>
                                             <span><input type="hidden" id="row-<?php echo $task_code; ?>-taskMWC"  value="<?php  if(isset($value['taskMWC'])){ echo $value['taskMWC']; }?>" ></span>
@@ -350,7 +350,7 @@ height: 50% !important;
                                         </td>
                                         <td>
                                            <div class="topmarrginebulkedit">
-                                               <select  <?php if($value['SystemTask'] == "checked") {echo 'disabled="true" title="This is a system task. Changing its type is not allowed"';}else{echo 'title="Task Type"';} ?>  style="width:100% !important;"class="form-control bulktasktypedrop tasktypesdata" id="bulktasktype_<?php echo $task_code; ?>" data-placeholder="Select Type" data-toggle="tooltip" data-allow-clear="true" egid="task-type">
+                                               <select  <?php if($value['SystemTask'] == "checked") {echo 'disabled="true" title="This is a system task. Changing its type is not allowed"';}else{echo 'title="Task Type"';} ?>  style="width:100% !important;"class="form-control bulktasktypedrop tasktypesdata" id="bulktasktype_<?php echo $task_code; ?>" data-placeholder="Select Type" data-toggle="tooltip" data-allow-clear="true">
                                                     <?php foreach ($plug_in_settings['ContentManager']['taskmanager']['input_type'] as $val) { ?>
                                                         <?php if ($val['type'] == $value['type']) { ?>
                                                             <option value="<?php echo $val['type']; ?>" selected="selected"><?php echo $val['lable']; ?></option>
@@ -402,11 +402,11 @@ height: 50% !important;
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" style="padding-left: 13px;margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $task_code; ?>-duedate" data-toggle="tooltip" class="form-control datepicker" name="datepicker" egid="duedate"  placeholder="Due Date" title="Due Date"  value="<?php echo $value['attrs']; ?>">
+                                            <input type="text" style="padding-left: 13px;margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $task_code; ?>-duedate" data-toggle="tooltip" class="form-control datepicker" name="datepicker"   placeholder="Due Date" title="Due Date"  value="<?php echo $value['attrs']; ?>">
                                         </td>
                                         <td> 
                                             <div class="addscrol topmarrginebulkedit">
-                                                <select class="select2"  data-placeholder="Select Levels" title="Select Levels" id="row-<?php echo $task_code; ?>-levels" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" egid="select-levels">
+                                                <select class="select2"  data-placeholder="Select Levels" title="Select Levels" id="row-<?php echo $task_code; ?>-levels" data-allow-clear="true" data-toggle="tooltip" multiple="multiple">
                                                     <?php
                                                     if (in_array('all', $value['roles'])) {
 
@@ -431,7 +431,7 @@ height: 50% !important;
                                                 </select>
                                                 <br>
 
-                                                <select class="select2 js-example-events" data-placeholder="Select Users" title="Select Users" data-allow-clear="true" id="row-<?php echo $task_code; ?>-userid" data-toggle="tooltip" multiple="multiple" egid="select-users" >
+                                                <select class="select2 js-example-events" data-placeholder="Select Users" title="Select Users" data-allow-clear="true" id="row-<?php echo $task_code; ?>-userid" data-toggle="tooltip" multiple="multiple" >
                                                     <?php
                                                     foreach ($get_all_ids as $user) {
                                                        // if(!empty($value['usersids'])){
@@ -449,7 +449,7 @@ height: 50% !important;
                                         
                                         <td><br>
                                             <div class="addscrol">
-                                                <div id="row-<?php echo $task_code; ?>-descrpition" name="taskdiscrpition_<?php echo $task_code; ?>" oncontextmenu="return false;" class='edittaskdiscrpition_<?php echo $task_code; ?>' onclick="bulktask_descripiton(this)" egid="task-description"><?php echo $value['descrpition']; ?></div>
+                                                <div id="row-<?php echo $task_code; ?>-descrpition" name="taskdiscrpition_<?php echo $task_code; ?>" oncontextmenu="return false;" class='edittaskdiscrpition_<?php echo $task_code; ?>' onclick="bulktask_descripiton(this)"><?php echo $value['descrpition']; ?></div>
 
                                                 <p ><i class="font-icon fa fa-edit" name='taskdiscrpition_<?php echo $task_code; ?>'title="Edit your task specifications" data-toggle="tooltip" style="cursor: pointer;color: #0082ff;"onclick="bulktask_descripiton(this)"></i>
         <?php if (!empty($value['descrpition'])) { ?>
@@ -473,8 +473,8 @@ height: 50% !important;
                     
                     <div class="col-sm-10">
                         
-                        <button  type="submit"  name="savealltask" id="savealltask"  class="btn btn-lg mycustomwidth btn-success" value="Register" egid="savealltask">Save All Changes</button>
-                        <a  name="addsponsor2"   class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register" egid="add-new-task">Add New Task</a>
+                        <button  type="submit"  name="savealltask" id="savealltask"  class="btn btn-lg mycustomwidth btn-success" value="Register">Save All Changes</button>
+                        <a  name="addsponsor2"   class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register">Add New Task</a>
                     
                     </div>
             </div>

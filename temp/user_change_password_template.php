@@ -39,14 +39,14 @@ get_header();
                                 <tr class="passwordTest">
                                   
                                     <td> <label for="file">New Password<strong>*</strong></label></td>
-                                    <td>  <input   type="password"  class="passwordTestinput" name="newpassword" id="newpassword" egid="newpassword" required><div id="messages"></div></td>
+                                    <td>  <input   type="password"  class="passwordTestinput" name="newpassword" id="newpassword"  required><div id="messages"></div></td>
                                     
                                     
                                 </tr>
                                  <tr class="passwordTest">
                                   
                                     <td> <label for="file">Confirm Password<strong>*</strong></label></td>
-                                    <td>  <input   type="password"   class="passwordTestinput" name="confirmpassword" id="confirmpassword" egid="confirmpassword" required></td>
+                                    <td>  <input   type="password"   class="passwordTestinput" name="confirmpassword" id="confirmpassword"  required></td>
                                     
                                     
                                 </tr>
@@ -61,7 +61,7 @@ get_header();
                                 
                                 <tr>
                                    <td> </td>
-                                    <td><button type="submit"  name="setpassword" class="btn btn-large btn-info button-cancle" style="margin-left: 0px !important;" egid="setpassword" value="Register">Submit</button><a class="btn btn-large btn-info button-cancle" href="/home">Cancel</a>
+                                    <td><button type="submit"  name="setpassword" class="btn btn-large btn-info button-cancle" style="margin-left: 0px !important;" value="Register">Submit</button><a class="btn btn-large btn-info button-cancle" href="/home">Cancel</a>
                                   
                                     </td>
                                    

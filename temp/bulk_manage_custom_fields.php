@@ -133,7 +133,7 @@ height: 50% !important;
                                         <option value="<?php echo $val['type']; ?>" ><?php echo $val['lable']; ?></option>
                                 <?php } ?>
                         </select>
-                       <select class="specialsearchfilter select2" id="customers_select_search" data-placeholder="Quick Search"  data-allow-clear="true" style="width:95%;border: #d6e2e8 solid 1px; height: 36px; border-radius: 3px;  padding-left: 10px;" egid="customers_select_search">
+                       <select class="specialsearchfilter select2" id="customers_select_search" data-placeholder="Quick Search"  data-allow-clear="true" style="width:95%;border: #d6e2e8 solid 1px; height: 36px; border-radius: 3px;  padding-left: 10px;">
    
                            <option value=""></option>
                      <?php  foreach ($fieldstitle_list as $Qkey=>$Qvalue){ ?>
@@ -152,8 +152,8 @@ height: 50% !important;
                         
 
 
-                        <a  name="addsponsor"   style="margin-left: 2%;float: right;"class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register" egid="add-new-field"> Add New Field</a>
-                        <button  style="float: right;" type="submit" name="savealltask" class="btn btn-lg mycustomwidth btn-success" value="Register" egid="save-all-changes">Save All Changes</button>
+                        <a  name="addsponsor"   style="margin-left: 2%;float: right;"class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register">Add New Field</a>
+                        <button  style="float: right;" type="submit" name="savealltask" class="btn btn-lg mycustomwidth btn-success" value="Register">Save All Changes</button>
                         
                     </div>
                 </div>
@@ -194,17 +194,17 @@ height: 50% !important;
                                         <td><div class="hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a">
                                                
                                                 
-                                                <i data-toggle="tooltip" class="hi-icon fa fa-clone saveeverything" id="<?php echo $value['fieldID']; ?>" onclick="clonebulk_fields(this)" title="Create a clone" egid="clone-field" ></i>
-                                                <i  data-toggle="tooltip" title="Field Settings" name="<?php echo $value['fieldID']; ?>" onclick="bulkfieldsettings(this)" class="hi-icon fusion-li-icon fa fa-gears" egid="field-settings" ></i>
+                                                <i data-toggle="tooltip" class="hi-icon fa fa-clone saveeverything" id="<?php echo $value['fieldID']; ?>" onclick="clonebulk_fields(this)" title="Create a clone" ></i>
+                                                <i  data-toggle="tooltip" title="Field Settings" name="<?php echo $value['fieldID']; ?>" onclick="bulkfieldsettings(this)" class="hi-icon fusion-li-icon fa fa-gears" ></i>
                                                 <?php if($value['SystemfieldInternal'] != "checked") {?>
-                                                <i  data-toggle="tooltip" title="Remove this field" name="<?php echo $value['fieldID']; ?>" onclick="removebulk_fields(this)" class="hi-icon fusion-li-icon fa fa-times-circle" egid="remove-field" ></i>
+                                                <i  data-toggle="tooltip" title="Remove this field" name="<?php echo $value['fieldID']; ?>" onclick="removebulk_fields(this)" class="hi-icon fusion-li-icon fa fa-times-circle" ></i>
                                                 <?php }?>
 												
 												<?php if($value['SystemfieldInternal'] == "checked") {?>
 												 <i  data-toggle="tooltip" title='This highlighted field is a "Internal field".'  name="" onclick="" class="hi-icon fusion-li-icon fa fa-question-circle" ></i>
                                                 <?php }?>
                                             </div> </td>
-                                        <td><input <?php if($value['fieldsystemtask'] == "checked") {echo 'readonly="true" title="This is a system field. Changing its title is not allowed"';}else{echo 'title="Field Name"';} ?> type="text" style="margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $value['fieldID']; ?>-title" class="form-control" name="tasklabel" placeholder="Title" data-toggle="tooltip" title="Title" value="<?php echo $value['fieldName']; ?>" egid="field-title" required> 
+                                        <td><input <?php if($value['fieldsystemtask'] == "checked") {echo 'readonly="true" title="This is a system field. Changing its title is not allowed"';}else{echo 'title="Field Name"';} ?> type="text" style="margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $value['fieldID']; ?>-title" class="form-control" name="tasklabel" placeholder="Title" data-toggle="tooltip" title="Title" value="<?php echo $value['fieldName']; ?>" required> 
                                             
                                             <span><input type="hidden" id="row-<?php echo $value['fieldID']; ?>-fielduniquekey"  value="<?php  if(isset($value['fielduniquekey'])){ echo $value['fielduniquekey']; }?>" ></span>
                                             <span><input type="hidden" id="row-<?php echo $value['fieldID']; ?>-fieldCode"  value="<?php  if(isset($value['fieldID'])){ echo $value['fieldID']; }?>" ></span>
@@ -237,7 +237,7 @@ height: 50% !important;
                                         </td>
                                         <td>
                                            <div class="topmarrginebulkedit">
-                                               <select  <?php if($value['fieldsystemtask'] == "checked") {echo 'disabled="true" title="This is a system field. Changing its type is not allowed"';}else{echo 'title="Field Type"';} ?>  style="width:100px !important;"class="select2 bulktasktypedrop tasktypesdata" id="bulktasktype_<?php echo $value['fieldID']; ?>" data-placeholder="Field Type" data-toggle="tooltip" data-allow-clear="true" egid="field-type">
+                                               <select  <?php if($value['fieldsystemtask'] == "checked") {echo 'disabled="true" title="This is a system field. Changing its type is not allowed"';}else{echo 'title="Field Type"';} ?>  style="width:100px !important;"class="select2 bulktasktypedrop tasktypesdata" id="bulktasktype_<?php echo $value['fieldID']; ?>" data-placeholder="Field Type" data-toggle="tooltip" data-allow-clear="true">
                                                     <?php foreach ($field_input_type as $val) { ?>
                                                         <?php if ($val['type'] == $value['fieldType']) { ?>
                                                             <option value="<?php echo $val['type']; ?>" selected="selected"><?php echo $val['lable']; ?></option>
@@ -257,11 +257,11 @@ height: 50% !important;
                                             
                                             <?php if($value['displayonapplicationform'] == "checked"){
                                             
-                                            echo '<input type="checkbox" id="row-'.$value["fieldID"].'-fieldstatusshowonregform" class="form-control" checked="true" egid="display-on-reg-form">';
+                                            echo '<input type="checkbox" id="row-'.$value["fieldID"].'-fieldstatusshowonregform" class="form-control" checked="true">';
                                             
                                             }else{
                                                 
-                                             echo '<input id="row-'.$value["fieldID"].'-fieldstatusshowonregform" type="checkbox" class="form-control" egid="display-on-reg-form" >';
+                                             echo '<input id="row-'.$value["fieldID"].'-fieldstatusshowonregform" type="checkbox" class="form-control" >';
                                             }?>
                                             </p></td>
                                         
@@ -299,17 +299,17 @@ height: 50% !important;
                                         <td><div class="hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a">
                                                
                                                 
-                                                <i data-toggle="tooltip" class="hi-icon fa fa-clone saveeverything" id="<?php echo $value['fieldID']; ?>" onclick="clonebulk_fields(this)" title="Create a clone"  egid="clone-field" ></i>
-                                                <i  data-toggle="tooltip" title="Field Settings" name="<?php echo $value['fieldID']; ?>" onclick="bulkfieldsettings(this)" class="hi-icon fusion-li-icon fa fa-gears" egid="field-settings"></i>
+                                                <i data-toggle="tooltip" class="hi-icon fa fa-clone saveeverything" id="<?php echo $value['fieldID']; ?>" onclick="clonebulk_fields(this)" title="Create a clone" ></i>
+                                                <i  data-toggle="tooltip" title="Field Settings" name="<?php echo $value['fieldID']; ?>" onclick="bulkfieldsettings(this)" class="hi-icon fusion-li-icon fa fa-gears" ></i>
                                                 <?php if($value['fieldsystemtask'] != "checked") {?>
-                                                <i  data-toggle="tooltip" title="Remove this field" name="<?php echo $value['fieldID']; ?>" onclick="removebulk_fields(this)" class="hi-icon fusion-li-icon fa fa-times-circle" egid="remove-field" ></i>
+                                                <i  data-toggle="tooltip" title="Remove this field" name="<?php echo $value['fieldID']; ?>" onclick="removebulk_fields(this)" class="hi-icon fusion-li-icon fa fa-times-circle" ></i>
                                                 <?php }?>
 												
 												<?php if($value['fieldsystemtask'] == "checked") {?>
 												 <i  data-toggle="tooltip" title='This highlighted field is a "System field". Please contact support@expo-genie.com'  name="" onclick="" class="hi-icon fusion-li-icon fa fa-question-circle" ></i>
                                                 <?php }?>
                                             </div> </td>
-                                        <td><input <?php if($value['fieldsystemtask'] == "checked") {echo 'readonly="true" title="This is a system field. Changing its title is not allowed"';}else{echo 'title="Field Name"';} ?> type="text" style="margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $value['fieldID']; ?>-title" class="form-control" name="tasklabel" placeholder="Title" data-toggle="tooltip" title="Title" value="<?php echo $value['fieldName']; ?>" egid="field-title" required> 
+                                        <td><input <?php if($value['fieldsystemtask'] == "checked") {echo 'readonly="true" title="This is a system field. Changing its title is not allowed"';}else{echo 'title="Field Name"';} ?> type="text" style="margin-top: 10px;margin-bottom: 10px;" id="row-<?php echo $value['fieldID']; ?>-title" class="form-control" name="tasklabel" placeholder="Title" data-toggle="tooltip" title="Title" value="<?php echo $value['fieldName']; ?>" required> 
                                             
                                             <span><input type="hidden" id="row-<?php echo $value['fieldID']; ?>-fielduniquekey"  value="<?php  if(isset($value['fielduniquekey'])){ echo $value['fielduniquekey']; }?>" ></span>
                                             <span><input type="hidden" id="row-<?php echo $value['fieldID']; ?>-fieldCode"  value="<?php  if(isset($value['fieldID'])){ echo $value['fieldID']; }?>" ></span>
@@ -342,7 +342,7 @@ height: 50% !important;
                                         </td>
                                         <td>
                                            <div class="topmarrginebulkedit">
-                                               <select  <?php if($value['fieldsystemtask'] == "checked") {echo 'disabled="true" title="This is a system field. Changing its type is not allowed"';}else{echo 'title="Field Type"';} ?>  style="width:100px !important;"class="select2 bulktasktypedrop tasktypesdata" id="bulktasktype_<?php echo $value['fieldID']; ?>" data-placeholder="Field Type" egid="field-type" data-toggle="tooltip" data-allow-clear="true">
+                                               <select  <?php if($value['fieldsystemtask'] == "checked") {echo 'disabled="true" title="This is a system field. Changing its type is not allowed"';}else{echo 'title="Field Type"';} ?>  style="width:100px !important;"class="select2 bulktasktypedrop tasktypesdata" id="bulktasktype_<?php echo $value['fieldID']; ?>" data-placeholder="Field Type" data-toggle="tooltip" data-allow-clear="true">
                                                     <?php foreach ($field_input_type as $val) { ?>
                                                         <?php if ($val['type'] == $value['fieldType']) { ?>
                                                             <option value="<?php echo $val['type']; ?>" selected="selected"><?php echo $val['lable']; ?></option>
@@ -362,11 +362,11 @@ height: 50% !important;
                                             
                                             <?php if($value['displayonapplicationform'] == "checked"){
                                             
-                                            echo '<input style="margin-left: 116px;margin-top: -17px;"type="checkbox" id="row-'.$value["fieldID"].'-fieldstatusshowonregform" class="form-control" checked="true" egid="display-on-reg-form">';
+                                            echo '<input style="margin-left: 116px;margin-top: -17px;"type="checkbox" id="row-'.$value["fieldID"].'-fieldstatusshowonregform" class="form-control" checked="true">';
                                             
                                             }else{
                                                 
-                                             echo '<input style="margin-left: 116px;margin-top: -17px;" id="row-'.$value["fieldID"].'-fieldstatusshowonregform" type="checkbox" class="form-control" egid="display-on-reg-form" >';
+                                             echo '<input style="margin-left: 116px;margin-top: -17px;" id="row-'.$value["fieldID"].'-fieldstatusshowonregform" type="checkbox" class="form-control" >';
                                             }?>
                                             </p></td>
                                         
@@ -400,8 +400,8 @@ height: 50% !important;
                         
 
 
-                        <button  type="submit"  name="savealltask"   class="btn btn-lg mycustomwidth btn-success" value="Register" egid="save-all-changes" >Save All Changes</button>
-                        <a  name="addsponsor2"   class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register"  egid="add-new-field" >Add New Field</a>
+                        <button  type="submit"  name="savealltask"   class="btn btn-lg mycustomwidth btn-success" value="Register">Save All Changes</button>
+                        <a  name="addsponsor2"   class="addnewbulktask btn btn-lg mycustomwidth btn-success" value="Register">Add New Field</a>
                     </div>
                 </div>
             </form>

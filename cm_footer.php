@@ -24,7 +24,10 @@
         
         <script type="text/javascript" src="/wp-content/plugins/EGPL/js/reportsfield.js?v=2.95"></script>
         <script type="text/javascript" src="/wp-content/plugins/EGPL/js/lodash.js?v=2.95"></script>
-        
+      <!---             Order-Managemnt    -->
+<script type="text/javascript" src="/wp-content/plugins/EGPL/js/ordermanagment/create-new-order.js?v=6.69"></script>
+<script type="text/javascript" src="/wp-content/plugins/EGPL/js/ordermanagment/edit-order.js?v=1.56"></script>
+<!---             Order-Managemnt    -->  
         
         
 <!--        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/exporting.js?v=2.95"></script>-->

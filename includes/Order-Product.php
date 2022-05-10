@@ -26,13 +26,16 @@ class orderProduct{
                
             $wc_deposit_enabled = get_post_meta( $value->id, '_wc_deposit_enabled', true );
             $wc_deposit_amount = get_post_meta( $value->id, '_wc_deposit_amount', true );
+            $product_status = get_post_meta( $value->id, '_stock_status',true );
+            $stock = get_post_meta( $value->id, '_stock',true );
             $getproduct_detail = $woocommerce->products->get( $value->id );
-     
+
             $coupon = array(  
                  'id'=> $value->id,
                  'title' => $value->name,
                  'price' => $value->price,
-                 'status' => $value->stock_status,
+                 'status' => $product_status,
+                 'stock' =>  $stock,
                  'deposit' => $wc_deposit_enabled,
                  'deposit_amount' => $wc_deposit_amount,
                  'catagory'=>$getproduct_detail->product->categories[0]

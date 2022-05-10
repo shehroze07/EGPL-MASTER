@@ -143,12 +143,12 @@ if ($slug == 'add-ons' || $slug == 'add-ons-2' || $slug == 'account' || $slug ==
      
                        
 
-                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$title.' " url="'.$link.'" slug="'.$slug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$pageid.'" menuorder = "'.$menuorder.'"   onclick="editmenuname(this)" id="'.$id.'" egid="edit-menu-item" ></i>
+                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$title.' " url="'.$link.'" slug="'.$slug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$pageid.'" menuorder = "'.$menuorder.'"   onclick="editmenuname(this)" id="'.$id.'" ></i>
     </span>
 
 
        <span class="button-delete btn-icon-del btn-xs pull-right hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a" >
-                                                 <i style="color: gray;" class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$id.'" slug="'.$slug.'" title="Delete Menu Item" egid="delete-menu-item" ></i>
+                                                 <i style="color: gray;" class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$id.'" slug="'.$slug.'" title="Delete Menu Item" ></i>
 
                                                   </span>';
 }
@@ -168,11 +168,11 @@ else{
      
                        
 
-                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$title.' " url="'.$link.'" slug="'.$slug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$pageid.'" menuorder = "'.$menuorder.'"   onclick="editmenuname(this)" id="'.$id.'" egid="edit-menu-item"></i>
+                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$title.' " url="'.$link.'" slug="'.$slug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$pageid.'" menuorder = "'.$menuorder.'"   onclick="editmenuname(this)" id="'.$id.'" ></i>
     </span>
 
                                   <span  class="button-delete  btn-xs pull-right hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a" >
-                                                 <i class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$id.'" slug="'.$slug.'" title="Delete Menu Item" egid="delete-menu-item" ></i>
+                                                 <i class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$id.'" slug="'.$slug.'" title="Delete Menu Item" ></i>
 
                                                   </span>';
                                                                                          
@@ -250,11 +250,11 @@ if ($cslug == 'add-ons' || $cslug == 'add-ons-2' || $cslug == 'account' || $cslu
     <span class="button-edit  btn-xs pull-right hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a" >    
                        
 
-                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$ctitle.' " url="'.$clink.'" slug="'.$cslug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$cpageid.'" menuorder = "'.$cmenuorder.'"   onclick="editmenuname(this)" id="'.$cid.'" egid="edit-menu-item" ></i>
+                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$ctitle.' " url="'.$clink.'" slug="'.$cslug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$cpageid.'" menuorder = "'.$cmenuorder.'"   onclick="editmenuname(this)" id="'.$cid.'" ></i>
     </span>
 
       <span class="button-delete btn-icon-del btn-xs pull-right hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a" >    
-                                                 <i style="color: gray;" class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$cid.'" title="Delete Menu Item" egid="delete-menu-item" ></i>
+                                                 <i style="color: gray;" class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$cid.'" title="Delete Menu Item" ></i>
 
                                                   </span>
                                                   <ol class="dd-list child-list childeclass-'.$cid.'" id="'.$cid.'" ></ol>
@@ -270,11 +270,11 @@ else{
     <span class="button-edit  btn-xs pull-right hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a" >    
                        
 
-                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$ctitle.' " url="'.$clink.'" slug="'.$cslug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$cpageid.'" menuorder = "'.$cmenuorder.'"   onclick="editmenuname(this)" id="'.$cid.'" egid="edit-menu-item"></i>
+                                                 <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x" title="Edit Menu Item" name="'.$ctitle.' " url="'.$clink.'" slug="'.$cslug.'" main_menu_id = "'.$main_menu_id.'"  pageid = "'.$cpageid.'" menuorder = "'.$cmenuorder.'"   onclick="editmenuname(this)" id="'.$cid.'" ></i>
     </span>
 
     <span class="button-delete  btn-xs pull-right hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a" >    
-                                                 <i class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$cid.'" title="Delete Menu Item" egid="delete-menu-item" ></i>
+                                                 <i class="hi-icon fusion-li-icon fa fa-times-circle fa-2x"  onclick="delete_menu_name(this)" id="'.$cid.'" title="Delete Menu Item" ></i>
 
                                                   </span>
                                                   <ol class="dd-list child-list childeclass-'.$cid.'" id="'.$cid.'" ></ol>
@@ -306,9 +306,9 @@ else{
       </div>
         <div class="col-md-6">
                   
-                  <span style="float: right;"><button onclick="add_new_menu_item()" class="btn btn-inline mycustomwidth btn-success" title="Add New Menu Item" egid="add-menu-item">Add Menu Item</button></span>
+                  <span style="float: right;"><button onclick="add_new_menu_item()" class="btn btn-inline mycustomwidth btn-success" title="Add New Menu Item">Add Menu Item</button></span>
      
-                                                   <span style="float: right;"><button onclick="set_menu_item_order()" class="btn btn-inline mycustomwidth btn-success" title="Add New Menu Item" egid="save-menu-order">Save Menu Order</button></span>
+                                                   <span style="float: right;"><button onclick="set_menu_item_order()" class="btn btn-inline mycustomwidth btn-success" title="Add New Menu Item">Save Menu Order</button></span>
              </div>
 
          </div>

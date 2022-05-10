@@ -221,7 +221,50 @@ $exhibitorEntryLevel[7]['description'] = 'This will be the Confirmation page aft
  
 
            <style>
-       
+        
+        .egmb-10{margin-bottom: 10px;}
+        .egmb-20{margin-bottom: 20px;}
+        .radio input{visibility: unset;}
+        .egradio-inline{display: inline;}
+        .egcolor{color:red;}
+        .row{margin-left: 0px;}
+
+         .previewDivselectedImage{
+            border: solid lightgray 1px;
+            height: auto;
+            width: auto;
+        }
+         .eg-optional{
+        
+        background: linear-gradient(to right, #1f9bd9, #99d2f2 200%);
+        border: 2px solid #53b2e4;
+/*        cursor: not-allowed;*/
+    }
+    .sweet-alert p{color:#333 !important;}
+    .eg-requried{
+        
+        background: linear-gradient(to right, #b2b2b2, #c3c2c2 200%);
+        border: 2px solid #b6b6b6;
+/*        cursor: not-allowed;*/
+    }
+    .eg-optional-type-2{
+        
+        background: linear-gradient(to right, #ff9800, #ef8d22 200%);
+        border: 2px solid #ff9800;
+/*        cursor: move;*/
+    }
+    .eg-boxed{
+        
+        height: 210px;
+        margin-bottom: 20px;
+        padding: 20px;
+        color:#fff;
+        
+        
+        padding: 20px;
+        border-radius: 50px 20px;
+        box-shadow: 0 8px 8px -4px #ccc;
+    }
     .switch {
   position: absolute;
   margin-left:385px;
@@ -323,7 +366,13 @@ input:checked + .slider:before {
     font-weight: bold;
     color: #009879;
 }
-   
+    .eg-editlink{
+        
+        
+        text-decoration: underline !important;
+        
+    }
+    .eg-editlink a{color:#fff !important;}
     /* .toggle.btn{
     width: 110px;
     min-height: 34px;
@@ -471,16 +520,16 @@ height: 50% !important;
                   <div class="tabs-section-nav tabs-section-nav-icons">
                     <div class="tbl">
                         <ul class="nav" role="tablist" id="myTabs">
-                            <li class="nav-item" style="width:33%;" egid="event-settings">
-                                <a class="nav-link " href="#tabs-1-tab-1" role="tab" data-toggle="tab" egid="event-settings">
+                            <li class="nav-item" style="width:33%;">
+                                <a class="nav-link " href="#tabs-1-tab-1" role="tab" data-toggle="tab">
                                     <span class="nav-link-in">
                                         <i class="fas fa-hat-wizard"></i>
                                             Event Settings
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item" egid="registration">
-                                <a class="nav-link" href="#tabs-1-tab-2" role="tab"  data-toggle="tab" egid="registration">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabs-1-tab-2" role="tab"  data-toggle="tab">
                                     <span class="nav-link-in">
                                          <i class="fas fa-hat-wizard"></i>
                                         
@@ -488,8 +537,8 @@ height: 50% !important;
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item" egid="booth-management-settings">
-                                <a class="nav-link " href="#tabs-1-tab-3" role="tab"  data-toggle="tab" egid="booth-management-settings">
+                            <li class="nav-item">
+                                <a class="nav-link " href="#tabs-1-tab-3" role="tab"  data-toggle="tab">
                                     <span class="nav-link-in">
                                          <i class="fas fa-hat-wizard"></i>
                                         
@@ -516,7 +565,7 @@ height: 50% !important;
                                     <div class="form-group row">
                                         <label class="col-sm-4 form-control-label"></label>
                                      
-                                                 <button style="float: right;" type="submit"  name="addsettings"  class="btn btn-lg mycustomwidth btn-success" value="Update" egid="update">Update</button>
+                                                 <button style="float: right;" type="submit"  name="addsettings"  class="btn btn-lg mycustomwidth btn-success" value="Update">Update</button>
                                                 
                                             
                                         </div>
@@ -530,25 +579,25 @@ height: 50% !important;
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label class="form-control-label" for="inputEventStart">Event Start Date</label>
-                                        <input type="text" class="form-control datetimepicker portalsettings" name="eventstartdate" value="<?php echo $eventstartdate;?>" id="inputEventStart" placeholder="Event Start Date" required="true" egid="inputEventStart">
+                                        <input type="text" class="form-control datetimepicker portalsettings" name="eventstartdate" value="<?php echo $eventstartdate;?>" id="inputEventStart" placeholder="Event Start Date" required="true">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-control-label" for="inputEventend">Event End Date</label>
-                                        <input type="text" class="form-control datetimepicker portalsettings" name="eventenddate" value="<?php echo $eventenddate;?>" id="inputEventend" placeholder="Event End Date" required="true" egid="inputEventEnd">
+                                        <input type="text" class="form-control datetimepicker portalsettings" name="eventenddate" value="<?php echo $eventenddate;?>" id="inputEventend" placeholder="Event End Date" required="true">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-12">
                                         <label class="form-control-label" for="inputEventStart">Event Address</label>
-                                        <textarea  class="form-control portalsettings" name="eventaddress"  id="inputEventaddress" placeholder="Event Address" egid="inputEventaddress" ><?php echo $eventaddress;?></textarea>
+                                        <textarea  class="form-control portalsettings" name="eventaddress"  id="inputEventaddress" placeholder="Event Address" ><?php echo $eventaddress;?></textarea>
                                     </div>
                                 </div>
                             <p><h6 class="card-title">Site Theme Colors</h6></p>
                                 
                                 <div class="row">
                                     <div class="form-group col-sm-12">
-                                        <label class="form-control-label" >Primary Color <i class="fa fa-question-circle fa-sm" title="The primary color of buttons and icons throughout the portal" ></i></label>
-                                        <input type="text" class="form-control cp-component portalsettings" name="prinarythemecolor" id="inputprimarytheme" value="<?php echo $prinarythemecolor;?>" placeholder="Primary Theme Color" egid="inputprimarytheme" required="true">
+                                        <label class="form-control-label" >Primary Color <i class="fa fa-question-circle fa-sm" title="The primary color of buttons and icons throughout the portal"></i></label>
+                                        <input type="text" class="form-control cp-component portalsettings" name="prinarythemecolor" id="inputprimarytheme" value="<?php echo $prinarythemecolor;?>" placeholder="Primary Theme Color" required="true">
                                     </div>
                                   <!--                                <div class="form-group col-sm-6">
                                         <label class="form-control-label">Secondary Color <i class="fa fa-question-circle fa-sm"></i></label>
@@ -558,7 +607,7 @@ height: 50% !important;
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label class="form-control-label" >Button Font Color <i class="fa fa-question-circle fa-sm" title="The font color within buttons"></i></label>
-                                        <input type="text" class="form-control cp-component portalsettings" name="buttonfontcolor" id="inputbuttonfontcolor" value="<?php echo $buttonfontcolor;?>" placeholder="Buttons Font Color" egid="inputbuttonfontcolor" required="true">
+                                        <input type="text" class="form-control cp-component portalsettings" name="buttonfontcolor" id="inputbuttonfontcolor" value="<?php echo $buttonfontcolor;?>" placeholder="Buttons Font Color" required="true">
                                     </div>
                                     
                                 </div>
@@ -567,7 +616,7 @@ height: 50% !important;
                                 <div class="row">
                                     <div class="form-group col-sm-12">
                                         <label class="form-control-label" >Header Logo </label>
-                                        <input type="file" class="form-control unhidelogo" id="inputImageLogo" egid="inputImageLogo" accept=".jpeg, .jpg, .jpe,.png">
+                                        <input type="file" class="form-control unhidelogo" id="inputImageLogo"  accept=".jpeg, .jpg, .jpe,.png">
                                         <input type="hidden"  id="headerimageLogo"  <?php if(!empty($headelogo)){ echo 'value="'.$headelogo.'"';}?> >
                                     </div>
                                     
@@ -593,12 +642,12 @@ height: 50% !important;
                                                         <div class="row">
                                                         <div class="form-group col-md-10">
                                                                 <label class="form-control-label" for="dataHeightLogo">Width</label>
-                                                                <input type="text" class="form-control"   id="dataWidthLogo" placeholder="Width in px" title="Width in px" egid="dataWidthLogo" readonly="true">
+                                                                <input type="text" class="form-control"   id="dataWidthLogo" placeholder="Width in px" title="Width in px"readonly="true">
                                                                 
                                                         </div></div><div class="row">
                                                         <div class="form-group col-md-10">
                                                                 <label class="form-control-label" for="dataHeightLogo">Height</label>
-                                                                <input type="text" class="form-control"   id="dataHeightLogo" placeholder="Height in px" title="Height in px" egid="dataHeightLogo" readonly="true">
+                                                                <input type="text" class="form-control"   id="dataHeightLogo" placeholder="Height in px" title="Height in px"readonly="true">
                                                                 
                                                         </div></div>
                                                         <div class="row">
@@ -671,7 +720,7 @@ height: 50% !important;
                                                   
 
                                                     <div class="logo-btn-group btn-group">
-                                                       <button type="button" class="btn btn-success btn-md hidebtnlogo " data-method="getCroppedCanvas" data-toggle="tooltip" data-placement="top" title="Apply Changes" egid="apply-changes-logo">
+                                                       <button type="button" class="btn btn-success btn-md hidebtnlogo " data-method="getCroppedCanvas" data-toggle="tooltip" data-placement="top" title="Apply Changes">
                                                           <!--   <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Apply Changes">
                                                                 <span class="fa fa-check"></span> 
                                                             </span> -->
@@ -683,7 +732,7 @@ height: 50% !important;
                                              <!-- My code Shehroze starts -->
 
                                                      <div class="logo-btn-group btn-group">
-                                                        <button type = "button" class="btn btn-md btn-danger fa fa-trash removelogo" data-method="deleteimage" egid="remove-logo" >
+                                                        <button type = "button" class="btn btn-md btn-danger fa fa-trash removelogo" data-method="deleteimage" >
                                                            <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Remove Logo Image">
                                         
                                                             </span>
@@ -702,7 +751,7 @@ height: 50% !important;
                                     <div class="row">
                                     <div class="form-group col-sm-12">
                                         <label class="form-control-label" >Site Favicon </label>
-                                        <input type="file" class="form-control unhidefavicon" id="inputImageFavicon" egid="inputImageFavicon" accept=".jpeg, .jpg, .jpe,.png">
+                                        <input type="file" class="form-control unhidefavicon" id="inputImageFavicon"  accept=".jpeg, .jpg, .jpe,.png">
                                         <input type="hidden"  id="headerimageFavicon" <?php if(!empty($sitefavicon)){ echo 'value="'.$sitefavicon.'"';}?> >
                                     </div>
                                     
@@ -728,12 +777,12 @@ height: 50% !important;
                                                         <div class="row">
                                                         <div class="form-group col-md-10">
                                                                 <label class="form-control-label" for="dataHeightFavicon">Width</label>
-                                                                <input type="text" class="form-control"   id="dataWidthFavicon" placeholder="Width in px" title="Width in px" egid="dataWidthFavicon" readonly="true">
+                                                                <input type="text" class="form-control"   id="dataWidthFavicon" placeholder="Width in px" title="Width in px"readonly="true">
                                                                 
                                                         </div></div><div class="row">
                                                         <div class="form-group col-md-10">
                                                                 <label class="form-control-label" for="dataHeightFavicon">Height</label>
-                                                                <input type="text" class="form-control"   id="dataHeightFavicon" placeholder="Height in px" title="Height in px" egid="dataHeightFavicon" readonly="true">
+                                                                <input type="text" class="form-control"   id="dataHeightFavicon" placeholder="Height in px" title="Height in px"readonly="true">
                                                                 
                                                         </div></div>
                                                         <div class="row">
@@ -806,7 +855,7 @@ height: 50% !important;
                                                   
 
                                                     <div class="favicon-btn-group btn-group">
-                                                                     <button type="button" class="btn btn-success btn-md hidebtnfavicon" data-method="getCroppedCanvas"  data-toggle="tooltip" data-placement="top" title="Apply Changes" egid="apply-changes-favicon">
+                                                                     <button type="button" class="btn btn-success btn-md hidebtnfavicon" data-method="getCroppedCanvas"  data-toggle="tooltip" data-placement="top" title="Apply Changes">
                                                           <!--   <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Apply Changes">
                                                                 <span class="fa fa-check"></span>
                                                             </span> -->
@@ -818,7 +867,7 @@ height: 50% !important;
                                                     <!-- My code Shehroze starts -->
 
                                                      <div class="favicon-btn-group btn-group">
-                                                        <button type = "button" class="btn btn-md btn-danger fa fa-trash removefavicon" data-method="deleteimage" egid="remove-favicon" >
+                                                        <button type = "button" class="btn btn-md btn-danger fa fa-trash removefavicon" data-method="deleteimage" >
                                                            <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Remove Favicon Image">
                                         
                                                             </span>
@@ -840,7 +889,7 @@ height: 50% !important;
                                     <div class="row">
                                     <div class="form-group col-sm-12">
                                         <label class="form-control-label" >Header Image (1800 x 230)</label>
-                                        <input type="file" class="form-control unhideheader" id="inputImage" egid="inputImageHeader" accept=".jpeg, .jpg, .jpe,.png">
+                                        <input type="file" class="form-control unhideheader" id="inputImage"  accept=".jpeg, .jpg, .jpe,.png">
                                         <input type="hidden"  id="headerimage" <?php if(!empty($mainheaderbackground)){ echo 'value="'.$mainheaderbackground.'"';}?>>
                                     </div>
                                     
@@ -944,7 +993,7 @@ height: 50% !important;
                                                   
 
                                                     <div class="header-btn-group btn-group">
-                                                       <button type="button" class="btn btn-success btn-md hidebtnheader" data-method="getCroppedCanvas" data-toggle="tooltip" data-animation="false" data-placement="top" title="Apply Changes" egid="apply-changes-header">
+                                                       <button type="button" class="btn btn-success btn-md hidebtnheader" data-method="getCroppedCanvas" data-toggle="tooltip" data-animation="false" data-placement="top" title="Apply Changes">
                                                            <!--  <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Apply Changes">
                                                                 <span class="fa fa-check"></span>
                                                             </span> -->
@@ -955,7 +1004,7 @@ height: 50% !important;
                                                     <!-- My code Shehroze starts -->
 
                                                      <div class="header-btn-group btn-group">
-                                                        <button type = "button" class="btn btn-md btn-danger fa fa-trash removeheader" data-method="deleteimage" onclick="" egid="remove-header" >
+                                                        <button type = "button" class="btn btn-md btn-danger fa fa-trash removeheader" data-method="deleteimage" onclick=""  >
                                                            <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Remove Header Image">
                                         
                                                             </span>
@@ -1164,7 +1213,7 @@ height: 50% !important;
                                 <div class="row">
                                     <div class="form-group col-sm-12">
                                         <label class="form-control-label" >Registration Notification Emails </label>
-                                        <input type="text" class="form-control portalsettings" value="<?php echo $registration_notificationemails;?>" name="registration_notificationemails" id="registrationnoticationemails" egid="registrationnoticationemails" >
+                                        <input type="text" class="form-control portalsettings" value="<?php echo $registration_notificationemails;?>" name="registration_notificationemails" id="registrationnoticationemails" >
                                     </div>
                                     <div class="form-group" style="display:none;">
                                         <label class="form-control-label">Order Notification Emails:  </label>
@@ -1176,7 +1225,7 @@ height: 50% !important;
                       <div class="form-group row">
                                         <label class="col-sm-4 form-control-label"></label>
                                         <div class="col-sm-8">
-                                                 <button type="submit"  name="addsettings"  class="btn btn-lg mycustomwidth btn-success" value="Update" egid="update">Update</button>
+                                                 <button type="submit"  name="addsettings"  class="btn btn-lg mycustomwidth btn-success" value="Update">Update</button>
                                                 
                                             
                                         </div>
@@ -1192,23 +1241,23 @@ height: 50% !important;
                            	<div class="box-typical box-typical-padding">
                            		<div class="card-header egmb-20">
                                <p>This is where you can configure the flow for your users to be guided through during a new registration process. Use the following URL to send out to your users to register or login:</p>
-                               <p><a href="<?php echo site_url().'/entry-wizard/';?>" target="_blank" egid="registration-url">Registration URL</a></p>
-                               <p><a href="<?php echo site_url().'/login/';?>" target="_blank" egid="login-url">Login URL</a></p>
+                               <p><a href="<?php echo site_url().'/entry-wizard/';?>" target="_blank">Registration URL</a></p>
+                               <p><a href="<?php echo site_url().'/login/';?>" target="_blank">Login URL</a></p>
                            		</div>
                            		<br>
                            		<form method="post" action="javascript:void(0);" onSubmit="exhibitor_entry_flow_settings_update()">
                            			<div class="form-group row">
                            				<div class="col-sm-3 ">
-                           					<input type="checkbox" data-on="Enabled" data-off="Disabled" <?php echo $exhibitorflowstatus[ 'status'];?> class="toggle-one" value='checked' id="exhibitorentryflow" data-toggle="toggle" egid="exhibitorentryflow">
+                           					<input type="checkbox" data-on="Enabled" data-off="Disabled" <?php echo $exhibitorflowstatus[ 'status'];?> class="toggle-one" value='checked' id="exhibitorentryflow" data-toggle="toggle">
                            					<p style="margin-top: 10px;">Registration</p>
                            				</div>
                            				<div class="col-sm-3 ">
-                           					<input type="checkbox" class="toggle-one" id="applicationmoderationstatus" data-toggle="toggle" egid="applicationmoderationstatus" <?php echo $applicationmoderationstatus;?>>
+                           					<input type="checkbox" class="toggle-one" id="applicationmoderationstatus" data-toggle="toggle" <?php echo $applicationmoderationstatus;?>>
                            					<p style="margin-top: 10px;">Application Moderation <i data-toggle="tooltip" title="" class="fa fa-question-circle" aria-hidden="true" data-original-title="Enable this setting if you want to moderate user applications before they gain access into this event portal. If this is disabled, when a user completes the form the system will immediately create an account for that user and send them the Welcome Email with login credentials."></i></p>
                            				</div>
                            				<div class="col-sm-3" style="margin-top: 7px;"><a target="_blank" href="<?php echo site_url().'/entry-wizard/?preview=on';?>" style="float: right;" class="btn mycustomwidth btn-success">Preview</a></div>
                            				<div class="col-sm-3" style="margin-top: 7px;">
-                           					<button style="float: right;" type="submit" name="savealltask" class="btn mycustomwidth btn-success" value="Register" egid="save-all-changes-registration">Save All Changes</button>
+                           					<button style="float: right;" type="submit" name="savealltask" class="btn mycustomwidth btn-success" value="Register">Save All Changes</button>
                            				</div>
                            			</div>
                            	</div>
@@ -1300,7 +1349,7 @@ height: 50% !important;
                        <hr>
                        <div class="form-group row">
                        	<div class="col-sm-10">
-                       		<button type="submit" name="savealltask" class="btn btn-lg mycustomwidth btn-success" egid="save-all-changes-registration" value="Register">Save All Changes</button>
+                       		<button type="submit" name="savealltask" class="btn btn-lg mycustomwidth btn-success" value="Register">Save All Changes</button>
                        	</div>
                        </div>
                        </form>
@@ -1416,7 +1465,7 @@ height: 50% !important;
                              <div class="card-header egmb-20" style="height: 10rem;">
                            			<p>Set the default settings for online booth selection/purchase.</p>
                            			<p>Only Update these settings if you are allowing users to self-select/purchase booths directly from the live floor plan.</p>
-                                 <button style="float: right;" id="updt_btn" type="submit"  name="addsettings"  class="btn btn-lg my-button mycustomwidth btn-success" egid="save-all-changes-booth-management" value="Update">Save All Changes</button>
+                                 <button style="float: right;" id="updt_btn" type="submit"  name="addsettings"  class="btn btn-lg my-button mycustomwidth btn-success" value="Update">Save All Changes</button>
                               </div>
                            		<br>
                                 <div style="display: flex;justify-content: space-between;      margin-top: 20px;">
@@ -1424,11 +1473,11 @@ height: 50% !important;
                                                    Enable Booth Selection Queue
                                             </h3>
                                           <label class="switch">
-                                              <input id="toggle_btn" type="checkbox" value="checked" egid="booth-queue" <?php echo $selected9=='checked'? 'checked':'unchecked';?> >
+                                              <input id="toggle_btn" type="checkbox" value="checked" <?php echo $selected9=='checked'? 'checked':'unchecked';?> >
                                               <span class="slider round"></span>
                                           </label>
                                          
-                                          <button style="margin-right: 20px;" id="updt_btn_table" type="submit" name="addsettings" class="btn btn-lg mycustomwidth btn-success" value="Update" egid="update-queue">Update Queue</button>
+                                          <button style="margin-right: 20px;" id="updt_btn_table" type="submit" name="addsettings" class="btn btn-lg mycustomwidth btn-success" value="Update">Update Queue</button>
                                  </div> 
                                         <br>
                                  <section class="faq-page-cats" Id="section_table" style="border-bottom:none;margin-bottom:30px;">
@@ -1446,7 +1495,7 @@ height: 50% !important;
                                                     </h6>
                                       
                                                     <label style="  margin-left: -19px !important;" class="switch">
-                                                        <input  style="margin-left: 5px;margin-top: 2px;" id='select_all_user' type='checkbox' class='checkcheckedstatus' name='id[]' egid="select_all_user">
+                                                        <input  style="margin-left: 5px;margin-top: 2px;" id='select_all_user' type='checkbox' class='checkcheckedstatus' name='id[]'>
                                                           <span class="slider round">
                                         
                                                           </span>
@@ -1459,7 +1508,7 @@ height: 50% !important;
                                             <div class="faq-page-cat">
                                                 <div class="faq-page-cat-icon"><i  class=" reporticon font-icon  fa fa-plus fa-2x"></i></div>
                                                 <div class="faq-page-cat-title " id="add_newUser" placement='bottom' style="cursor: pointer;" >
-                                                <button type="button" style=" color: white !important;border-color: #5690c7;background-color: #7cb5ec;" egid="add_newUser" class="btn btn-inline btn-square-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" style=" color: white !important;border-color: #5690c7;background-color: #7cb5ec;"  class="btn btn-inline btn-square-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Add User to Queue
                                                     </button>
                                                 </div>
@@ -1473,7 +1522,7 @@ height: 50% !important;
                                                 <div class="faq-page-cat-txt">
 
                                                     <div class="btn-group">
-                                                        <button disabled type="button" id="newsendbulkemailstatus" class="btn btn-inline dropdown-toggle btn-square-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" egid="bulk-action">
+                                                        <button disabled type="button" id="newsendbulkemailstatus" class="btn btn-inline dropdown-toggle btn-square-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             Bulk Action
                                                             <span class="label label-pill label-danger" id="newbulkemailcounter">0</span>
                                                         </button>
@@ -1498,7 +1547,7 @@ height: 50% !important;
                                                 <div class="faq-page-cat-txt" style="margin-top: 42px;">
 
                                                     <div class="btn-group" >
-                                                        <button disabled type="button" id="newsendbulkemailstatus" class="btn btn-inline btn-square-icon" style=" display: grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" egid="current-turn">
+                                                        <button disabled type="button" id="newsendbulkemailstatus" class="btn btn-inline btn-square-icon" style=" display: grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             Current Turn
                                                             <p  id="turn-counter">0</p>
                                                         </button>
@@ -1668,7 +1717,7 @@ height: 50% !important;
                                   <div class="row">
                                       <div class="form-group col-sm-6">
                                         <label class="form-control-label" >When Open User Selects Booth, THEN:</label>
-                                        <select id="Open_users" class="form-control portalsettings" style="width: 100%;margin-right: 100px;" egid="Open_users">
+                                        <select id="Open_users" class="form-control portalsettings" style="width: 100%;margin-right: 100px;">
                                             <option <?php echo $selected1=='Auto and Email'?'selected':''?> value="Auto and Email">Automatically Open Next Queue & Send Email</option>
                                             <option <?php echo $selected1=='Auto and No Email'?'selected':''?> value="Auto and No Email">Automatically Open Next Queue & Do NOT send Email</option>
                                             <option <?php echo $selected1=='Nothing'?'selected':''?> value="Nothing">Do Nothing</option>
@@ -1676,7 +1725,7 @@ height: 50% !important;
                                       </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-control-label" for="inputEventend"> Select Email:</label>
-                                        <select id="Email_Selection" class="form-control portalsettings" style="width: 100%;border-radius: 5px;" egid="Email_Selection">
+                                        <select id="Email_Selection" class="form-control portalsettings" style="width: 100%;border-radius: 5px;">
                                         <?php    foreach ($sponsor_info as $key=>$value) {
                                           if($key == $email_selected){
                                           $template_name = ucwords(str_replace('_', ' ', $key));
@@ -1692,7 +1741,7 @@ height: 50% !important;
                                     <div class="row">
                                     <div class="form-group col-sm-12" style="    width: 99%;">
                                         <label class="form-control-label" for="inputEventStart"> Default Status for Unassigned and New Users:</label>
-                                        <select id="Deafult_status" class="form-control portalsettings" style="border-radius: 5px;" egid="Deafult_status"> 
+                                        <select id="Deafult_status" class="form-control portalsettings" style="border-radius: 5px;">
                                             <option <?php echo $selected3=='Open'?'selected':''?> value="Open">Open</option>
                                             <option  <?php echo $selected3=='Close'?'selected':''?>  value="Close">Closed</option>
                                            
@@ -1711,11 +1760,11 @@ height: 50% !important;
                                        <div class="row">
                                             <div class="form-group col-sm-6">
                                                 <label class="form-control-label" for="inputEventStart">Number Of Allowed Booths Per User</label>
-                                                <input id="usersNum" type="number" min="1" oninput="validity.valid||(value='');" value="<?php echo $selected7;?>"  egid="usersNum" placeholder="Enter Number of Users" class="form-control portalsettings">    
+                                                <input id="usersNum" type="number" min="1" oninput="validity.valid||(value='');" value="<?php echo $selected7;?>"   placeholder="Enter Number of Users" class="form-control portalsettings">    
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label class="form-control-label" >Default FloorPlan Zoom Settings(Percentage)</label>
-                                                <input id="zoom" type="number" min="1"  oninput="validity.valid||(value='');" value="<?php echo $selected11;?>" egid="zoom" placeholder="Enter Default FloorPlan Zoom(Percentage) " class="form-control portalsettings">      
+                                                <input id="zoom" type="number" min="1"  oninput="validity.valid||(value='');" value="<?php echo $selected11;?>"  placeholder="Enter Default FloorPlan Zoom(Percentage) " class="form-control portalsettings">      
                                             </div>
                                             
                                        </div>
@@ -1725,7 +1774,7 @@ height: 50% !important;
                                                
                                                   
                                                 <label class="switch" style="    margin-left: 106px !important;">
-                                                <input  type="checkbox" id="prePaidChk" style="    margin-top: 9px;" value="checked" egid="prePaidChk" <?php echo $selected10=='checked'? 'checked':'unchecked';?>  class="form-control portalsettings">    
+                                                <input  type="checkbox" id="prePaidChk" style="    margin-top: 9px;" value="checked" <?php echo $selected10=='checked'? 'checked':'unchecked';?>  class="form-control portalsettings">    
                                                       <span class="slider round"></span>
                                               </label>
                                               </div>
@@ -1739,19 +1788,19 @@ height: 50% !important;
                                  <div style="margin-top: -10px;">
                                        <div style="border-bottom: 1px solid #d8e2e7;padding-bottom: 30px;">
                                         <div style="display: flex;">
-                                       <input id="Hide_exhibitor_Details" <?php echo $selected78=='Hide_Details'?'checked':''?> type="checkbox" value="Hide_Details" egid="Hide_exhibitor_Details">
+                                       <input id="Hide_exhibitor_Details" <?php echo $selected78=='Hide_Details'?'checked':''?> type="checkbox" value="Hide_Details">
                                        <label style="margin-left: 9px;" > Hide Exhibitor Details</label><br>
                                        </div>
                                        <div style="margin-left: 21px;font-size: 14px;">
                                        <p>Hides All exhibitor details from public floor plan view.<br>Booths will just be labeled "Available, Reserved, or Occupied'</p>
                                      </div> 
                                       <div style="display: flex;">
-                                        <input id="Hide_reserved_Details" <?php echo $selected4=='Hide_Reserved_Booth'?'checked':''?> type="checkbox" value="Hide_Reserved_Booth" egid="Hide_reserved_Details">
+                                        <input id="Hide_reserved_Details" <?php echo $selected4=='Hide_Reserved_Booth'?'checked':''?> type="checkbox" value="Hide_Reserved_Booth">
                                         <label style="margin-left: 9px;" > Hide Reserved Booth Exhibitor Details</label><br>
                                         </div>  <div style="margin-left: 21px;font-size: 14px;"> <p>Hides all exhibitor details for 'Reserved' booths Only.</p>
                                         </div> 
                                         <div style="display: flex;">
-                                       <input id="Hide_Price" <?php echo $selected5=='Hide_Booth_price'?'checked':''?> type="checkbox" value="Hide_Booth_price" egid="Hide_Price">
+                                       <input id="Hide_Price" <?php echo $selected5=='Hide_Booth_price'?'checked':''?> type="checkbox" value="Hide_Booth_price">
                                        <label style="margin-left: 9px;" >  Hide Booth Price on Public View</label><br>
                                        </div>   <div style="margin-left: 21px;font-size: 14px;">  <p>Hide booth prices from non-exhibitor view.</p>
                                        </div>  
@@ -1763,7 +1812,7 @@ height: 50% !important;
                                  <br>
                                  
                                   <div class="btn-div">
-                                     <button style="float: right;" id="updt_btn" type="submit"  name="addsettings"  class="btn btn-lg my-button mycustomwidth btn-success" value="Update" egid="save-all-changes-booth-management">Save All Changes</button>
+                                     <button style="float: right;" id="updt_btn" type="submit"  name="addsettings"  class="btn btn-lg my-button mycustomwidth btn-success" value="Update">Save All Changes</button>
                                   </div>
                                    
 
@@ -2945,38 +2994,7 @@ jQuery("#turn-counter").html('<?php echo $listofturn; ?>');
 
                 var url = currentsiteurl+'/';
                 var urlnew = url + 'wp-content/plugins/EGPL/egpl.php?contentManagerRequest=removeUserFromQueue';
-//                jQuery.ajax({
-//                    url: urlnew,
-//                    data: data,
-//                    cache: false,
-//                    contentType: false,
-//                    processData: false,
-//                    type: 'POST',
-//                    success: function (data) {
-//                        
-//                        jQuery("body").css({'cursor':'default'});
-//                          swal({
-//                            title: "Success",
-//                            text: 'Users Removed From Queue Successfully.',
-//                            type: "success",
-//                            html:true,
-//                            confirmButtonClass: "btn-success",
-//                            confirmButtonText: "Ok"
-//                            },function(){
-//                                localStorage.setItem('activeTab', "#tabs-1-tab-3");
-//                                location.reload();
-//                                console.log("Success");
-//                            });
-//                      },error: function (xhr, ajaxOptions, thrownError) {
-//                        swal({
-//                          title: "Error",
-//                          text: "There was an error during the requested operation. Please try again.",
-//                          type: "error",
-//                          confirmButtonClass: "btn-danger",
-//                          confirmButtonText: "Ok"
-//                        });
-//                      }
-//                    });
+
 
                  swal.close();
                                                              
@@ -3050,47 +3068,6 @@ jQuery("#turn-counter").html('<?php echo $listofturn; ?>');
                                     var url = currentsiteurl+'/';
                                     var urlnew = url + 'wp-content/plugins/EGPL/egpl.php?contentManagerRequest=addUserIntoQueue';
      
-//                                         jQuery.ajax({
-//                                                 url: urlnew,
-//                                                 data: data,
-//                                                 cache: false,
-//                                                 contentType: false,
-//                                                 processData: false,
-//                                                 type: 'POST',
-//                                                 success: function (data) {
-//                                                     
-//                                                     jQuery("body").css({'cursor':'default'});
-//                                                     
-////                                                       swal({
-////                                                         title: "Success",
-////                                                         text: 'Users Added to Queue Successfully.',
-////                                                         type: "success",
-////                                                         html:true,
-////                                                         confirmButtonClass: "btn-success",
-////                                                         confirmButtonText: "Ok"
-////                                                         },function(){
-////                                                             localStorage.setItem('activeTab', "#tabs-1-tab-3");
-////                                                             location.reload();
-////                                                             console.log("Success");
-////                                                         }
-////                                                             
-////                                                         );
-////                                                 
-//                                                 
-//                                                 
-//                                                   },error: function (xhr, ajaxOptions, thrownError) {
-//                                                     swal({
-//                                                       title: "Error",
-//                                                       text: "There was an error during the requested operation. Please try again.",
-//                                                       type: "error",
-//                                                       confirmButtonClass: "btn-danger",
-//                                                       confirmButtonText: "Ok"
-//                                                     });
-//                                                   }
-//                                                  
-//     
-//                         }
-//                                         )
                                         },
          
           });

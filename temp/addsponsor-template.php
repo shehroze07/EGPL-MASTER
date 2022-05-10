@@ -128,16 +128,6 @@
 
         width: 200px !important;
     }
-
-    .select2-selection__rendered{
-        
-        color: #a9a4a4 !important;
-    }
-
-    #select2-Role-container {
-
-    color: #000 !important;
-}
     </style>
 
           <select id="hiddenlistemaillist" style="display: none;">
@@ -198,24 +188,24 @@
                             <div class="tabs-section-nav tabs-section-nav-icons">
                                 <div class="tbl">
                                     <ul class="nav" role="tablist">
-                                        <li class="nav-item" egid="user-detail">
-                                            <a class="nav-link active" href="#tabs-1-tab-1" role="tab" data-toggle="tab" egid="user-detail">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#tabs-1-tab-1" role="tab" data-toggle="tab">
                                                 <span class="nav-link-in">
                                                     <span class="fa fa-info-circle" ></span>
                                                     User Details
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="nav-item" egid="additional-information">
-                                            <a class="nav-link" href="#tabs-1-tab-2" role="tab" data-toggle="tab" egid="additional-information">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#tabs-1-tab-2" role="tab" data-toggle="tab">
                                                 <span class="nav-link-in">
                                                     <span class="fa fa-list-alt"></span>
                                                     Additional Information
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="nav-item" egid="booth-details">
-                                            <a class="nav-link " href="#tabs-1-tab-3" role="tab" data-toggle="tab" egid="booth-details">
+                                        <li class="nav-item">
+                                            <a class="nav-link " href="#tabs-1-tab-3" role="tab" data-toggle="tab">
                                                 <span class="nav-link-in">
                                                     <span class="fa fa-id-card" ></span>
                                                 Booth Details
@@ -235,11 +225,11 @@
                                                 <label>Email *</label>
                                             </div>
                                             <div class="col-sm-5">
-                                                <input type="email"  class="form-control mymetakey"  id="Semail" name="Semail" placeholder="Email" egid="Semail" required='true'>
+                                                <input type="email"  class="form-control mymetakey"  id="Semail" name="Semail" placeholder="Email" required='true'>
                                             </div>
                                             <div class="col-sm-5">
                                         
-                                                <a class="btn btn-inline" onclick="checkemailaddressalreadyexist()" egid="lookup-user">Lookup User</a>
+                                                <a class="btn btn-inline" onclick="checkemailaddressalreadyexist()">Lookup User</a>
                                             </div> 
                                         </div>  
                                         
@@ -249,7 +239,7 @@
                                                 <label>First Name *</label>
                                             </div>
                                             <div class="col-sm-10">
-                                                <input  type="text"  class="form-control mymetakey" id="first_name" name="first_name" placeholder="First Name" egid="first_name" required='true'>
+                                                <input  type="text"  class="form-control mymetakey" id="first_name" name="first_name" placeholder="First Name" required='true'>
                                             </div>
                                            
                                         </div>  
@@ -259,7 +249,7 @@
                                                 <label>Last Name *</label>
                                             </div>
                                             <div class="col-sm-10">
-                                                <input type="text"  class="form-control mymetakey" id="last_name" name="last_name" placeholder="Last Name" egid="last_name" required='true'>
+                                                <input type="text"  class="form-control mymetakey" id="last_name" name="last_name" placeholder="Last Name" required='true'>
                                             </div>
                                            
                                         </div> 
@@ -268,17 +258,17 @@
                                                 <label>Company Name *</label>
                                             </div>
                                             <div class="col-sm-10">
-                                                <input type="text"  class="form-control mymetakey" id="company_name" name="company_name" placeholder="Company Name" egid="company_name" required='true'>
+                                                <input type="text"  class="form-control mymetakey" id="company_name" name="company_name" placeholder="Company Name" required='true'>
                                             </div>
                                            
                                         </div> 
-                                        egid="" 
+                                        
                                         <div class="form-group row" >
                                             <div class="col-sm-2">
                                                 <label>Level *</label>
                                             </div>
                                             <div class="col-sm-10">
-                                                <select class="select2 mycustomedropdown"  title="Role" id="Role" data-allow-clear="true" data-toggle="tooltip" egid="Role" required='true' >
+                                                <select class="select2 mycustomedropdown"  title="Role" id="Role" data-allow-clear="true" data-toggle="tooltip" required='true' >
                                                      <option value=""></option>
                                                     <?php  foreach ($all_roles as $key => $name) { 
                                                         
@@ -366,7 +356,7 @@
                                              
                                              <div class="col-sm-10">
                                              <?php if($additional_fields[$key]['multiselect'] == 'chekced') {?>
-                                              <select class="select2 form-control mycustomedropdown" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
+                                              <select class="select2 mycustomedropdown"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
                                                     <?php  foreach ($all_roles as $key => $name) { 
                                                         
                                                         
@@ -380,13 +370,8 @@
                                               </select>
                                              <?php }else {?>
                                                     
-                                                    <select class="select2 form-control mycustomedropdown" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
-                                                        <?php
-                                                            if(!empty($additional_fields[$key]['fieldplaceholder'])){
-                                                           
-                                                                echo '<option value="" hidden selected disabled>'.$additional_fields[$key]["fieldplaceholder"].'</option>';
-                                                                
-                                                            }?>
+                                                    <select class="select2 mycustomedropdown"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
+
                                                        <?php  foreach ($all_roles as $key => $name) { 
                                                         
                                                         
@@ -549,7 +534,7 @@
                                             <div class="col-sm-8">
                                              
                                              <?php if(($additional_fields[$key]['multiselect'] == "checked")&&($additional_fields[$key]['BoothSettingsField'] != 'checked')) {?>
-                                              <select class="select2 form-control mycustomedropdown mymetakey" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
+                                              <select class="select2 mycustomedropdown mymetakey"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
                                                     <?php foreach ($additional_fields[$key]['options'] as $key=>$value){ ?>
                                                   
                                                          <option value='<?php echo $value->label;?>'><?php echo $value->label;?></option>
@@ -559,14 +544,8 @@
                                               </select>
                                              <?php }else {?>
                                                 
-                                                    <select class="select2 form-control mycustomedropdown mymetakey" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
-                                                    <?php 
-                                                       
-                                                       if(!empty($additional_fields[$key]['fieldplaceholder'])){
-                                                          
-                                                          echo '<option value="" hidden selected disabled >'.$additional_fields[$key]["fieldplaceholder"].'</option>';
-                                                          
-                                                      }?>
+                                                    <select class="select2 mycustomedropdown mymetakey"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
+
                                                        <?php foreach ($additional_fields[$key]['options'] as $key=>$value){ ?>
                                                   
                                                          <option value='<?php echo $value->label;?>'><?php echo $value->label;?></option>
@@ -783,12 +762,12 @@ if(( $profile_field_settings['type'] == 'text' ||  $profile_field_settings['type
                                                                             Override Booth Default Settings for this User? 
                                                                         </h5>
                                                                         <label class="switch">
-                                                                            <input  type="checkbox" name="Override_Check" id="Override_Check" value="checked" egid="Override_Check" >
+                                                                            <input  type="checkbox" name="Override_Check" id="Override_Check" value="checked" >
                                                                             <span class="slider round"></span>
                                                                         </label>
                                                                     </div>
                                                                         <div class="col-sm-4 text-right" >
-                                                                            <button type="button" style="background-color: #7cb5ec;border-color: white; " class="btn btn-primary" id="navigate" egid="navigate">Go To Booth Management Settings</button>
+                                                                            <button type="button" style="background-color: #7cb5ec;border-color: white; " class="btn btn-primary" id="navigate" >Go To Booth Management Settings</button>
                                                                         </div>
                                                             </div> 
                                                             <div class="form-group row" id="Booth_div" style="display:none;"> 
@@ -799,7 +778,7 @@ if(( $profile_field_settings['type'] == 'text' ||  $profile_field_settings['type
                                                                         </label>
                                                                     </div>
                                                                     <div class="col-sm-8">
-                                                                    <input type="number" class="form-control mymetakey" id="customefield_booth_allow" name="customefield_booth_allow" value="<?php echo $Oveeridedata[0] ?>" placeholder="Enter Number" egid="customefield_booth_allow">
+                                                                    <input type="number" class="form-control mymetakey" id="customefield_booth_allow" name="customefield_booth_allow" value="<?php echo $Oveeridedata[0] ?>" placeholder="Enter Number">
                                                                 </div>
                                                             </div> 
                                                             <div class="form-group row" id="Booth_Pre_div" style="display:none;"> 
@@ -808,7 +787,7 @@ if(( $profile_field_settings['type'] == 'text' ||  $profile_field_settings['type
                                                                     <label style="    display: flex;width: 126px;">
                                                                             Pre-Paid?
                                                                         </label>
-                                                                        <input type="checkbox" id="prePaid_checkbox"   name="customefield_booth_pre_paid" value="checked" placeholder="" egid="prePaid_checkbox">
+                                                                        <input type="checkbox" id="prePaid_checkbox"   name="customefield_booth_pre_paid" value="checked" placeholder="">
                                                                     </div>
                                                                     
                                                                 
@@ -834,7 +813,7 @@ if(( $profile_field_settings['type'] == 'text' ||  $profile_field_settings['type
                         <div class="col-sm-2"></div>
                             <div class="col-sm-6">
                                 <div class="checkbox" id="checknewuserdiv">
-                                    <input  type="checkbox" id="checknewuser" egid="checknewuser">Send Welcome Email<br/>
+                                    <input  type="checkbox" id="checknewuser">Send Welcome Email<br/>
                                     
                                    
                                 </div>
@@ -868,7 +847,7 @@ if(( $profile_field_settings['type'] == 'text' ||  $profile_field_settings['type
                   <div class="form-group row">
                                     <label class="col-sm-2 form-control-label"></label>
                                     <div class="col-sm-6">
-                                             <button type="submit" id="addnewsponsor_q" name="addsponsor"  class="btn btn-lg mycustomwidth btn-success" value="Register" egid="addnewsponsor_q">Create</button>
+                                             <button type="submit" id="addnewsponsor_q" name="addsponsor"  class="btn btn-lg mycustomwidth btn-success" value="Register">Create</button>
                                             
                                         
                                     </div>
@@ -940,5 +919,4 @@ jQuery('#navigate').on('click',function(){
     window.location.href=newurl;
   
 })
-
 </script>

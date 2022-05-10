@@ -248,7 +248,7 @@ class FloorPlanManager {
                     $cellboothlabelvalue = $CellValue->attributes();
                     $getCellStylevalue = $xml->root->MyNode[$currentIndex]->mxCell->attributes();
                     $boothid = $cellboothlabelvalue['id'];
-                    $boothtitlebooth = $cellboothlabelvalue['mylabel'];
+                    
                     
                     
                     foreach ($requestBoothsproductArray as $boothIndex=>$boothObject){
@@ -281,7 +281,7 @@ class FloorPlanManager {
                 
                             $objProduct = new WC_Product();
                             $objProduct->set_slug($boothObject->cellID);
-                            $objProduct->set_name($boothtitlebooth); 
+                            $objProduct->set_name($boothObject->boothtitle); 
 
                             $objProduct->set_status('publish'); //Set product status.
                             $objProduct->set_featured(TRUE); //Set if the product is featured.                          | bool
@@ -351,7 +351,7 @@ class FloorPlanManager {
                             $objProduct = wc_get_product( $boothObject->boothID ); 
                             if(!empty($objProduct)){
                             
-                                $objProduct->set_name($boothtitlebooth); 
+                            $objProduct->set_name($boothObject->boothtitle); 
                            // $objProduct->set_stock_quantity(1); //Set number of items available for sale.
                             $objProduct->set_description($boothObject->boothdescripition); //Set product description.
                             $objProduct->set_short_description($boothObject->boothdescripition); //Set product short description.
