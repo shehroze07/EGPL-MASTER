@@ -95,12 +95,12 @@
                             <label class="col-sm-2 form-control-label">Add New Level <strong>*</strong></label>
                             <div class="col-sm-7">
   <div class="form-control-wrapper form-control-icon-left">    
-                                <input type="text"  class="form-control" id="rolename" placeholder="Level Name" required>
+                                <input type="text"  class="form-control" id="rolename" placeholder="Level Name" egid="rolename" required>
  <i class="font-icon fa fa-edit"></i>
  </div>
                             </div>
                             <div class="col-sm-3">
-                                <button type="submit"  name="addsponsor"  class="btn btn-inline mycustomwidth btn-success" value="Register">Create</button>
+                                <button type="submit"  name="addsponsor"  class="btn btn-inline mycustomwidth btn-success" value="Register" egid="create-level">Create</button>
                               
                             </div>
                         </div>
@@ -112,7 +112,7 @@
 						<thead>
 						<tr>     <th>Priority</th>
 							<th><b>Level Name</b><p style="font-size: 12px;color: gray;">(Hover over a level name to see the associated tasks)</p></th>
-                                                        <th>Action <span style="float: right;"><button onclick="setlevelspriorities()" class="btn btn-inline mycustomwidth btn-success" title="Save Level Priorities">Save</button></span></th>
+                                                        <th>Action <span style="float: right;"><button onclick="setlevelspriorities()" class="btn btn-inline mycustomwidth btn-success" title="Save Level Priorities" egid="Save-Level-Priorities">Save</button></span></th>
                                                         
 							
 						</tr>
@@ -121,7 +121,7 @@
                                                     <tr>
                                                         <th>Priority</th>
                                                         <th><b>Level Name</b><p style="font-size: 12px;color: gray;">(Hover over a level name to see the associated tasks)</p></th>
-                                                        <th>Action<span style="float: right;"><button onclick="setlevelspriorities()" class="btn btn-inline mycustomwidth btn-success" title="Save Level Priorities">Save</button></span></th>
+                                                        <th>Action<span style="float: right;"><button onclick="setlevelspriorities()" class="btn btn-inline mycustomwidth btn-success" title="Save Level Priorities"  egid="Save-Level-Priorities">Save</button></span></th>
                                                         
 							
 						</tr>
@@ -174,9 +174,9 @@
                                                            <td><div class="hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a">
    
     
-    <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x"  title="Edit Level Name" name="'.$name['name'].'" onclick="editrolename(this)" id="'.$name['key'].'" ></i>
-    <i class="hi-icon fusion-li-icon fa fa-clone fa-2x" name="'.$name['name'].'" title="Create a Clone" onclick="createroleclone(this)" id="'.$name['key'].'" ></i>
-    <i class="hi-icon fusion-li-icon fa fa-times-circle fa-2x" onclick="delete_role_name(this)" id="'.$name['key'].'" name="delete-sponsor" title="Remove Level" ></i>
+    <i class="hi-icon fusion-li-icon fa fa-pencil-square fa-2x"  title="Edit Level Name" name="'.$name['name'].'" onclick="editrolename(this)" id="'.$name['key'].'" egid="edit-level-name"></i>
+    <i class="hi-icon fusion-li-icon fa fa-clone fa-2x" name="'.$name['name'].'" title="Create a Clone" onclick="createroleclone(this)" id="'.$name['key'].'" egid="clone-level"></i>
+    <i class="hi-icon fusion-li-icon fa fa-times-circle fa-2x" onclick="delete_role_name(this)" id="'.$name['key'].'" name="delete-sponsor" title="Remove Level" egid="remove-level" ></i>
 </div></td>
                                                            </tr>';                          
                                                   

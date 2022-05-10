@@ -281,7 +281,7 @@ class FloorPlanManager {
                 
                             $objProduct = new WC_Product();
                             $objProduct->set_slug($boothObject->cellID);
-                            $objProduct->set_name($boothObject->boothtitle); 
+                            $objProduct->set_name($boothtitlebooth); 
 
                             $objProduct->set_status('publish'); //Set product status.
                             $objProduct->set_featured(TRUE); //Set if the product is featured.                          | bool

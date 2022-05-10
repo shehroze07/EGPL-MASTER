@@ -395,7 +395,7 @@ width: 200px !important;
                                              
                                              <div class="col-sm-10">
                                              <?php if($additional_fields[$key]['multiselect'] == 'chekced') {?>
-                                              <select class="select2 mycustomedropdown "  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
+                                              <select class="select2 mycustomedropdown " placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
                                                     <?php  foreach ($all_roles as $key => $name) { 
                                                         
                                                         
@@ -409,8 +409,13 @@ width: 200px !important;
                                               </select>
                                              <?php }else {?>
                                                     
-                                                    <select class="select2 mycustomedropdown "  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
-
+                                                    <select class="select2 mycustomedropdown "  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" id="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>    
+                                                     <?php
+                                                            if(!empty($additional_fields[$key]['fieldplaceholder'])){
+                                                           
+                                                                echo '<option value="" hidden selected disabled>'.$additional_fields[$key]["fieldplaceholder"].'</option>';
+                                                                
+                                                            }?>
                                                        <?php  foreach ($all_roles as $key => $name) { 
                                                         
                                                         
@@ -513,7 +518,7 @@ width: 200px !important;
                                         
                              
                                 <div class="form-group row">
-                                    <label class="col-sm-2 form-control-label">Change Password <p>(if u want to change or reset password)</p></label>
+                                    <label class="col-sm-2 form-control-label">Change Password <p>(if you want to change or reset password)</p></label>
                                     <div class="col-sm-10">
                                           
                             <input type="password"  class="form-control mymetakey" id="password" name="password" placeholder="Password" value="" >
@@ -671,7 +676,15 @@ width: 200px !important;
                                                                 
                                                                 
                                                                 ?>
-                                                            <select class="select2 mycustomedropdown mymetakey"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
+                                                            <select class="select2 mycustomedropdown mymetakey" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" <?php echo $requiredStatueUpdate;?>>
+                                                                    
+                                                            <?php
+                                                            if(!empty($additional_fields[$key]['fieldplaceholder'])){
+                                                           
+                                                                echo '<option value="" hidden selected disabled>'.$additional_fields[$key]["fieldplaceholder"].'</option>';
+                                                                
+                                                            }?>
+                                                                    
                                                                     <?php foreach ($additional_fields[$key]['options'] as $key=>$value){ 
                                                                         
                                                                         
@@ -692,7 +705,14 @@ width: 200px !important;
                                                             </select>
                                                             <?php }else {
                                                                     ?>
-                                                                    <select class="select2 mycustomedropdown mymetakey"  title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>
+                                                                    <select class="select2 mycustomedropdown mymetakey" placeholder="<?php echo $additional_fields[$key]['fieldplaceholder'];?>" title="<?php echo $additional_fields[$key]['fielduniquekey'];?>" name="<?php echo $additional_fields[$key]['fielduniquekey'];?>" data-allow-clear="true" <?php echo $requiredStatueUpdate;?>>                
+                                                                    <?php 
+                                                       
+                                                       if(!empty($additional_fields[$key]['fieldplaceholder'])){
+                                                          
+                                                          echo '<option value="" hidden selected disabled >'.$additional_fields[$key]["fieldplaceholder"].'</option>';
+                                                          
+                                                      }?>                                                                    
 
                                                                     <?php foreach ($additional_fields[$key]['options'] as $keysoptions=>$additionalvalue){ 
                                                                         

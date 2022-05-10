@@ -191,6 +191,29 @@ function update_user_meta_custome(elem,typeoftask) {
     var elementType = jQuery("#my" + value).is("input[type='file']"); //jQuery(this).prev().prop('tagName');
     var curdate = new Date();
     var usertimezone = curdate.getTimezoneOffset()/60;
+        // code by Shehroze start
+        var dropdown_val = jQuery("#" +value ).val();
+        
+ 
+        
+             if (dropdown_val == "None" ) {
+                 jQuery("body").css({'cursor':'default'});
+                 swal({
+                     title: "Warning",
+                     text: "You must select a value before submitting",
+                     type: "warning",
+                     confirmButtonClass: "btn-warning",
+                     confirmButtonText: "Ok"
+                 });
+ 
+                 return false;
+                 
+             }
+            else {
+                // do something
+             }
+ 
+     // code by Shehroze end
     if (elementType == false) {
         
         var pattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,15}(:[0-9]{1,5})?(\/.*)?$/g;
@@ -630,7 +653,10 @@ function remove_task_value_readyfornew(e,typeoftask){
      var elementType = jQuery("#my" + task_name_key).is("input[type='file']");
      var curdate = new Date();
      var usertimezone = curdate.getTimezoneOffset()/60;
+     var removed = jQuery(e).attr('rem');
+     var remove;
      console.log(typeoftask) ;
+     
      var tasktype='';
      if (elementType == false) {
          
@@ -638,7 +664,7 @@ function remove_task_value_readyfornew(e,typeoftask){
          
           swal({
             title: "Are you sure?",
-            text: 'You want to remove your submission?',
+            text: 'Remove current submission',
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger mr-2",
@@ -650,15 +676,27 @@ function remove_task_value_readyfornew(e,typeoftask){
         },
                 function (isConfirm) {
 
-
+            
 
                     if (isConfirm) {
-                       
-                        update_task_submission_status(task_name_key,tasktype);
-                        console.log(typeoftask) ;
+
+                      
+
+                        if(typeoftask == 'select-2'){
+                           
+                          
+                            jQuery(".egpl_single_select2").removeAttr("selected");
+                  
+                       }
+
+                      
+                           
+    
+                        update_task_submission_status(task_name_key,typeoftask);
+                        
                         if(typeoftask == "multivaluedtask"){
                             
-                            
+                        
                             jQuery(".speicaltaskmulittask_" + task_name_key).prop("disabled", false);
                             
                         }else{
@@ -684,6 +722,7 @@ function remove_task_value_readyfornew(e,typeoftask){
                             confirmButtonClass: "btn-success"
                         }, function () {
                             
+                            location.reload();
                         }
                         );
                     } else {
@@ -702,7 +741,7 @@ function remove_task_value_readyfornew(e,typeoftask){
          
          swal({
             title: "Are you sure?",
-            text: 'You want to remove your submission?',
+            text: 'Remove current submission',
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-danger",
@@ -740,6 +779,7 @@ function remove_task_value_readyfornew(e,typeoftask){
                             confirmButtonClass: "btn-success"
                         }, function () {
                             
+                            location.reload();
                         }
                         );
                     } else {
@@ -786,11 +826,13 @@ function update_task_submission_status(submissiontaskstatuskey,tasktype){
     var data = new FormData();
     
     var curdate = new Date();
-        var usertimezone = curdate.getTimezoneOffset()/60;
+    var usertimezone = curdate.getTimezoneOffset()/60;
+    console.log(tasktype);
     data.append('sponsorid',   sponsorid);
     data.append('tasktype',   tasktype);
     data.append('usertimezone',usertimezone);
     data.append('submissiontaskstatuskey',   submissiontaskstatuskey);
+    
     jQuery.ajax({
             url: urlnew,
             data: data,

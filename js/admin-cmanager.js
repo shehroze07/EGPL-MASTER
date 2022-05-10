@@ -16,6 +16,7 @@ function updatecontentsettings() {
    var totalAmountKey = jQuery("#totalamount").val();
    var attendyTypeKey = jQuery("#attendytype").val();
    var eventdate = jQuery("#eventdate").val();
+   var eventid = jQuery("#eventid").val();
    var formemail = jQuery("#formemail").val();
    var mandrill = jQuery("#mandrill").val();
    var mapapikey = jQuery("#mapapikey").val();
@@ -69,6 +70,7 @@ function updatecontentsettings() {
        data.append('excludemetakeysedit', exclude_array_edit);
        data.append('sponsorname', sponsor_name);
        data.append('eventdate', eventdate);
+       data.append('eventid', eventid);
        data.append('attendyTypeKey', attendyTypeKey);
        data.append('formemail', formemail);
        data.append('mandrill', mandrill);

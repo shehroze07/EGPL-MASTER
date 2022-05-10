@@ -5,7 +5,7 @@
  * Plugin Name:       EGPL
  * Plugin URI:        https://github.com/QasimRiaz/EGPL
  * Description:       EGPL
- * Version:           6.09
+ * Version:           6.13
  * Author:            EG
  * License:           GNU General Public License v2
  * Text Domain:       EGPL
@@ -5071,7 +5071,7 @@ function getReportsdatanew($report_name,$usertimezone){
 
 add_action('wp_enqueue_scripts', 'add_contentmanager_js');
 function add_contentmanager_js(){
-      wp_enqueue_script('safari4', plugins_url().'/EGPL/js/my_task_update.js', array('jquery'),'5.2.8', true);
+      wp_enqueue_script('safari4', plugins_url().'/EGPL/js/my_task_update.js', array('jquery'),'5.3.2', true);
     
      wp_enqueue_script( 'jquery.alerts', plugins_url() . '/EGPL/js/jquery.alerts.js', array(), '1.1.0', true );
      wp_enqueue_script( 'boot-date-picker', plugins_url() . '/EGPL/js/bootstrap-datepicker.js', array(), '1.2.0', true );
@@ -5330,7 +5330,7 @@ add_action( 'init', 'add_contentmanager_settings' );
 
 function add_contentmanager_settings() {
     
-    wp_register_script('adminjs', plugins_url('js/admin-cmanager.js?v=2.41', __FILE__), array('jquery'));
+    wp_register_script('adminjs', plugins_url('js/admin-cmanager.js?v=2.42', __FILE__), array('jquery'));
     wp_enqueue_script('adminjs');
     //$settings_array['ContentManager']['sponsor-name']='Exhibitor';
     //update_option( 'ContenteManager_Settings', $settings_array);
@@ -5370,6 +5370,7 @@ function updatecmanagersettings($object_data){
     $sponsor_name=$object_data['sponsorname'];
     $attendytypeKey=$object_data['attendyTypeKey'];
     $eventdate = $object_data['eventdate'];
+    $eventid = $object_data['eventid'];
     $formemail = $object_data['formemail'];
     $mandrill = $object_data['mandrill'];
     $mapapikey = $object_data['mapapikey'];
@@ -5409,6 +5410,9 @@ function updatecmanagersettings($object_data){
     $oldvalues['ContentManager']['sponsor_name']=$sponsor_name;
     $oldvalues['ContentManager']['attendytype_key']=$attendytypeKey;
     $oldvalues['ContentManager']['eventdate']=$eventdate;
+
+    $oldvalues['ContentManager']['eventid']=$eventid;
+
     $oldvalues['ContentManager']['formemail']=$formemail;
     $oldvalues['ContentManager']['mandrill']=$mandrill;
     $oldvalues['ContentManager']['addresspoints']=$addresspoints;
@@ -5544,6 +5548,7 @@ function excludes_sponsor_meta(){
      $sponsor_name      =   $oldvalues['ContentManager']['sponsor_name'];
      $attendytype       =   $oldvalues['ContentManager']['attendytype_key'];
      $eventdate         =   $oldvalues['ContentManager']['eventdate'];
+     $eventid           =   $oldvalues['ContentManager']['eventid'];
      $formemail         =   $oldvalues['ContentManager']['formemail'];
      $mandrill          =   $oldvalues['ContentManager']['mandrill'];
      $mapapikey         =   $oldvalues['ContentManager']['mapapikey'];
@@ -5619,7 +5624,10 @@ function excludes_sponsor_meta(){
  
         <td><input type="text" name="attendytype"  id="attendytype" value='.$attendytype.'></td>
        </tr>
-       
+              <tr><td><h4>Event Id</h4></td>
+ 
+        <td><input type="text" name="eventid"  id="eventid" value='.$eventid.'></td>
+       </tr>
 <tr><td><h4>Event Date</h4></td>
  
         <td><input type="date" name="eventdate"  id="eventdate" value='.$eventdate.'></td>
@@ -5831,7 +5839,7 @@ class PageTemplater {
                         'temp/welcome_email_template.php' =>  'Welcome Email',
                         'temp/create-role-template.php' =>  'Create New Role',
                         'temp/addcontentmanager-template.php' =>  'Add Content Manager',
-			'temp/edit_content_page.php'     => 'Edit Content',
+			            'temp/edit_content_page.php'     => 'Edit Content',
                         'temp/admin_dashboard.php'     => 'Dashboard',
                         'temp/bulk_download_task_files_template.php'     => 'Download Bulk Email',
                         'temp/user_change_password_template.php'     => 'User Change Password',
@@ -5879,6 +5887,7 @@ class PageTemplater {
                         'temp/admin_view_orders.php'=>'Admin View User Orders',
                         'temp/create-new-page-template.php'=>'Create New Page',
                         'temp/manage-menu-template.php'=>'Manage Menu Template',
+                        'temp/egpl_cloning_features_temp.php'=>'Egpl Cloning',
                        
                         
                      
@@ -7969,25 +7978,6 @@ function isValidEmail($email){
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
-include_once('updater.php');
-
-
-if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
-        $config = array(
-            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
-            'proper_folder_name' => 'EGPL', // this is the name of the folder your plugin lives in
-            'api_url' => 'https://api.github.com/repos/QasimRiaz/EGPL', // the GitHub API url of your GitHub repo
-            'raw_url' => 'https://raw.github.com/QasimRiaz/EGPL/master', // the GitHub raw url of your GitHub repo
-            'github_url' => 'https://github.com/QasimRiaz/EGPL', // the GitHub url of your GitHub repo
-            'zip_url' => 'https://github.com/QasimRiaz/EGPL/zipball/master', // the zip url of the GitHub repo
-            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-            'requires' => '3.0', // which version of WordPress does your plugin require?
-            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
-            'readme' => 'README.md', // which file to use as the readme for the version number
-            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
-        );
-        new WP_GitHub_Updater($config);
-    }
 
 //add_filter('woocommerce_payment_complete_order_status', 'exp_autocomplete_paid_orders', 10, 2);
 add_action('woocommerce_thankyou', 'exp_autocomplete_all_orders',10,2);
@@ -9360,6 +9350,12 @@ add_action('rest_api_init', function() {
 	]);
         
         
+        register_rest_route('w1/v1', 'cventgetrequest', [
+		'methods' => 'POST',
+		'callback' => 'cventgetrequest',
+	]);
+        
+        
         register_rest_route('w1/v1', 'getuserinfo', [
 		'methods' => 'POST',
 		'callback' => 'getuserinfo',
@@ -9931,6 +9927,83 @@ function getorders(){
     
 }
 
+function cventgetrequest(){
+    
+    try {
+    
+      
+    //$newContactUserData =   json_decode(get_option("cventuserdata"));
+      
+    //echo '<pre>';
+    //print_r($newContactUserData);exit;
+     
+     
+     
+    $newContactUserData =  json_decode(file_get_contents('php://input')) ;
+    
+    
+    //update_option("cventuserdata",$newContactUserData);
+    
+    
+   $lastInsertId = contentmanagerlogging('Cvent Action Create User', "Admin Action", "", "", "", $newContactUserData);
+ 
+   
+    
+    if(!empty($newContactUserData)){
+        
+        
+    
+        
+        //foreach($newContactUserData as $usersdata2=>$userdata){
+            
+            
+           
+                
+                
+                $userinformationupdatearray['username']  = $newContactUserData->Semail;
+                $userinformationupdatearray['Semail'] = $newContactUserData->Semail;
+                $userinformationupdatearray['Role'] = $newContactUserData->role;
+                $userinformationupdatearray['external_reference_id_zapier']  = $newContactUserData->cvent_id;
+                $userinformationupdatearray['first_name']  = $newContactUserData->first_name;
+                $userinformationupdatearray['last_name']  =$newContactUserData->last_name;
+                $userinformationupdatearray['company_name']  = $newContactUserData->company_name;
+                $userinformationupdatearray['confirmation_number']  = $newContactUserData->confirmation_number;
+                $userinformationupdatearray['send_welcome_email']  = $newContactUserData->send_welcome_email;
+                $userinformationupdatearray['register_date']  = $newContactUserData->register_date;
+                
+                $userinformationupdatearray = (object)$userinformationupdatearray;
+                $lastInsertId = contentmanagerlogging('testin', "Admin Action", "", "", "", $userinformationupdatearray);
+    
+            //print_r($userinformationupdatearray);exit;
+            
+                $resultRegistratedUser[$usersdata]['result'] = CreateNewUser($userinformationupdatearray);
+            
+            
+            
+            
+        //}
+        
+        
+    }else{
+        
+        $resultRegistratedUser["error"] = "Something went going wrong. Please Connect with App administrative.";
+        
+    }
+    
+    
+    
+    return (object)$resultRegistratedUser;
+    
+    }catch (Exception $e) {
+
+      
+
+        return $e;
+    }
+    
+    
+}
+
 function createuser(){
     
     try {
@@ -10292,7 +10365,11 @@ function CreateNewUser($newContactUserData){
         
         updateregistredUserMeta($user_id,$newContactUserData,$role);
         
-        custome_email_send($user_id,$newContactUserData->Semail,"welcome_email_template");
+        
+        if($newContactUserData->send_welcome_email == true){
+            custome_email_send($user_id,$newContactUserData->Semail,"welcome_email_template");
+        }
+        
         //update_user_option($user_id, 'profile_updated', $t*1000);
         
         if (add_user_to_blog($blogid, $user_id, $role)) {
@@ -10321,6 +10398,10 @@ function CreateNewUser($newContactUserData){
 			   
 			   $message['message'] = $userregister_responce['errors']['invalid_username'][0];
 		   }
+                   
+                   $message['username'] = $newContactUserData->username;
+                   $message['email'] = $newContactUserData->Semail;
+                   
         
         } 
     } else {
@@ -10359,7 +10440,9 @@ function CreateNewUser($newContactUserData){
                     $useremail='';
                     
                     updateregistredUserMeta($user_id,$newContactUserData,$role);
-                    custome_email_send($user_id,$email,"welcome_email_template");
+                    if($newContactUserData->send_welcome_email == true){
+                        custome_email_send($user_id,$email,"welcome_email_template");
+                    }
                     $t=time();
                     //update_user_option($user_id, 'profile_updated', $t*1000);
                     
@@ -10387,7 +10470,9 @@ function CreateNewUser($newContactUserData){
 function updateregistredUserMeta($userID,$userMetaData,$role){
     
     try {
-    
+        
+        //$lastInsertId = contentmanagerlogging('$userMetaData', "Admin Action", "", "", "", $userMetaData);
+        
         foreach($userMetaData as $keyIndex=>$valueDataIndex){
             
             if (is_numeric($valueDataIndex)) {
@@ -11020,6 +11105,7 @@ function gettasktype($taskkey){
     }
     return $getOrginalData;
 }
+
 
 ///-----------------Expogenie API Endpoints ---------------------///
 
