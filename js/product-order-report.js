@@ -129,13 +129,115 @@ jQuery(document).ready(function () {
                 }
               },
             });
-          } else {
-            columnsheaderarrayfortable.push({
-              title: columsheader[key].title,
-              data: columsheader[key].title,
-              type: columsheader[key].type,
-            });
-          }
+            jQuery('#orderreportcolumns').select2();
+            if (data != '') {
+                jQuery('body').css('cursor', 'default');
+                ordertablereport = jQuery('#orderreport');
+                ordertablereport.dataTable({
+                    order: [[ 1, "desc" ]],
+                    data: rowsdata,
+                    columns: columnsheaderarrayfortable,
+                    "columnDefs": [
+                        { "class": "noExport noclick", "targets": 0 },
+                        { "type": "date", "targets": 1 },
+                        { "class": "noExport", "targets": 6 },
+                        
+                        { "type": "num", "targets": 25 }
+                        
+                    ],
+                    dom: 'fBrlpt',
+                    initComplete: function () {
+                            this.api().columns().every( function () {
+                                var column = this;
+                               
+                                jQuery('.dataTables_filter input').on( 'keyup click', function () {
+                                     var searchTerm = this.value.toLowerCase();
+                                     regex = '\\b' + searchTerm + '\\b';
+                                    //  ordertablereport.api().search(regex, true, false).draw();
+                                } );   
+                            });
+                    },
+                    
+                    search: {
+                        "smart": false
+                    },
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: 'orderreport_' + jQuery.now(),
+                            exportOptions: {
+                                columns: "thead th:not(.noExport)",
+                                format: {
+                                body: function ( rowsdata, row, column, node ) {
+                                    
+                                    var href = jQuery('<div>').append(rowsdata).find('a:first').attr('href');
+                                        if(href !== undefined){
+                                            rowsdata = href;
+                                        }
+                                        return  rowsdata;
+                                    }
+                                }
+                            },
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            title: 'orderreport_' + jQuery.now(),
+                            exportOptions: {
+                                columns: "thead th:not(.noExport)",
+                                format: {
+                                body: function ( rowsdata, row, column, node ) {
+                                    
+                                    var href = jQuery('<div>').append(rowsdata).find('a:first').attr('href');
+                                        if(href !== undefined){
+                                            rowsdata = href;
+                                        }
+                                        return  rowsdata;
+                                    }
+                                }
+                            },
+                        },
+                        
+                        {
+                            extend: 'print',
+                             title: 'orderreport_' + jQuery.now(),
+                            
+                            
+                            exportOptions: {
+                                columns: "thead th:not(.noExport)",
+                                format: {
+                                body: function ( rowsdata, row, column, node ) {
+                                    
+                                    var href = jQuery('<div>').append(rowsdata).find('a:first').attr('href');
+                                        if(href !== undefined){
+                                            rowsdata = href;
+                                        }
+                                        return  rowsdata;
+                                    }
+                                }
+                            },
+                        }
+                    ]
+
+                });
+
+                jQuery('#filteredordercount').empty();
+                var filterrowscount = ordertablereport.api().rows({filter: 'applied'});
+                jQuery('#filteredordercount').append(filterrowscount[0].length);
+                jQuery('#builder').queryBuilder('setRules', JSON.parse('{"condition":"AND","rules":[],"valid":true}'));
+                if (orderreportstatusloading != undefined) {
+                    
+                   
+                    
+                    jQuery("body").css({'cursor': 'wait'});
+                    loadorderreport(decodeURIComponent(orderreportstatusloading));
+                    jQuery("#loadorderreport option:selected").prop("selected", false);
+                    jQuery('#loadorderreport').val(decodeURIComponent(orderreportstatusloading));  
+                    getapplyfiltersonordereport();
+                    
+                }
+
+            }
+
         }
       });
       jQuery.each(columsheader, function (key, value) {

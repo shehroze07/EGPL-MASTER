@@ -1,6 +1,4 @@
 <?php
-
-
 if ($_GET['orderManagerRequest'] == "createOrder") {
 
      require_once('../../../wp-load.php');
@@ -130,7 +128,6 @@ if ($_GET['orderManagerRequest'] == "createOrder") {
                'product_ids' => $disc_coupon->product_ids,
                'excluded_product_ids' => $disc_coupon->excluded_product_ids,
                'product_categories' => $disc_coupon->product_categories,
-
           );
           echo json_encode($coupon);
           // echo ($disc_coupon->amount);

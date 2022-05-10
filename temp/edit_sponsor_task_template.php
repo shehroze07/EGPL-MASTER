@@ -698,14 +698,14 @@ get_header();
                         
                             
                             $status_col .= '<table><tr style="background-color: transparent;" ><td><button    class="btnclick btn btn-light-success eg-buttons font-weight-bold mr-2 fixedwithclass disableremovebutton taskcustomesubmit disableremovebutton" >'.$submit_button_text.'</button></td>';
-                            $status_col .= '<td><i  name="'.$profile_field_name.'" data-toggle="tooltip" title="Remove this task"  name="'.$profile_field_name.'" class="fusion-li-icon fa fa-times-circle fa-2x specialremoveicondisable"   ></i><td></tr></table>';
+                            $status_col .= '<td><i  name="'.$profile_field_name.'" data-toggle="tooltip" title="Remove Current Submission"  name="'.$profile_field_name.'" class="fusion-li-icon fa fa-times-circle fa-2x specialremoveicondisable" rem ="'.$profile_field_name.'"  ></i><td></tr></table>';
                             
                     
                     }else{
                             
                             
                             $status_col .= '<table><tr style="background-color: transparent;" ><td><button onclick="update_user_meta_custome(this,'.$type.')"  id="update_' . $profile_field_name . '_status" '.$special_check_buttons_status_submit.'  data-style="shrink" data-horizontal>'.$submit_button_text.'</button></td>';
-                            $status_col .= '<td><i  name="'.$profile_field_name.'" data-toggle="tooltip" title="Remove this task" onclick="remove_task_value_readyfornew(this,'.$type.')" name="'.$profile_field_name.'" '.$special_check_buttons_status_remove.' id="update_' . $profile_field_name . '_remove"   ></i><td></tr></table>';
+                            $status_col .= '<td><i  name="'.$profile_field_name.'" data-toggle="tooltip" title="Remove Current Submission" onclick="remove_task_value_readyfornew(this,'.$type.')" rem ="'.$profile_field_name.'" name="'.$profile_field_name.'" '.$special_check_buttons_status_remove.' id="update_' . $profile_field_name . '_remove"   ></i><td></tr></table>';
                     
                             
                     }
@@ -870,7 +870,7 @@ get_footer();
 			
 				 // multi select
         jQuery('.kt_select2_3').select2({
-         placeholder: "Select a Value",
+         placeholder: "None",
         });
 			
 		 jQuery('.kt_datepicker_1').datepicker({

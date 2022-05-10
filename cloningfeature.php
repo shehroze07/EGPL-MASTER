@@ -47,45 +47,45 @@ function datavalidateurl($requestData){
 
         if($requestData['tasks'] == "checked"){
 
-            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
+            //if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
 
-                $responce['tasks']['msg'] =  'success';
+               // $responce['tasks']['msg'] =  'success';
 
-            }else{
+            //}else{
 
                 $responce['tasks']['msg'] = $validating->validatetasks($requestData);
 
-            }
+            //}
         
             
         }
 
         if($requestData['Shop'] == "checked"){
 
-            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') ){
+            //if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') ){
 
-                $responce['Shop']['msg'] =  'success';
+                //$responce['Shop']['msg'] =  'success';
 
-            }else{
+            //}else{
 
                 $responce['Shop']['msg'] = $validating->validateshop($requestData);
 
-            }
+            //}
 
            
         }
 
         if($requestData['florrplan'] == "checked"){
 
-            if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
+            //if(($requestData['levels'] == 'checked' || $requestData['levels'] == 'checked-add') && ($requestData['users'] == 'checked' || $requestData['users'] == 'checked-add')){
 
-                $responce['florrplan']['msg'] =  'success';
+                //$responce['florrplan']['msg'] =  'success';
 
-            }else{
+            //}else{
 
                 $responce['florrplan']['msg'] = $validating->validatefloorplan($requestData);
 
-            }
+            //}
 
             
         }
@@ -113,9 +113,10 @@ function datavalidateurl($requestData){
 
         }
 
-        if($requestData['reports'] == "reports"){
+        if($requestData['reports'] == "checked"){
 
-            $responce['reports']['msg'] = 'success';
+           
+            $responce['reports']['msg'] = $validating->validatereports($requestData);
 
         }
 

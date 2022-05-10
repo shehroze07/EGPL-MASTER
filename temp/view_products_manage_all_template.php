@@ -34,8 +34,8 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                  <div class="form-group row">
                                  
                                     <div class="col-sm-6" >
-                                            <a class="btn btn-lg mycustomwidth btn-success" href="<?php echo $site_url;?>/add-new-product/?producttype=addons">Create Add-On</a>
-                                            <a class="btn btn-lg mycustomwidth btn-success" href="<?php echo $site_url;?>/add-new-package/">Create Package</a>
+                                            <a class="btn btn-lg mycustomwidth btn-success" href="<?php echo $site_url;?>/add-new-product/?producttype=addons" egid="create-add-on">Create Add-On</a>
+                                            <a class="btn btn-lg mycustomwidth btn-success" href="<?php echo $site_url;?>/add-new-package/" egid="create-package">Create Package</a>
                                         
                                         
                                     </div>

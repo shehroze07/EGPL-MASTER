@@ -14,7 +14,17 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
     include 'cm_left_menu_bar.php';
     
     ?>
- 
+ <style>
+
+
+        ul.warningmessage {
+            list-style-type: square;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+
+ </style>
 <div class="page-content">
         <div class="container-fluid">
             <header class="section-header">
@@ -397,7 +407,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 									        <div class="col-sm-7">
 										    <p>
                                             Includes floor plan design, booths, booth tags, and legend labels.</p>
-	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/admin-settings/';?>" target="_blank">Floor Plan</a></p>
+	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/floor-plan-editor/';?>" target="_blank">Floor Plan</a></p>
 											</div>
 											<div class="col-sm-2">
                                         
@@ -408,7 +418,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                                     </label>
                                             
                                                     <div class="form-check myradiobtn">
-                                                    <input class="form-check-input" type="radio" name="florrplan3" id="florrplan3" egid="florrplan3" value="override" >
+                                                    <input class="form-check-input" type="radio" name="florrplan1" id="florrplan3" egid="florrplan3" value="override" >
                                                     <label class="form-check-label mylabel" for="florrplan3">
                                                     Override
                                                     </label>
@@ -458,7 +468,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
         include 'cm_footer.php';
         ?>
             
-        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=4.16"></script>    
+        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=4.27"></script>    
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
        

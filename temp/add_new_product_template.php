@@ -144,42 +144,15 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
 
         <div class="box-typical box-typical-padding">
 
-            <?php if($product_type == 'package'){?>
-
-            <p>
-                Fill out the required fields to create your package. A package is a Level in ExpoGenie that your users
-                have the option to purchase. Whenever a user purchases a package, they will be automatically assigned OR
-                re-assigned to the level associated with that package.
-            </p>
-            <?php }elseif($product_type == 'addons'){?>
-
-            <p>
-                Fill out the required fields to create your add-on. Once published, these will be made available for all
-                of your users within the portal to view and purchase.
-            </p>
-
-
-            <?php }elseif($product_type == 'booths'){?>
-
-            <p>
-                Fill out the required fields to create your Booth.
-            </p>
-
-            <?php }?>
-
-
-
-            <form method="post" action="javascript:void(0);" onSubmit="check_whocat_selet()">
-
-                <div class="form-group row">
-                    <label class="col-sm-8 form-control-label"></label>
-                    <div class="col-sm-4">
-                        <button style="float: right;" type="submit" id="addnewproduct" name="addsponsor"
-                            class="btn mycustomwidth btn-success" value="Register">Save</button>
-                        <a style="float: right;margin-right: 5%;" href="<?php echo site_url().'/manage-products/';?>"
-                            class="btn mycustomwidth btn-success">Cancel</a>
-
-                    </div>
+              <form method="post" action="javascript:void(0);" onSubmit="check_whocat_selet()">
+                
+               <div class="form-group row">
+                          <label class="col-sm-8 form-control-label"></label>
+                          <div class="col-sm-4" >
+                              <button style="float: right;" type="submit" id="addnewproduct" name="addsponsor"  class="btn mycustomwidth btn-success" value="Register" egid="add-new-product">Save</button>
+                             <a style="float: right;margin-right: 5%;" href="<?php echo site_url().'/manage-products/';?>" class="btn mycustomwidth btn-success" egid="cancel">Cancel</a>
+                              
+                          </div>
                 </div>
 
                 <hr>
@@ -202,13 +175,11 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                     
                               ?>
 
-                        <input type="text" class="form-control" id="ptitle" value="<?php echo $retitle; ?>"
-                            placeholder="<?php echo $product_name_for_fields_lebal;?> Title" required>
-                        <?php  }else{ ?>
-                        <input type="text" class="form-control" id="ptitle" value="<?php echo $update_product->name; ?>"
-                            placeholder="<?php echo $product_name_for_fields_lebal;?> Title" required>
-                        <?php  } ?>
-                        <input type="hidden" value="<?php echo $product_name_for_fields_lebal;?>" id="getcatname">
+                              <input type="text"  class="form-control" id="ptitle" value="<?php echo $retitle; ?>" placeholder="<?php echo $product_name_for_fields_lebal;?> Title" egid="ptitle" required>
+                             <?php  }else{ ?>
+                              <input type="text"  class="form-control" id="ptitle" value="<?php echo $update_product->name; ?>" placeholder="<?php echo $product_name_for_fields_lebal;?> Title" egid="ptitle" required>
+                              <?php  } ?>
+                              <input type="hidden" value="<?php echo $product_name_for_fields_lebal;?>" id="getcatname" >
 
                     </div>
                 </div>
@@ -216,63 +187,59 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                     <label class="col-sm-3 form-control-label">Price <strong>*</strong></label>
                     <div class="col-sm-9">
 
-                        <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control"
-                            id="pprice" name="pprice" value="<?php echo $update_product->regular_price; ?>"
-                            placeholder="<?php echo $product_name_for_fields_lebal;?> Price" required>
+                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pprice" name="pprice" value="<?php echo $update_product->regular_price; ?>" placeholder="<?php echo $product_name_for_fields_lebal;?> Price" egid="pprice" required>
 
 
-                    </div>
-                </div>
-                <div class="form-group row">
-
-
-                    <label class="col-sm-3 form-control-label">Enable Deposits <i data-toggle="tooltip"
-                            title="Select to give your users ability to pay a deposit payment for this item"
-                            class="fa fa-question-circle" aria-hidden="true"></i></label>
-                    <div class="col-sm-9">
-
-
-                        <select class="form-control" id="depositsstatus">
-
-                            <?php if (isset($_GET['productid'])) { 
-                                  if($get_depositenable_type == "optional"){  ?>
-                            <option value="optional" selected="true">Deposit OR Pay in Full</option>
-                            <option value="forced">Deposit Only - No Option to Pay in Full</option>
-                            <option value="no">No</option>
-                            <?php }else if($get_depositenable_type == "forced"){?>
-
-                            <option value="optional">Deposit OR Pay in Full</option>
-                            <option value="forced" selected="true">Deposit Only - No Option to Pay in Full</option>
-                            <option value="no">No</option>
-
-                            <?php }else{ ?>
-
-                            <option value="optional">Deposit OR Pay in Full</option>
-                            <option value="forced">Deposit Only - No Option to Pay in Full</option>
-                            <option value="no" selected="true">No</option>
-                            <?php }}else{?>
-
-                            <option value="optional">Deposit OR Pay in Full</option>
-                            <option value="forced">Deposit Only - No Option to Pay in Full</option>
-                            <option value="no" selected="true">No</option>
-                            <?php } ?>
-
-                        </select>
-
-
-
-
-
-                    </div>
-                </div>
-
-
-                <?php if(isset($_GET['productid'])) { 
-                       if(!empty($get_deposit_type)){  ?>
-                <div class="form-group row depositsdetail">
-                    <?php }else{ ?>
-                    <div class="form-group row depositsdetail" style="display:none;">
-                        <?php }}else{?>
+                          </div>
+                      </div>
+                     <div class="form-group row">
+                          
+                          
+                          <label class="col-sm-3 form-control-label">Enable Deposits <i data-toggle="tooltip" title="Select to give your users ability to pay a deposit payment for this item" class="fa fa-question-circle" aria-hidden="true"></i></label>
+                          <div class="col-sm-9">
+                              
+                             
+                              <select class="form-control" id="depositsstatus" egid="depositsstatus">
+                                  
+                                <?php if (isset($_GET['productid'])) { 
+                                  if($get_depositenable_type == "optional"){  ?> 
+                                   <option value="optional" selected="true">Deposit OR Pay in Full</option>
+                                   <option value="forced">Deposit Only - No Option to Pay in Full</option>
+                                   <option value="no">No</option>
+                                <?php }else if($get_depositenable_type == "forced"){?>
+                                    
+                                    <option value="optional" >Deposit OR Pay in Full</option>
+                                    <option value="forced" selected="true">Deposit Only - No Option to Pay in Full</option>
+                                    <option value="no" >No</option>
+                                    
+                                <?php }else{ ?>
+                                  
+                                   <option value="optional" >Deposit OR Pay in Full</option>
+                                   <option value="forced">Deposit Only - No Option to Pay in Full</option>
+                                   <option value="no" selected="true">No</option>
+                                <?php }}else{?>
+                                   
+                                  <option value="optional" >Deposit OR Pay in Full</option>
+                                   <option value="forced">Deposit Only - No Option to Pay in Full</option>
+                                   <option value="no" selected="true">No</option>
+                                <?php } ?>
+                                  
+                              </select>
+                              
+                              
+                              
+                              
+                             
+                          </div>
+                   </div>
+                   
+                  
+                   <?php if(isset($_GET['productid'])) { 
+                       if(!empty($get_deposit_type)){  ?>   
+                        <div class="form-group row depositsdetail" >
+                    <?php }else{ ?>      
+                         <div class="form-group row depositsdetail" style="display:none;">
+                     <?php }}else{?>
                         <div class="form-group row depositsdetail" style="display:none;">
                             <?php } ?>
 
@@ -327,10 +294,10 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                     <label class="col-sm-3 form-control-label">Publish Status <strong>*</strong></label>
                                     <div class="col-sm-9">
 
-                                        <select id="pstatus" class="form-control" required>
-
-
-                                            <?php if (isset($_GET['productid'])) {
+                              <select id="pstatus" class="form-control" egid="pstatus" required>
+                                     
+                                      
+                                      <?php if (isset($_GET['productid'])) {
                                           if ($update_product->status == 'publish') {
                                               ?>
 
@@ -357,17 +324,9 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                         </select>
 
 
-                                    </div>
-                                </div>
-                                <?php if($product_name_for_fields_lebal != 'Booth'){ ?>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">Stock status <strong>*</strong></label>
-                                    <div class="col-sm-9">
-
-                                        <select onchange="checkstockstatus()" id="pstrockstatus" class="form-control"
-                                            required>
-
-                                            <?php if(isset($_GET['productid'])){
+                              <select onchange="checkstockstatus()" id="pstrockstatus" class="form-control" egid="pstrockstatus" required>
+                                 
+                                <?php if(isset($_GET['productid'])){
                                     if($update_product->stock_status == 'instock'){?>
 
                                             <option value="instock" selected="selected">In Stock</option>
@@ -383,15 +342,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                         </select>
 
 
-                                    </div>
-                                </div>
-
-                                <div class="quanititybox">
-                                    <?php if (isset($_GET['productid'])) { if($update_product->stock_status == 'instock'){ ?>
-                                    <div class="form-group row stockstatusbox">
-                                        <label class="col-sm-3 form-control-label">Stock
-                                            Quantity<strong>*</strong></label>
-                                        <div class="col-sm-9">
+                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" value="<?php echo $update_product->stock_quantity; ?>" name="pquanitity" placeholder="Stock Quantity" egid="pquanitity" >
 
                                             <input type="number" min="0" oninput="validity.valid||(value='');"
                                                 class="form-control" id="pquanitity"
@@ -399,33 +350,23 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                                 placeholder="Stock Quantity">
 
 
-                                        </div>
-                                    </div>
-                                    <?php }}else{?>
-                                    <div class="form-group row stockstatusbox">
-                                        <label class="col-sm-3 form-control-label">Stock
-                                            Quantity<strong>*</strong></label>
-                                        <div class="col-sm-9">
+                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" name="pquanitity" egid="pquanitity" placeholder="Stock Quantity" >
 
                                             <input type="number" min="0" oninput="validity.valid||(value='');"
                                                 class="form-control" id="pquanitity" name="pquanitity"
                                                 placeholder="Stock Quantity">
 
-
-                                        </div>
-                                    </div>
-                                    <?php }?>
-                                </div>
-
-                                <?php }?>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label"> Image <i data-toggle="tooltip"
-                                            title="Recommended Max Size: w:500 h:500" class="fa fa-question-circle"
-                                            aria-hidden="true"></i></label>
-                                    <div class="col-sm-9" id="changeimageupload" style="display:none;">
-                                        <input type="file" class="form-control" id="updateproductimage">
-                                    </div>
-                                    <?php if (isset($_GET['productid'])) { 
+                          </div></div>
+                    <?php }?>
+                  </div>  
+                 
+                   <?php }?>
+                     <div class="form-group row">
+                          <label class="col-sm-3 form-control-label"> Image <i data-toggle="tooltip" title="Recommended Max Size: w:500 h:500" class="fa fa-question-circle" aria-hidden="true"></i></label>
+                          <div class="col-sm-9" id="changeimageupload" style="display:none;" egid="changeimageupload">
+                              <input  type="file" class="form-control" id="updateproductimage" >				
+                            </div>
+                           <?php if (isset($_GET['productid'])) { 
                                
                                if(!empty($update_product->image_id)){
                                $url = wp_get_attachment_thumb_url($update_product->image_id);
@@ -465,46 +406,62 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
 
                                     </div>
                                 </div>
-                                <?php }?>
+                           <?php }else{ ?>
+                            <div class="col-sm-9">
+                              <input  type="file" class="form-control" id="productimage" egid="productimage">				
+                            </div>
+                           <?php }}else{ ?>
+                          <div class="col-sm-9">
+                              <input  type="file" class="form-control" id="productimage" egid="productimage">				
+                            </div>
+                          <?php } ?>
+                 </div>         
+                  <?php if($product_name_for_fields_lebal != 'Booth'){ ?>
+                      <div class="form-group row">
+                          <label class="col-sm-3 form-control-label">Position <i data-toggle="tooltip" title="This determines the order in which this product shows up in the shop based on the numeric order. For example, if you create 3 products, and you select the position 1,2,3 for each of the products, the product with the position '1' will appear first. Leaving a position blank will default the product by creation date." class="fa fa-question-circle" aria-hidden="true"></i></label>
+                          <div class="col-sm-9">
 
-                                <?php if($product_name_for_fields_lebal != 'Booth'){ ?>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">Short Description</label>
-                                    <div class="col-sm-9">
+                            <input  id="menu_order" class="form-control"  value="<?php echo $update_product->menu_order; ?>" type="number" min="0" oninput="validity.valid||(value='');" egid="menu_order">		
 
-                                        <textarea class="pdescriptionbox"
-                                            id="pshortdescription"><?php echo $update_product->short_description; ?></textarea>
+                          </div>
+                      </div>
+                    <?php }?> 
+                             
+                     <?php if($product_name_for_fields_lebal != 'Booth'){ ?>
+                     <div class="form-group row">
+                          <label class="col-sm-3 form-control-label">Short Description</label>
+                          <div class="col-sm-9">
 
-
-                                    </div>
-                                </div>
-                                <?php }?>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">Long Description</label>
-                                    <div class="col-sm-9">
-
-
-                                        <textarea class="pdescriptionbox"
-                                            id="pdescription"><?php echo $update_product->description; ?></textarea>
-
-                                    </div>
-                                </div>
-
-                                <hr>
-
-                                <h4 class="eg-sub-title">Visibility</h4>
-
-                                <hr>
-                                <div class="form-group row" style="display: none;">
-                                    <label class="col-sm-3 form-control-label">Type </label>
-                                    <div class="col-sm-9">
+                             <textarea  egid="pshortdescription" class="pdescriptionbox"  id="pshortdescription"  ><?php echo $update_product->short_description; ?></textarea>	
 
 
+                          </div>
+                      </div>
+                    <?php }?>
+                     <div class="form-group row">
+                          <label class="col-sm-3 form-control-label">Long Description</label>
+                          <div class="col-sm-9">
 
-                                        <select id="pcategories" class="form-control" onchange="checkptoducttype()"
-                                            required style="display: none;">
+                             
+                              <textarea egid="pdescription" class="pdescriptionbox"   id="pdescription"  ><?php echo $update_product->description; ?></textarea>		
 
-                                            <?php if (isset($_GET['productid'])) { 
+                          </div>
+                      </div>
+                             
+                     <hr >
+
+                        <h4 class="eg-sub-title">Visibility</h4>
+
+                    <hr>     
+                    <div class="form-group row" style="display: none;">
+                          <label class="col-sm-3 form-control-label">Type </label>
+                          <div class="col-sm-9">
+                              
+                              
+                              
+                              <select id="pcategories" class="form-control" onchange="checkptoducttype()" required style="display: none;">
+                                    
+                                      <?php if (isset($_GET['productid'])) { 
                                           
                                            
                                             $typename =  $selectedcat_name;
@@ -572,12 +529,11 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                             title="Select user levels that product is visible for. If no levels selected product will be visible for all levels."
                                             class="fa fa-question-circle" aria-hidden="true"></i></label>
                                     <div class="col-sm-9">
-
-                                        <select class="form-control select2" id="visiblelevels" multiple="multiple"
-                                            data-allow-clear="true">
-
-                                            <option></option>
-                                            <?php if (isset($_GET['productid'])) { 
+                                           
+								 <select  class="form-control select2" id="visiblelevels" multiple="multiple" data-allow-clear="true" egid="visible-levels" >
+								
+                                                                     <option></option>
+                                                                     <?php if (isset($_GET['productid'])) { 
                                                                          if (empty($getvisiblelevelsnames) && empty($listofuseremails)) {
                                                                              
                                                                               echo '<option selected="selected">All</option>';
@@ -631,12 +587,11 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                             title="Select users that product is visible for. If no users selected product will be visible for all users."
                                             class="fa fa-question-circle" aria-hidden="true"></i></label>
                                     <div class="col-sm-9">
-
-                                        <select class="form-control select2" id="listofuservisible" multiple="multiple"
-                                            data-allow-clear="true">
-
-                                            <option></option>
-                                            <?php if (isset($_GET['productid'])) { 
+                                           
+								 <select  class="form-control select2" id="listofuservisible" multiple="multiple" data-allow-clear="true" egid ="listofuservisible" >
+								
+                                                                     <option></option>
+                                                                     <?php if (isset($_GET['productid'])) { 
                                                                          foreach ($listofuseremails as $key => $name) {
 
                                                                                 if (in_array($name['id'],$getvisiblelistofusers)) {
@@ -680,11 +635,11 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                             title="If you select a level here, the buyer of this product will be automatically assigned this level on successfully placing the order."
                                             class="fa fa-question-circle" aria-hidden="true"></i></label>
                                     <div class="col-sm-9">
-
-                                        <select class="form-control" id="roleassign">
-
-                                            <option></option>
-                                            <?php if (isset($_GET['productid'])) { 
+                                           
+								 <select  class="form-control" id="roleassign" egid="roleassign">
+								
+                                                                     <option></option>
+                                                                     <?php if (isset($_GET['productid'])) { 
                                                                          foreach ($all_roles as $key => $name) {
 
 
@@ -725,13 +680,11 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                             title="If you select one or more tasks here, the buyer of this product will be automatically assigned these tasks on successfully placing the order."
                                             class="fa fa-question-circle" aria-hidden="true"></i></label>
                                     <div class="col-sm-9">
-
-                                        <select class="form-control" class="select2" data-placeholder="Select Tasks"
-                                            data-allow-clear="true" data-toggle="tooltip" multiple="multiple"
-                                            id="selectedtasks">
-
-                                            <option></option>
-                                            <?php if (isset($_GET['productid'])) { 
+                                           
+								 <select  class="form-control" class="select2"  data-placeholder="Select Tasks" data-allow-clear="true" data-toggle="tooltip" multiple="multiple" id="selectedtasks" egid="selectedtasks">
+								
+                                                                     <option></option>
+                                                                     <?php if (isset($_GET['productid'])) { 
                                                                          foreach ($taskkeyContent as $taskindex => $taskValue) {
                                                                              
                                                                                 
@@ -776,6 +729,14 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                     </div>
                                 </div>
 
+                          <div class="form-group row">
+                          <label class="col-sm-8 form-control-label"></label>
+                          <div class="col-sm-4" >
+                              <button style="float: right;" type="submit" id="addnewproduct" name="addsponsor"  class="btn mycustomwidth btn-success" value="Register" egid="add-new-product">Save</button>
+                             <a style="float: right;margin-right: 5%;" href="<?php echo site_url().'/manage-products/';?>" class="btn mycustomwidth btn-success" egid="cancel">Cancel</a>
+                              
+                          </div>
+                </div>
 
 
 

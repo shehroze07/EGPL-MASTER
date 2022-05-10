@@ -203,7 +203,8 @@ function cloningfeatureconfrim(){
     html: '<div class="popupcontent"><p>Please wait while your choices are validated</p></div>',
     timerProgressBar: true,
     icon: 'info',
-    showConfirmButton: false,
+    showConfirmButton: true,
+    confirmButtonText: `Execute`,
     showCancelButton: true,
     cancelButtonText: `Close`,
     confirmButtonColor: '#86cceb',
@@ -223,7 +224,8 @@ function cloningfeatureconfrim(){
             success: function (data) {
                 
                 var message = jQuery.parseJSON(data);
-                var appendmessage = "";
+                var appendmessage = "<ul class='warningmessage'>";
+                var softwarning  =  "";
                 jQuery.each( message, function( i, item ) {
 
                   
@@ -240,8 +242,8 @@ function cloningfeatureconfrim(){
 
                             
                                 if(object == "missinglevels"){
-
-                                    appendmessage += '<p style="font-size:15px;color:red;">Shop products have dependencies on Levels which are not part of the current selection.</p>';
+                                    softwarning = "off";
+                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Levels which are not part of the current selection.</p></li>';
                                    
                                 }
                            
@@ -250,8 +252,8 @@ function cloningfeatureconfrim(){
                            
 
                                 if(object == "missingusers"){
-    
-                                    appendmessage += '<p style="font-size:15px;color:red;">Shop products have dependencies on Users which are not part of the current selection.</p>';
+                                    softwarning = "off";
+                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Users which are not part of the current selection.</p></li>';
                                     
                                 }
     
@@ -262,8 +264,20 @@ function cloningfeatureconfrim(){
                            
 
                                 if(object == "missingtasks"){
+                                    softwarning = "off";
+                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Tasks which are not part of the current selection.</p></li>';
+                                   
+                                }
     
-                                    appendmessage += '<p style="font-size:15px;color:red;">Shop products have dependencies on Tasks which are not part of the current selection.</p>';
+                           
+
+                            }else if( j == 'floorplan'){
+
+                           
+
+                                if(object == "missingbooths"){
+    
+                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Floor Plan which are not part of the current selection.</p></li>';
                                    
                                 }
     
@@ -296,8 +310,8 @@ function cloningfeatureconfrim(){
 
                             
                                 if(object == "missinglevels"){
-
-                                    appendmessage += '<p style="font-size:15px;color:red;">Tasks have dependencies on Levels which are not part of the current selection.</p>';
+                                    softwarning = "off";
+                                    appendmessage += '<li><p style="font-size:15px;color:red;">Tasks have dependencies on Levels which are not part of the current selection.</p></li>';
                                    
                                 }
                            
@@ -306,8 +320,8 @@ function cloningfeatureconfrim(){
                            
 
                                 if(object == "missingusers"){
-    
-                                    appendmessage += '<p style="font-size:15px;color:red;">Tasks have dependencies on Users which are not part of the current selection.</p>';
+                                    softwarning = "off";
+                                    appendmessage += '<li><p style="font-size:15px;color:red;">Tasks have dependencies on Users which are not part of the current selection.</p></li>';
                                     
                                 }
     
@@ -320,11 +334,19 @@ function cloningfeatureconfrim(){
                             });
                         }
 
+                    }else if(i == 'reports'){
+
+                        if(item.msg !="success"){
+                          
+                            appendmessage += '<li><p style="font-size:15px;color:red;">'+item.msg+'</p></li>';
+    
+                        }
+
                     }else{
 
                         if(item.msg !="success"){
-                       
-                            appendmessage += '<p style="font-size:15px;color:red;">'+item.msg+'</p>';
+                            softwarning = "off";
+                            appendmessage += '<li><p style="font-size:15px;color:red;">'+item.msg+'</p></li>';
     
                         }
 
@@ -336,14 +358,33 @@ function cloningfeatureconfrim(){
                 });
                
                 console.log(appendmessage);
+                console.log(softwarning);
                 if(appendmessage !=""){
+
+                    appendmessage += '</ul>';
 
                     jQuery(".popupcontent").empty();
                     jQuery(".popupcontent").append(appendmessage);
 
-                    jQuery(".popupcontent").append('<p>Please change your selections and try again</p>');
-                    //jQuery(".swal2-confirm").text("Execute");
+                    if(softwarning == "off"){
+
+                        
+
+                    jQuery(".popupcontent").append('<p>Please change your selections and try again.</p>');
                     Swal.hideLoading();
+                    jQuery(".swal2-confirm").hide();
+                   
+
+                    }else{
+
+                        jQuery(".popupcontent").append('<p>Are you want to Execute without dependencies ?</p>');
+                        Swal.hideLoading();
+                         
+                    }
+                    
+                   
+                   
+                   
                    
 
                 }else{

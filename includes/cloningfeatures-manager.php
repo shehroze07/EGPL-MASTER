@@ -12,7 +12,7 @@ class ClonefeatureManager {
 
         
         $this->$clonesiteID = $siteID;
-        
+        $this->$currentsiteID = get_current_blog_id();
     }
 
 
@@ -24,6 +24,7 @@ class ClonefeatureManager {
         $clonedEntryWizardSettings = get_option("custome_exhibitor_flow_settings_data");
         $clonedFloorplanQueueSettings = get_option("floorPlanSettings");
         $wizardsettings = get_option("exhibitorentryflowstatus");
+        $boothQueueSettings = get_option("boothQueueSettings");
         
         
         restore_current_blog();
@@ -61,6 +62,16 @@ class ClonefeatureManager {
             update_option("ContenteManager_Settings", $clonedEventSiteSettings);
         }
         
+        if(!empty($boothQueueSettings)){
+
+            update_option("boothQueueSettings", $boothQueueSettings);
+           
+        }
+        
+
+        
+
+
         if(!empty($clonedEntryWizardSettings)){
             update_option("custome_exhibitor_flow_settings_data", $clonedEntryWizardSettings);
         }
@@ -189,7 +200,8 @@ class ClonefeatureManager {
                         $get_all_roles2[$remove_space_role_kye]['capabilities']['upload_files'] =  1;//ucfirst($newrolename);
                         $get_all_roles2[$remove_space_role_kye]['capabilities']['level_0'] =  1;
                         $get_all_roles2[$remove_space_role_kye]['capabilities']['read'] =  1;
-                        
+                        $get_all_roles2[$remove_space_role_kye]['priorityNum'] = $item['priorityNum'];
+
                         update_option ($get_all_roles_array2, $get_all_roles2);
     
                     }
@@ -279,6 +291,7 @@ class ClonefeatureManager {
         
         restore_current_blog();
 
+        
         
         $this->removeAllProducts(get_current_blog_id());
         $this->createAllproducts(get_current_blog_id(),$getAllclonedproductData);
@@ -774,6 +787,23 @@ class ClonefeatureManager {
                 $prodcutmeta['short_description'] = $update_product->short_description;
                 $prodcutmeta['description'] = $update_product->description;
                 $prodcutmeta['seletedtaskKeys'] = get_post_meta($product_id, "seletedtaskKeys",true);
+                $selectedtaskids = get_post_meta($product_id, "seletedtaskKeys",true);
+                $prodcutmeta['listoftasksnames'] = "";
+
+               
+                if(!empty($selectedtaskids)){
+
+
+                    foreach($selectedtaskids['selectedtasks'] as $index=>$taskid){
+
+                        $label =  get_post_meta( $taskid, 'label' , true);
+                        $listoflabels[$index] = $label ;
+                    }
+
+                    $prodcutmeta['listoftasksnames'] = $listoflabels;
+                }
+
+
                 $prodcutmeta['title'] = $update_product->name;
                
 
@@ -946,9 +976,27 @@ class ClonefeatureManager {
             update_post_meta( $new_product_id, 'min_quantity', 1 );
             update_post_meta( $new_product_id, 'max_quantity', 1 );
         
+
+            $productmeta['seletedtaskKeys']['selectedtasks'] = [];
         
-            if(!empty($productmeta['seletedtaskKeys'])){
-                update_post_meta( $new_product_id, 'seletedtaskKeys', $productmeta['seletedtaskKeys'] );
+            if(!empty($productmeta['listoftasksnames'])){
+
+                foreach($productmeta['listoftasksnames'] as $tasksindex=>$taskslabel){
+
+
+                    $taskid = $this->getcurrenttaskid($taskslabel);
+
+                    if($taskid != "notexist" ){
+
+                        $productmeta['seletedtaskKeys']['selectedtasks'][] = $taskid;
+                    }
+
+                }
+
+                
+                
+
+                update_post_meta( $new_product_id, 'seletedtaskKeys', $productmeta['seletedtaskKeys']);
             }
 
            
@@ -1241,6 +1289,10 @@ class ClonefeatureManager {
             $menumeta['title'] = $title;
             $menumeta['itemID'] = $menu_item_id;
             $menumeta['page_visibility'] = $pagevisibility;
+
+            
+
+
             if($itemtype == 'page'){
                 $menumeta['page_type'] = $itemtype;
 
@@ -1369,7 +1421,10 @@ class ClonefeatureManager {
             $page_path = $pagesmeta['slug'];
             $page = get_page_by_path($page_path);
             $cat_name = array($cat_id_get);
-            if (!$page) {
+
+            
+            
+            if (empty($page)) {
 
                 $my_post = array(
                     'post_title' => wp_strip_all_tags($pagesmeta['title']),
@@ -1382,7 +1437,26 @@ class ClonefeatureManager {
                 );
 
                 $returnpage_ID = wp_insert_post($my_post);
-                update_post_meta($returnpage_ID, '_wp_page_template', $pagesmeta['pagetemplate']);
+               
+
+               
+
+                update_post_meta($returnpage_ID, '_wp_page_template', $pagesmeta['pagetemplate'][0]);
+
+               
+
+            }else{
+
+
+                $my_post = array(
+                    'ID'           => $page->ID,
+                    'post_title'   => wp_strip_all_tags($pagesmeta['title']),
+                    'post_content' => wp_strip_all_tags($pagesmeta['content']),
+                );
+                  
+                wp_update_post( $my_post, true );	
+
+                
             }
         
         }
@@ -1405,8 +1479,7 @@ class ClonefeatureManager {
         $main_menu_id = $menu->term_id;
 
 
-        //echo '<pre>';
-        //print_r($listofallmenuitems);exit;
+      
 
 
 
@@ -1682,6 +1755,15 @@ class ClonefeatureManager {
 
             }
 
+            if(!empty($selectedboothlist) && $validationrules['florrplan'] != 'checked'){
+                
+               
+                $userresult['floorplan'] = "missingbooths";
+
+            }
+
+            
+
 
         }
 
@@ -1703,20 +1785,23 @@ class ClonefeatureManager {
         $floorPlanSettings = get_option("floorPlanSettings");
         $contentmanager_settings = get_option( 'ContenteManager_Settings' );
         $ClonedFloorplanID = $contentmanager_settings['ContentManager']['floorplanactiveid'];
-        $sellboothsjson    = get_post_meta( $ClonedFloorplanID, 'sellboothsjson', true );
+        $sellboothsjson    = json_decode(get_post_meta( $ClonedFloorplanID, 'sellboothsjson', true ));
 
         restore_current_blog();
 
         $listofalllevels = $this->listofcurretnsitelevels();
 
-    
+      
 
         foreach($sellboothsjson as $productindex=>$productmeta){
 
-            if(!empty($productmeta['boothlevel']) && ($validationrules['levels'] != 'checked' && $validationrules['levels'] != 'checked-add')){
-                if (!in_array($productmeta['boothlevel'], $listofalllevels)){
+         
+            if(!empty($productmeta->boothlevel) && ($validationrules['levels'] != 'checked' && $validationrules['levels'] != 'checked-add')){
+                
+              
+                if (!in_array($productmeta->boothlevel, $listofalllevels)){
 
-                    $userresult['floorplan']['msg'] = "Floorplan booths have dependencies on Levels which are not part of the current selection..";
+                    $userresult = "Floorplan booths have dependencies on Levels which are not part of the current selection..";
                     break;
                 }
             }
@@ -1733,10 +1818,39 @@ class ClonefeatureManager {
 
     }
 
-   
+    public function validatereports($validationrules){
+
+
+        if($validationrules['userfields'] != 'checked' && $validationrules['tasks'] != 'checked'){
+
+            $userresult = "Reports have dependencies on Users Fields and Users Tasks which are not part of the current selection.";
+
+        }else if($validationrules['userfields'] != 'checked' ){
+
+
+            $userresult = "Reports have dependencies on Users Fields which are not part of the current selection.";
+
+
+        }else if($validationrules['tasks'] != 'checked'){
+
+
+            $userresult = "Reports have dependencies on Users Tasks which are not part of the current selection.";
+
+
+        }
+
+        if(empty($userresult)){
+
+            $userresult = 'success';
+        }
+
+        return $userresult;
+
+    }
 
     public function listofcurretnsitelevels(){
 
+        //switch_to_blog($this->$currentsiteID);
         $get_all_roles_array = 'wp_'.get_current_blog_id().'_user_roles';
         $get_all_roles = get_option($get_all_roles_array);
         $listofArray = [];
@@ -1900,5 +2014,37 @@ class ClonefeatureManager {
     }
         
     
-    
+    public function getcurrenttaskid($taskslable){
+
+
+        $args = array(
+            'posts_per_page'   => -1,
+            'orderby'          => 'date',
+            'order'            => 'DESC',
+            'post_type'        => 'egpl_custome_tasks',
+            'post_status'      => 'draft',
+            
+            );
+        $clonedsiteTaskData = get_posts( $args );
+        
+      
+        foreach ($clonedsiteTaskData as $taskskey => $tasksObject) {
+
+            
+            $tasksID = $tasksObject->ID;
+                                    
+           
+            $tasktitle = get_post_meta( $tasksID, 'label' , true);
+            if($tasktitle == $taskslable){
+
+
+                return $tasksID;
+            }
+
+
+        }
+
+        return 'notexist';
+
+    }
 }

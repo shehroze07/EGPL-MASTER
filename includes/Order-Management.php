@@ -1,11 +1,11 @@
 <?php
-require_once 'includes/Order-Complete.php';
 
 class ordermanagment
 {
 
     public function createNewOrder($order_array)
     {
+        require_once ('includes/Order-Complete.php');
         $address = array(
             'first_name' => $order_array['first_name'],
             'last_name'  => $order_array['last_name'],

@@ -169,7 +169,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             if($all_meta_for_user[$site_prefix.'selfsignupstatus'][0] == 'Declined'){
                                 $column_row_action="";
                             }else{
-                                $column_row_action= '<div style="width: 140px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="approvethisuser(this)" id="' . $aid->ID . '" name="approve"   title="Approve" data-toggle="tooltip" ><i class="hi-icon fusion-li-icon fa fa-check-circle-o" ></i></a><a onclick="declinethisuser(this)" id="' . $aid->ID . '" name="delete-sponsor" data-toggle="tooltip"  title="Decline" ><i class="hi-icon fusion-li-icon fa fa-times-circle" ></i></a></div>';
+                                $column_row_action= '<div style="width: 140px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="approvethisuser(this)" egid="approve-user" id="' . $aid->ID . '" name="approve"   title="Approve" data-toggle="tooltip" ><i class="hi-icon fusion-li-icon fa fa-check-circle-o" ></i></a><a onclick="declinethisuser(this)" egid="decline-user" id="' . $aid->ID . '" name="delete-sponsor" data-toggle="tooltip"  title="Decline" ><i class="hi-icon fusion-li-icon fa fa-times-circle" ></i></a></div>';
                             }
                             
                            ?> 

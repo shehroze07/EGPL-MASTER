@@ -232,6 +232,7 @@ function delete_menu_name(elem){
      var viewmenuname= menuname.replace("_", " ");
       Swal.fire({
                             title: "Are you sure?",
+                            icon: 'info',
                             text: 'you want to remove this menu item',
                             type: "warning",
                             showCancelButton: true,
@@ -250,6 +251,7 @@ function delete_menu_name(elem){
                               var Sname =  delete_menu_name_conform(menuname);
                                 Swal.fire({
                                     title: "Deleted!",
+                                    icon: 'info',
                                     text: "Menu item deleted successfully",
                                     type: "success",
                                     confirmButtonClass: " btn btn-success"
@@ -271,6 +273,7 @@ function delete_menu_name(elem){
                           
                                 Swal.fire({
                                     title: "Cancelled",
+                                    icon: 'info',
                                     text: "Resource is safe :)",
                                     type: "error",
                                     confirmButtonClass: "btn btn-primary'"
@@ -836,6 +839,7 @@ function editrolename(e){
                           if(finalresult.msg == 'update'){
                             Swal.fire({
                                 title: "Success!",
+                                icon: 'info',
                                 text: 'Menu Item Added',
                                 type: "success",
                                 confirmButtontext:'OK',
@@ -1192,6 +1196,7 @@ function editrolename(e){
                             if(finalresult.msg == 'update'){
                             Swal.fire({
                                 title: "Success!",
+                                icon: 'info',
                                 text: 'Changed Successfully',
                                 type: "success",
                                 confirmButtontext:'OK',
@@ -1359,6 +1364,7 @@ function set_menu_item_order(e){
               
                                     Swal.fire({
                                   title: "Success!",
+                                  icon: 'info',
                                 text: 'Menu Order saved',
                                 type: "success",
                                 confirmButtontext:'OK',
