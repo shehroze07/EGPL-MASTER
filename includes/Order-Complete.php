@@ -219,6 +219,10 @@ public function updateuser_role_on_purches($order,$porduct_ids_array,$customer_i
                                     $item_quantity=$item['quantity'];
                                 }			
                             }
+
+                            $total_sales=get_post_meta($productID, 'total_sales', true);
+                            $total_sales=$total_sales +$item_quantity;
+                            update_post_meta($productID,'total_sales',$total_sales);
                             $new_stock= $stock-$item_quantity;
                             update_post_meta($productID, '_stock', $new_stock);
                             if($new_stock==0)
@@ -479,14 +483,4 @@ public function updateuser_role_on_purches($order,$porduct_ids_array,$customer_i
           
 }
 
-public function new_order_on_hold_notification( $order_id ) {
-$order = wc_get_order( $order_id );
-print_r($order);
-// Only for on hold new orders
-// if( ! $order->has_status('on-hold') )
-// return; // Exit
-
-// Send Customer On-Hold Order notification
-WC()->mailer()->get_emails()['WC_Email_New_Order']->trigger( $order_id );
-}
 }?>

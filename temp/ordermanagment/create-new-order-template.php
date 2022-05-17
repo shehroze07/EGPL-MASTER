@@ -14,6 +14,11 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
     include $hom_path.'cm_left_menu_bar.php';
     global $woocommerce;
     $payment_gateways = WC()->payment_gateways->payment_gateways();
+    //$payment_gateways = WC()->payment_gateways->get_available_payment_gateways();
+    // echo '<pre>';
+    // print_r($payment_gateways);
+    // exit;
+    
     $countries_obj   = new WC_Countries();
     $countries   = $countries_obj->__get('countries');
     if (isset($_GET['orderid'])) {
@@ -142,16 +147,16 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                         <form method="post" id="biling-form" action="javascript:void(0);" onsubmit="create_order()">
                         <div class="form-field form-field-wide" style='    display: flex;align-content: center;    align-items: baseline;'>
                             <div style='display: flex;' class='date' id='datetimepicker1' egid="datetimepicker1">
-                                    <input type="text" id="date" egid="date" required   class="form-control text" required
+                                    <input type="text" id="date" egid="date" order_id=<?php echo $orderid ;?> required   class="form-control text" required
                                     value="<?php echo $arrayString[0]; ?>">
                                     <span class="input-group-addon" style='width: 38px;'>
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                             </div>@
 							<input type="number" id="time-hour" class="hour form-control"   value="<?php echo $arrayStringM[0]; ?>"
-                            style='    width: 20%;' placeholder="h" required name="order_date_hour" min="0" max="23" step="1"  pattern="([01]?[0-9]{1}|2[0-3]{1})">:
+                            style='    width: 30%;' placeholder="h" required name="order_date_hour" min="0" max="23" step="1"  pattern="([01]?[0-9]{1}|2[0-3]{1})">:
 							<input type="number" id="time-mins" class="minute form-control"     value="<?php echo $arrayStringM[1]; ?>"
-                            style='    width: 20%;' placeholder="m" required name="order_date_minute" min="0" max="59" step="1"  pattern="[0-5]{1}[0-9]{1}">
+                            style='    width: 30%;' placeholder="m" required name="order_date_minute" min="0" max="59" step="1"  pattern="[0-5]{1}[0-9]{1}">
 							<input type="hidden" name="order_date_second" value="03">
                             </div>
                       
@@ -160,7 +165,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             <label class="">Status</label>
                             <?php if ($orderid) { ?>
                             <select id="order_status" egid="order_status" name="order_status"
-                                onchange="statusChange('<?php echo $order_value ;?>')"
+                                onchange="statusChange('<?php echo $order_value ;?>',this)"
                                 class="select2 option2 mycustomedropdown">
                                 <?php if (!empty($order_status)) { ?>
 
@@ -169,10 +174,11 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                 <?php } ?>
 
                                 <option id="wc-partial-payment" value="wc-partial-payment">Initial Deposit Paid</option>
-                                <option id="wc-completed" value="wc-completed">Completed</option>
+                                <option id="wc-completed" value="wc-completed">Paid in Full</option>
                                 <option id="wc-pending" value="wc-pending">Balance Due</option>
                                 <option id="wc-cancelled" value="wc-cancelled">Cancelled</option>
                                 <option id="wc-refunded" value="wc-refunded">Refunded</option>
+                                <option id="wc-failed" value="wc-failed">Failed</option>
 
                             </select>
                             <?php } else { ?>
@@ -183,6 +189,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                 <option id="wc-pending" value="wc-pending">Balance Due</option>
                                 <option id="wc-cancelled" value="wc-cancelled">Cancelled</option>
                                 <option id="wc-refunded" value="wc-refunded">Refunded</option>
+                                <option id="wc-failed" value="wc-failed">Failed</option>
 
                             </select>
                             <?php } ?>
@@ -352,8 +359,12 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                             <?php echo $payment_method; ?></option>
 
                                         <?php } else { ?>
-                                           
-                                        <option value=<?php echo $key; ?>><?php echo $value->title; ?></option>;
+                                           <?php if($value->title=='eCheck'){?>
+                                        <option value=<?php echo $key; ?>>Authorize.Net</option>;
+                                       
+                                        <?php }else{ ?>
+                                            <option value=<?php echo $key; ?>><?php echo $value->title; ?></option>;
+                                        <?php } ?>
                                         <?php } ?>
                                         <?php }?>
                                     </select>
@@ -381,11 +392,18 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                             <h3>Order Actions</h3>
                             <div style="margin-top: 29px;">
                                 <div class="col-md-8 mb-3"
-                                    style="width: 108%; margin-top: 20px; margin-left: -15px;margin-bottom: 20px;">
+                                    style="width: 106%; margin-top: 20px; margin-left: -15px;margin-bottom: 20px; display: flex;">
 
-                                    <select id="emailinvoice" egid="emailinvoice" class="select2 option2 mycustomedropdown">
-                                        <option>Email Invoice/Order Details to Customers</option>
+                                    <select id="emailinvoice" onchange='emailchange()' egid="emailinvoice" placeholder="Select Actions" class="select2 option2 mycustomedropdown">
+
+                                         <option value="0"  >Select Action</option>
+                                        <option value='1'>Email Invoice/Order Details to Customer</option>
                                     </select>
+                                    <div>
+                                    <?php if ($orderid) { ?>
+                                    <button type="button"  disabled='true' id='sendEmail' egid="sendEmail" name="" class="btn btn-md  btn-primary" value="">Send</button>
+                                    <?php } ?>
+                                </div>
                                 </div>
                                 <br><br>
                                 <?php
@@ -427,48 +445,27 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card">
-                                    <div class="card-header" id="headingOne">
-                                        <h5 class="mb-0">
-                                            <a style="    color: black;" data-toggle="collapse" data-target="#collapsetwo" aria-expanded="true" aria-controls="collapseOne">
-                                                Order Note
-                                            </a>
-                                        </h5>
-                                    </div>
-                                    
-                                    <div id="collapsetwo" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                                        <div class="card-body">
-                                                <?php if ($orderid) { 
+                               
+                                   
+                                  
+                                    <div id="note-div" egid="note-div" class="order-note">
+                                        <a style="    color: black;font-size: 20px;">Order Notes</a>
+                                        <?php if ($orderid) { 
                                                      $order_notes=get_post_meta( $orderid, '_order_custome_note',true );?>
 
-                                                <p><?php echo $order_notes; ?></p>
+                                                
                                                 <?php } ?>
-                                            
-                                               
-                                           </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <br>
-                                    <!-- <hr class="m-t-lg with-border"> -->
-
-                                    <!-- <div id="note-div" egid="note-div" class="order-note">
-                                        <label>Add Notes</label>
-                                        <textarea id="order_note" egid="order_note" class="form-control" name="notes" rows="4"
-                                            cols="30"></textarea>
+                                        <textarea id="order_note" egid="order_note" class="form-control orders_note" name="notes" rows="4"
+                                            cols="30"><?php echo $order_notes; ?></textarea>
+                                       
                                         <br>
                                         <div class="col-md-8 mb-3" style="float: left; margin-left: -15px">
-                                            <select id="Private" egid="Private" class="select2 option2 mycustomedropdown">
-                                                <option>Note to user</option>
-                                                <option>Private</option>
-                                            </select>
+                                            
                                         </div>
                                         <div class="col-md-4 mb-3" style="float: right;">
-                                            <button type="button" style="float: rightt; min-width: 0px !important;" id='addNote' disabled=true egid="addNote" name=""
-                                                class="btn btn-md mycustomwidth btn-success" value="">Add</button>
+                                    
                                         </div>
-                                    </div> -->
+                                    </div>
                                
                             </div>
                         </div>
@@ -502,9 +499,9 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                         foreach ($order_items as $item_id => $item) { ?>
 
                                 <?php
-                                            // Get the product name
+                                            // // Get the product name
                                             //    echo '<pre>';
-                                            //    print_r($item);
+                                            //    print_r($note);
                                            
                                             
                                             //  exit;
@@ -683,7 +680,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                 Discount</a>
                             <?php if ($orderid && $order_status != 'refunded') { ?>
                             <a id="refund" egid="refund" style=" min-width: 30px !important;" name=""
-                                onclick="refund_order( <?php echo $orderid; ?>, <?php echo $total_pricess; ?>)"
+                                onclick="refund_order( <?php echo $orderid; ?>, <?php echo $total_pricess; ?>,<?php echo $total__refunded_prices;?>)"
                                 class="btn btn-sm mycustomwidth btn-success">Refund</a>
                             <?php } ?>
                         </div>
@@ -743,14 +740,13 @@ jQuery(function() {
         jQuery('#time-mins').val(today.getMinutes());
 
     } else {
-        jQuery('#datetimepicker1').datepicker({
-            "setDate": new Date(),
-            "autoclose": false
-        });
-        jQuery('#datetimepicker2').datepicker({
-            "setDate": new Date(),
-            "autoclose": true
-        });
+        jQuery("#datetimepicker1").datepicker("update", jQuery(this).attr("startdate"));
+        jQuery("#datetimepicker1").datepicker("update", jQuery(this).attr("enddate"));
+        jQuery('#date').val(jQuery('#date').attr('value'));
+        // jQuery('#date').val(dateTime);
+        jQuery("#datetimepicker2").datepicker("update", jQuery(this).attr("startdate"));
+        jQuery("#datetimepicker2").datepicker("update", jQuery(this).attr("enddate"));
+        jQuery('#payment_date').val(jQuery('#payment_date').attr('value'));
     }
 
     jQuery("#biling-form").validate();

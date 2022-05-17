@@ -1,11 +1,12 @@
 <?php
+require_once 'includes/Order-Complete.php';
 
 class ordermanagment
 {
 
     public function createNewOrder($order_array)
     {
-        require_once ('includes/Order-Complete.php');
+        try{
         $address = array(
             'first_name' => $order_array['first_name'],
             'last_name'  => $order_array['last_name'],
@@ -20,6 +21,7 @@ class ordermanagment
             'country'    => $order_array['region']
          
         );
+        //$lastInsertId = contentmanagerlogging('Order Create Request',"Admin Action",serialize($order_array),''.$user_ID,$user_info->user_email,"pre_action_data");
 
         $args = array(
             'customer_id'   => $order_array['customer_id'],
@@ -32,7 +34,8 @@ class ordermanagment
         foreach($noteArray as $key =>$value)
         {
             $note = $value['note'];
-            $order->add_order_note($note);
+            update_post_meta( $order->id, '_order_custome_note',$note );
+            break;
         }
         foreach ($productArray as $key => $value) {
 
@@ -82,14 +85,8 @@ class ordermanagment
         $order->set_payment_method($payment_gateways[$gateway]);
         update_post_meta($order->id,'_transaction_id',$order_array['Transaction_ID']);
         if (!empty($order_array['order_status'])) {
-            if($order_array['payment_method']=='cheque')
-            {
-                $order->update_status('wc-pending');
-            }else{
 
                 $order->update_status($order_array['order_status']);
-
-            }
         }
 
         $order->save();   
@@ -98,55 +95,49 @@ class ordermanagment
             $porduct_ids_array[] = $item['product_id'];
         }   
         $customer_id = $order_array['customer_id'];
-
-        if( $order_array['order_status'] !== 'wc-cancelled' && $order_array['order_status'] !== 'wc-refunded')
+        $objA = new orderComplete();
+        if($order_array['order_status'] !== 'wc-completed')
         {
-            $objA = new orderComplete();
             $NewOrderStatusPartial = $objA->create_new_partial_order($order->id);
+
+        }
+        if( $order_array['order_status'] !== 'wc-cancelled' && $order_array['order_status'] !== 'wc-refunded' &&   $order_array['order_status'] !== 'wc-failed')
+        {
+            
+           
             $NewOrderStatusPartials = $objA->updateuser_role_on_purches($order->id, $porduct_ids_array, $customer_id, true);
 
         }
+             if($order_array['emailinvoice']==1)
+             {
+                 $emails = WC_Emails::instance();
+                 $emails->customer_invoice( wc_get_order( $order->id ) );
 
-        // WC()->mailer()->get_emails()['WC_Email_New_Order']->trigger( $order->id );
-         
-        //   $email_oc = new WC_Email();
-        //   $email_oc->trigger($order->id);
-        //   $mailer = WC()->mailer();
-        //   $mails = $mailer->get_emails();
-        //   $emails = wc()->mailer()->get_emails();
-        //   if (!empty($emails)) {
-        //       foreach ($emails as $mail) {
-        //         print_r( $mail);
-              
-        //           if ( $mail->id == 'new_order' ) {
-        //           $mail->trigger( $order->id );
-        //           }
-        //       }
-        //   }
-        //add_action('woocommerce_checkout_order_processed', 'new_order_on_hold_notification');   
-        // $mailer = WC()->mailer();
-        // $subject = 'New Customer Order';
-        // $mailer->send( 'abc@example.com,def@example.com', $subject, $mailer->wrap_message( $subject, $data ), '', '' );
-        // $emails = WC_Emails::instance();
-        // $emails->customer_invoice( wc_get_order( $order->id) );
-        // $email_oc = new WC_Email_Customer_Completed_Order();
-        // $email_oc->trigger($order->id);
-        // print_r($emails);
-        // exit;
-        // $mailer = WC()->mailer();
-        // $mails = $mailer->get_emails();
-        // if (!empty($mails)) {
-        //     foreach ($mails as $mail) {
-        //         if ($mail->id == 'customer_completed_order') {
-        //               $mail->trigger($order->id);
-        //         }
-        //     }
-        // }
+             }
+            // $mailer = WC()->mailer();
+            // $mails = $mailer->get_emails();
+
+            // if (!empty($mails)) {
+            //     foreach ($mails as $mail) {
+            //         if ($mail->id == 'customer_completed_order') {
+            //             echo '--';
+            //             $mail->trigger($order_id,$order);
+            //             //break;
+            //         }
+            //     }
+            // }
+        
         if ($order) {
             // return "end";
             return "success";
             die();
         }
+    }catch (Exception $e) {
+       
+        //  contentmanagerlogging_file_upload ($lastInsertId,serialize($e));
+   
+      return $e;
+    }
         //$NewOrderStatusPartial = $objA->new_order_on_hold_notification($order->id);
 
     }
@@ -173,6 +164,8 @@ class ordermanagment
         $order_items = $order->get_items();
         $order_data = $order->get_data();
         $order_status = $order_data['status'];
+        // echo $order_status;
+        
         if($order_status=='cancelled' && $order_array['order_status'] != 'wc-cancelled' && $order_array['order_status'] != 'wc-refunded' )
         {
             $order->update_status($order_array['order_status']);
@@ -181,10 +174,15 @@ class ordermanagment
                 $product_id = $item["product_id"];
                 $item_quantity = $item['quantity'];
                 $stock_quantity = get_post_meta($product_id, '_stock', true);
+                if($order_array['order_status'] == 'wc-completed')
+                {
+                    $stock_quantity++;
+                }
                 $product_status = get_post_meta($product_id, '_stock_status', true);
                 $out_of_stock_staus = 'instock';
                 $restored_stock = $stock_quantity - $item_quantity;
                 update_post_meta($product_id, '_stock', $restored_stock);
+                // echo  $restored_stock;
                 if ($restored_stock > 0) {
                     update_post_meta($product_id, '_stock_status', wc_clean($out_of_stock_staus));
                 }
@@ -200,6 +198,7 @@ class ordermanagment
                     $product_id = $item["product_id"];
                     $item_quantity = $item['quantity'];
                     $stock_quantity = get_post_meta($product_id, '_stock', true);
+                    // echo '--AD194-------'. $stock_quantity;
                     $product_status = get_post_meta($product_id, '_stock_status', true);
                     $out_of_stock_staus = 'instock';
                     $restored_stock = $stock_quantity + $item_quantity;
@@ -210,7 +209,7 @@ class ordermanagment
                 }
                 return "success";
             }else if($order_array['order_status']=='wc-refunded'){
-                 return "refunded";
+                 return "success";
             }
         }
         foreach ($productArray as $key => $values) {
@@ -225,6 +224,7 @@ class ordermanagment
             if (array_search($item_id, $item_ids_arrays) === false) {
 
                 $stock = get_post_meta($item_id, '_stock', true);
+                // echo '--AD-------'. $stock;
                 $product_value = $item->get_data();
                 $order_item_id = $product_value['id'];
                 $order_item_quantity = $product_value['quantity'];
@@ -249,6 +249,11 @@ class ordermanagment
             $price = $values['price'];
             $product_status = get_post_meta($itemData, '_stock_status', true);
             $stock = get_post_meta($itemData, '_stock', true);
+            if($order_array['order_status'] == 'wc-completed')
+            {
+                $stock++;
+            }
+            //echo '----------'. $stock;
             $item_quantity = 0;
             $product_value = 'p';
             $index = array_search($itemData, $porduct_ids_arrays);
@@ -292,11 +297,16 @@ class ordermanagment
                     $item->set_subtotal($price);
                     $item->set_total($price);
                 }
+                //  echo '-----------'. $item_quantity;
+                
                 if ($item_quantity < 0) {
+                    //  echo '----3-------';
                     $item_quantity = abs($item_quantity);
                     $new_stock = $stock - $item_quantity;
                 } else {
+                    // echo '---4--------'. $item_quantity;
                     $new_stock = $stock + $item_quantity;
+                   
                 }
                 update_post_meta($itemData, '_stock', $new_stock);
                 if ($new_stock <= 0) {
@@ -334,9 +344,11 @@ class ordermanagment
                 }
                 $item_quantity = $quantity;
                 if ($item_quantity < 0) {
+                    // echo '----337-------';
                     $item_quantity = abs($item_quantity);
                     $new_stock = $stock - $item_quantity;
                 } else {
+                    // echo '----341-------';
                     $new_stock = $stock - $item_quantity;
                 }
                 update_post_meta($itemData, '_stock', $new_stock);
@@ -365,7 +377,8 @@ class ordermanagment
         foreach($noteArray as $key =>$value)
         {
             $note = $value['note'];
-            $order->add_order_note($note);
+             update_post_meta( $orderId, '_order_custome_note',$note );
+             break;
         }
        
         update_post_meta($orderId, '_customer_user', $customer_id);
@@ -379,7 +392,10 @@ class ordermanagment
         $order->save();
 
         $objA = new orderComplete();
-        $NewOrderStatusPartial = $objA->create_new_partial_order($orderId);
+        // if($order_array['order_status'] !== 'wc-completed' || $order_array['order_status'] !== 'wc-cancelled' )
+        // {
+        //     $NewOrderStatusPartial = $objA->create_new_partial_order($orderId);
+        // } 
         foreach ($order->get_items() as $item) {
             $porduct_ids_array[] = $item['product_id'];
         }
@@ -426,6 +442,7 @@ class ordermanagment
         $query = new WP_Query( array( 'post_type' => 'shop_order' ,'post_status'=>array('wc-pending-deposit','wc-scheduled-payment','wc-partial-payment','wc-failed','wc-refunded','wc-processing','wc-pending','wc-cancelled','wc-completed','wc-on-hold','wc-pending'),'posts_per_page' => -1) );
         $all_posts = $query->posts;
         $billing_details_array=[];
+        $billing_details=[];
         foreach ($all_posts as $single_post) {
 
             $header_array = get_object_vars($single_post);

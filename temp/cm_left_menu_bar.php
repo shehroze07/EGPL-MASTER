@@ -424,7 +424,7 @@ $getsiteurl = get_site_url();
                         </li>
                        
                     </ul>
-                </li>
+                </li> 
              <?php if($expogeniefloorplanstatus == 'enable'){?>
                  <li class="mythemestyle with-sub" egid="item-floor-plan">
 	            <span>
