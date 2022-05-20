@@ -23,6 +23,16 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
             padding-left: 20px;
         }
 
+        .errormsg{
+
+            color:red;
+        }
+
+        .warningmsg{
+
+            color:#f98a00;
+        }
+
 
  </style>
 <div class="page-content">
@@ -90,7 +100,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                                     <div class="saveeverything eg-boxed-2 row eg-optional-2 eventsettings" egid="eventsettings">
 									    
                                         <div class="col-sm-3">
-										    <h2>Event Settings</h2> 
+										    <h2>Settings</h2> 
                                         </div>
 									    <div class="col-sm-7">
 										        <p>Includes event dates, address, colors, and graphic assets. Includes Registration Configurations and Booth Management Settings.</p>
@@ -267,7 +277,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 										    <h2>Shop</h2> </div>
 									        <div class="col-sm-7">
 										    <p>
-                                            Includes all Packages & Add-Ons.</p>
+                                            Includes All Packages, Add-Ons and their related configurations.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/manage-products/';?>" target="_blank">Shop</a></p>
 											</div>
 											<div class="col-sm-2">
@@ -468,7 +478,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
         include 'cm_footer.php';
         ?>
             
-        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=4.27"></script>    
+        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=4.39"></script>    
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
        

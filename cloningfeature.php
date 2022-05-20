@@ -178,11 +178,7 @@ function cloningfeature($requestData){
         }
 
         
-        if($requestData['users'] == "checked" || $requestData['users'] == "checked-add"){
-
-            
-            $responce['users'] = $cloningfeatures->cloneusers($requestData['users']);
-        }
+        
 
         if($requestData['levels'] == "checked" || $requestData['levels'] == "checked-add"){
 
@@ -202,11 +198,7 @@ function cloningfeature($requestData){
             $responce['resources'] = $cloningfeatures->cloneresources($requestData['resources']);
         }
 
-        if($requestData['Shop'] == "checked"){
-
-            
-            $responce['Shop'] = $cloningfeatures->cloneShop($requestData['Shop']);
-        }
+       
 
         if($requestData['florrplan'] == "checked"){
 
@@ -219,7 +211,19 @@ function cloningfeature($requestData){
             
             $responce['userfields'] = $cloningfeatures->cloneuserfields($requestData['userfields']);
         }
-      
+
+        if($requestData['users'] == "checked" || $requestData['users'] == "checked-add"){
+
+            
+            $responce['users'] = $cloningfeatures->cloneusers($requestData['users']);
+        }
+        
+
+        if($requestData['Shop'] == "checked"){
+
+            
+            $responce['Shop'] = $cloningfeatures->cloneShop($requestData['Shop']);
+        }
         echo json_encode($responce);
         die();
 

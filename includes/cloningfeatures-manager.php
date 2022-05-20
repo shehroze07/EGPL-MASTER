@@ -10,9 +10,9 @@ class ClonefeatureManager {
     public function __construct($siteID) {
     
 
-        
+       
         $this->$clonesiteID = $siteID;
-        $this->$currentsiteID = get_current_blog_id();
+        //$this->$currentsiteID = get_current_blog_id();
     }
 
 
@@ -96,25 +96,54 @@ class ClonefeatureManager {
         
         
         switch_to_blog($this->$clonesiteID);
+
         $clonedUsersTaskReports = get_option("ContenteManager_userstasksreport_settings");
         $clonedUsersReports = get_option("ContenteManager_usersreport_settings");
         $clonedOrdersReports = get_option("ContenteManager_Orderreport_settings");
         
         
+        
+        
+
+
         restore_current_blog();
 
-       
+        $clonID = "_".$this->$clonesiteID."_";
+        $clonedID= "_".get_current_blog_id()."_";
 
 
         if(!empty($clonedUsersTaskReports)){
+
+            foreach($clonedUsersTaskReports as $reportnametasks=>$reportData){
+
+                $clonedUsersTaskReports[$reportnametasks][0] = str_replace($clonID,$clonedID, $clonedUsersTaskReports[$reportnametasks][0]);
+
+            }
+           
+            
             update_option("ContenteManager_userstasksreport_settings", $clonedUsersTaskReports);
         }
         
         if(!empty($clonedUsersReports)){
+           
+            foreach($clonedUsersReports as $reportname=>$reportData){
+
+                $clonedUsersReports[$reportname][0] = str_replace($clonID,$clonedID, $clonedUsersReports[$reportname][0]);
+
+            }
+
+            
             update_option("ContenteManager_usersreport_settings", $clonedUsersReports);
+        
         }
 
         if(!empty($clonedOrdersReports)){
+
+            foreach($clonedOrdersReports as $orderreport=>$reportData){
+
+                $clonedUsersTaskReports[$orderreport][0] = str_replace($clonID,$clonedID, $clonedOrdersReports[$orderreport][0]);
+
+            }
             update_option("ContenteManager_Orderreport_settings", $clonedOrdersReports);
         }
 
@@ -786,6 +815,7 @@ class ClonefeatureManager {
                 $prodcutmeta['menu_order'] = $update_product->menu_order;
                 $prodcutmeta['short_description'] = $update_product->short_description;
                 $prodcutmeta['description'] = $update_product->description;
+                 
                 $prodcutmeta['seletedtaskKeys'] = get_post_meta($product_id, "seletedtaskKeys",true);
                 $selectedtaskids = get_post_meta($product_id, "seletedtaskKeys",true);
                 $prodcutmeta['listoftasksnames'] = "";
@@ -1291,21 +1321,23 @@ class ClonefeatureManager {
             $menumeta['page_visibility'] = $pagevisibility;
 
             
+           
 
-
-            if($itemtype == 'page'){
-                $menumeta['page_type'] = $itemtype;
+            if($itemtype == 'customlink'){
+               
+                $menumeta['page_type'] = 'customlink';
 
             }else{
 
-                $menumeta['page_type'] = 'customlink';
+                
+                $menumeta['page_type'] = $itemtype;
             }
             
             $menumeta['addon_enabled'] = $addons_enabled;
             $menumeta['menu_item_parent'] = $item->menu_item_parent;
             $menumeta['menu_order'] = $item->menu_order;
 
-            if($menumeta['page_type'] == "page" && $menumeta['page_type'] != ""){
+            if($menumeta['page_type'] != "customlink" ){
 
                
                 $pageslug = basename(parse_url($link, PHP_URL_PATH));
@@ -1479,7 +1511,8 @@ class ClonefeatureManager {
         $main_menu_id = $menu->term_id;
 
 
-      
+       //echo '<pre>';
+       //print_r($listofallmenuitems);
 
 
 
@@ -1521,16 +1554,25 @@ class ClonefeatureManager {
         }
 
         
-       
+        
 
+      
 
-        if($menuarray['page_type'] == 'page'){
+        if($menuarray['page_type'] == 'customlink'){
 
-
-            $page = get_page_by_path($menuarray['linkedpageslug']);
+            $createdmenuid = wp_update_nav_menu_item($main_menu_id, 0, array(
+                'menu-item-title' => $menuarray['title'],
+                'menu-item-type' => 'custom',
+                'menu-item-url' => $menuarray['link'], 
+                'menu-item-position'  => $menuarray['menu_order'],
+                'menu-item-status' => 'publish'));
 
            
 
+        }else{
+
+          
+            $page = get_page_by_path($menuarray['linkedpageslug']);
 
             $argu = array(
                 'menu-item-title' => $menuarray['title'],
@@ -1543,20 +1585,10 @@ class ClonefeatureManager {
                 'menu-item-status' => 'publish');
 
               
+           
 
-                $createdmenuid = wp_update_nav_menu_item($main_menu_id, 0, $argu);
-
-        }else{
-
-          
-
-            $createdmenuid = wp_update_nav_menu_item($main_menu_id, 0, array(
-                'menu-item-title' => $menuarray['title'],
-                'menu-item-type' => 'custom',
-                'menu-item-url' => $menuarray['link'], 
-                'menu-item-position'  => $menuarray['menu_order'],
-                'menu-item-status' => 'publish'));
-
+            $createdmenuid = wp_update_nav_menu_item($main_menu_id, 0, $argu);
+            
         }
 
                 update_post_meta($createdmenuid, 'page_visibility', $menuarray['page_visibility']);
@@ -1573,11 +1605,11 @@ class ClonefeatureManager {
         $siteID = $this->$clonesiteID;
         $validateresult = $this->getAllUsers($siteID);
 
-        $get_all_roles_array = 'wp_'.$this->$clonesiteID.'_user_roles';
+        $get_all_roles_array = 'wp_'.get_current_blog_id().'_user_roles';
         $get_all_roles = get_option($get_all_roles_array);
 
 
-       
+
         $message = "Users have dependencies on Levels which are not part of the current selection.";
         foreach($validateresult as $userkey=>$userdata){
 
@@ -1801,7 +1833,7 @@ class ClonefeatureManager {
               
                 if (!in_array($productmeta->boothlevel, $listofalllevels)){
 
-                    $userresult = "Floorplan booths have dependencies on Levels which are not part of the current selection..";
+                    $userresult = "Floorplan booths have dependencies on Levels which are not part of the current selection.";
                     break;
                 }
             }
@@ -2045,6 +2077,8 @@ class ClonefeatureManager {
         }
 
         return 'notexist';
+
+
 
     }
 }

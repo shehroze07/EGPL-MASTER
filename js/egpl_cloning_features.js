@@ -43,7 +43,7 @@ function submitcloningfeature(){
     if(cloneportalname == ""){
 
        swal.fire({
-            title: "Missing !",
+            title: "Missing",
             text: 'Please select the event name from the dropdown.',
             icon: "warning",
            
@@ -56,8 +56,8 @@ function submitcloningfeature(){
     }else if(!jQuery("#termscondition").prop("checked")){
 
         swal.fire({
-            title: "Missing !",
-            text: 'Please clicked the acknowlegded checkbox.',
+            title: "Missing",
+            text: 'Please click the checkbox at the bottom of the screen to acknowledge and confirm your changes.',
             icon: "warning",
            
             confirmButtonClass: "btn-success",
@@ -225,6 +225,7 @@ function cloningfeatureconfrim(){
                 
                 var message = jQuery.parseJSON(data);
                 var appendmessage = "<ul class='warningmessage'>";
+                
                 var softwarning  =  "";
                 jQuery.each( message, function( i, item ) {
 
@@ -243,7 +244,7 @@ function cloningfeatureconfrim(){
                             
                                 if(object == "missinglevels"){
                                     softwarning = "off";
-                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Levels which are not part of the current selection.</p></li>';
+                                    appendmessage += '<li><p style="font-size:15px;" class="errormsg">Shop products have dependencies on Levels which are not part of the current selection.</p></li>';
                                    
                                 }
                            
@@ -253,7 +254,7 @@ function cloningfeatureconfrim(){
 
                                 if(object == "missingusers"){
                                     softwarning = "off";
-                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Users which are not part of the current selection.</p></li>';
+                                    appendmessage += '<li><p style="font-size:15px;" class="errormsg">Shop products have dependencies on Users which are not part of the current selection.</p></li>';
                                     
                                 }
     
@@ -265,7 +266,7 @@ function cloningfeatureconfrim(){
 
                                 if(object == "missingtasks"){
                                     softwarning = "off";
-                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Tasks which are not part of the current selection.</p></li>';
+                                    appendmessage += '<li><p style="font-size:15px;" class="errormsg">Shop products have dependencies on Tasks which are not part of the current selection.</p></li>';
                                    
                                 }
     
@@ -277,7 +278,7 @@ function cloningfeatureconfrim(){
 
                                 if(object == "missingbooths"){
     
-                                    appendmessage += '<li><p style="font-size:15px;color:red;">Shop products have dependencies on Floor Plan which are not part of the current selection.</p></li>';
+                                    appendmessage += '<li><p style="font-size:15px;" class="errormsg">Shop products have dependencies on Floor Plan which are not part of the current selection.</p></li>';
                                    
                                 }
     
@@ -311,7 +312,7 @@ function cloningfeatureconfrim(){
                             
                                 if(object == "missinglevels"){
                                     softwarning = "off";
-                                    appendmessage += '<li><p style="font-size:15px;color:red;">Tasks have dependencies on Levels which are not part of the current selection.</p></li>';
+                                    appendmessage += '<li><p style="font-size:15px;" class="errormsg">Tasks have dependencies on Levels which are not part of the current selection.</p></li>';
                                    
                                 }
                            
@@ -321,7 +322,7 @@ function cloningfeatureconfrim(){
 
                                 if(object == "missingusers"){
                                     softwarning = "off";
-                                    appendmessage += '<li><p style="font-size:15px;color:red;">Tasks have dependencies on Users which are not part of the current selection.</p></li>';
+                                    appendmessage += '<li><p style="font-size:15px;" class="errormsg">Tasks have dependencies on Users which are not part of the current selection.</p></li>';
                                     
                                 }
     
@@ -338,7 +339,7 @@ function cloningfeatureconfrim(){
 
                         if(item.msg !="success"){
                           
-                            appendmessage += '<li><p style="font-size:15px;color:red;">'+item.msg+'</p></li>';
+                            appendmessage += '<li><p style="font-size:15px;" class="errormsg">'+item.msg+'</p></li>';
     
                         }
 
@@ -346,7 +347,7 @@ function cloningfeatureconfrim(){
 
                         if(item.msg !="success"){
                             softwarning = "off";
-                            appendmessage += '<li><p style="font-size:15px;color:red;">'+item.msg+'</p></li>';
+                            appendmessage += '<li><p style="font-size:15px;" class="errormsg">'+item.msg+'</p></li>';
     
                         }
 
@@ -359,25 +360,34 @@ function cloningfeatureconfrim(){
                
                 console.log(appendmessage);
                 console.log(softwarning);
-                if(appendmessage !=""){
+                if(appendmessage !="<ul class='warningmessage'>"){
 
                     appendmessage += '</ul>';
 
                     jQuery(".popupcontent").empty();
-                    jQuery(".popupcontent").append(appendmessage);
+                    
 
                     if(softwarning == "off"){
 
                         
 
                     jQuery(".popupcontent").append('<p>Please change your selections and try again.</p>');
+                    jQuery(".popupcontent").append(appendmessage);
                     Swal.hideLoading();
                     jQuery(".swal2-confirm").hide();
                    
 
                     }else{
 
-                        jQuery(".popupcontent").append('<p>Are you want to Execute without dependencies ?</p>');
+                       
+                        console.log(appendmessage);
+                        appendmessage = appendmessage.replace("errormsg", "warningmsg");
+                        jQuery(".swal2-icon.swal2-info").css({"border-color": "#f98a00", "color": "#f98a00"});
+                        
+                        console.log(appendmessage);
+                        jQuery(".popupcontent").append(appendmessage);
+                        jQuery(".popupcontent").append('<p>Click on the Execute button if you want to continue without dependencies.</p>');
+                     
                         Swal.hideLoading();
                          
                     }
