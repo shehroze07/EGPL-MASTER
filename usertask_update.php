@@ -16,6 +16,16 @@ if ($_GET['usertask_update'] == "update_submission_status") {
 
     
     require_once('../../../wp-load.php');
+    
+    if(!is_user_logged_in()){
+      
+        $user_status = 0;
+        
+        echo json_encode($user_status);
+
+        die(); 
+        
+    }
     $keyvalue = $_POST['action'];
    
     $updatevalue=$_POST['updatevalue'];
