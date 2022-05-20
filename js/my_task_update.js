@@ -373,6 +373,13 @@ function update_user_meta_custome(elem,typeoftask) {
             type: 'post',
             success: function(output) {
                 
+                var user_status = output;
+                var login_status = user_status.trim();
+                // console.log(user_status.trim());
+                if(login_status == "0"){
+
+                    location.reload();
+                }
               
                filestatus=true;
                jQuery("body").css({'cursor':'default'});
