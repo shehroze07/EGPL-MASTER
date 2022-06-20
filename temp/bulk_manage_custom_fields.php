@@ -9,6 +9,8 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
     require_once plugin_dir_path( __DIR__ ) . 'includes/egpl-custome-functions.php';
     $GetAllcustomefields = new EGPLCustomeFunctions();
     $listOFcustomfieldsArray = $GetAllcustomefields->getAllcustomefields();
+    $listOFcustomfieldsArray = (array)$listOFcustomfieldsArray;
+    
     $showSystemInternalFields = "enabled";
     //asort($listOFcustomfieldsArray);            
     //wp_delete_post(17368);
@@ -38,6 +40,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
             }
         }
        
+     $fieldstitle_list = (array)$fieldstitle_list;   
      
      sort($fieldstitle_list);
     ?> 

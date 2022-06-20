@@ -86,8 +86,11 @@ if ($_GET['dashboardRequest'] == 'getdashboarddailygraph') {
              
             
              $get_thistask_roles = $labelsArray[$index]['roles'];
-             $totaltaskcount = count($labelsArray[$index]['usersids']);
-             
+             $totaltaskcount = count((array)$labelsArray[$index]['usersids']);
+
+            
+            
+
              foreach ($get_thistask_roles as $index_key=>$rolename){
                  
                  if($rolename == 'all'){
@@ -291,14 +294,15 @@ function getdashboarddailygraph($data) {
         );
         $user_query = new WP_User_Query( $args );
         $authors = $user_query->get_results();
-        
+        $user_last_login = [];
         foreach ($authors as $aid) {
              
              $user_data = get_userdata($aid->ID);
              $all_meta_for_user = get_user_meta($aid->ID);
-             $user_last_login[] = date('d-M-Y', $all_meta_for_user[$custome_login_date_time_key][0]);
+     
+             $user_last_login = date('d-M-Y', $all_meta_for_user[$custome_login_date_time_key][0]);
         }
-        $occurences = array_count_values($user_last_login);
+        $occurences = array_count_values((array)$user_last_login);
          foreach ($totaldatesarray as $datekeys) {
              
              if(array_key_exists($datekeys,$occurences)){

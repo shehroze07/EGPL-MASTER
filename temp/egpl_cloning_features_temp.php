@@ -60,7 +60,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                     
                 
                     <div class="form-group row" >
-                        <div class="col-sm-1">
+                        <div class="col-sm-2">
                         <label>From Event Portal </label>
                         </div>
                         <div class="col-sm-10">
@@ -103,7 +103,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 										    <h2>Settings</h2> 
                                         </div>
 									    <div class="col-sm-7">
-										        <p>Includes event dates, address, colors, and graphic assets. Includes Registration Configurations and Booth Management Settings.</p>
+										        <p>Includes event dates, address, colors and graphic assets. Includes Registration Configurations and Booth Management Settings.</p>
 	    									    <p class="eg-editlink-2"><a href="<?php echo site_url().'/admin-settings/';?>" target="_blank">Event Settings</a></p>
 										</div>
                                         <div class="col-sm-2" >
@@ -134,10 +134,10 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 
                                     <div class="saveeverything eg-boxed-2 row eg-optional-2 menupages" egid="menupages">
 									    <div class="col-sm-3">
-                                        <h2>Pages, Content, & Menu</h2> </div>
+                                        <h2>Pages, Content & Menu</h2> </div>
 									        <div class="col-sm-7">
 										    <p>
-                                            Includes all standard page content, custom pages and their content, and the current menu navigation. </p>
+                                            Includes all standard page content, custom pages and their content and the current menu navigation. </p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/manage-menu/';?>" target="_blank">Menu Pages & Navigation</a></p>
 											</div>
 											<div class="col-sm-2">
@@ -347,7 +347,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 										    <h2>Users</h2> </div>
 									        <div class="col-sm-7">
 										    <p>
-                                            Includes all users. Note that this function will only clone the basic user information with the record: First Name, Last Name, Company Name, Level, & Email.</p>
+                                            Includes all users. Note that this function will only clone the basic user information with the record: First Name, Last Name, Company Name, Level & Email.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/user-report-result/';?>" target="_blank">Users</a></p>
 											</div>
                                             <div class="col-sm-2">
@@ -416,7 +416,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
 										    <h2>Floor Plan</h2> </div>
 									        <div class="col-sm-7">
 										    <p>
-                                            Includes floor plan design, booths, booth tags, and legend labels.</p>
+                                            Includes floor plan design, booths, booth tags and legend labels.</p>
 	    									<p class="eg-editlink-2"><a href="<?php echo site_url().'/floor-plan-editor/';?>" target="_blank">Floor Plan</a></p>
 											</div>
 											<div class="col-sm-2">
@@ -478,7 +478,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
         include 'cm_footer.php';
         ?>
             
-        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=4.39"></script>    
+        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/egpl_cloning_features.js?v=4.40"></script>    
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
        

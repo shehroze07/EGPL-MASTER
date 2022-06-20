@@ -200,7 +200,7 @@ function cloningfeatureconfrim(){
     let timerInterval
     Swal.fire({
     title: 'Data Validation in Progress',
-    html: '<div class="popupcontent"><p>Please wait while your choices are validated</p></div>',
+    html: '<div class="popupcontent"><p>Please wait while your choices are being validated</p></div>',
     timerProgressBar: true,
     icon: 'info',
     showConfirmButton: true,

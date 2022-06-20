@@ -434,16 +434,16 @@ height: 50% !important;
                                                 <select class="select2 js-example-events" data-placeholder="Select Users" title="Select Users" data-allow-clear="true" id="row-<?php echo $task_code; ?>-userid" data-toggle="tooltip" multiple="multiple" egid="select-users" >
                                                     <?php
                                                     foreach ($get_all_ids as $user) {
-                                                       // if(!empty($value['usersids'])){
-                                                            if (in_array($user->ID, $value['usersids'])) {
+                                                        if(!empty($value['usersids']) && in_array($user->ID, $value['usersids'], True)){
+                                                          //  if (in_array($user->ID, $value['usersids'])) {
                                                                 echo '<option value="' . $user->ID . '" selected="selected">' . $user->user_email . '</option>';
-                                                            }else{
+                                                             }else{
                                                                  echo '<option value="' . $user->ID . '" >' . $user->user_email . '</option>';
                                                             }
                                                        // }
                                                     }
                                                     ?>
-                                                </select>
+                                                </select> 
                                             </div> 
                                         </td>
                                         

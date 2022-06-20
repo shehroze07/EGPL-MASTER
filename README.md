@@ -1,4 +1,4 @@
-Current Version:6.08
+Current Version:7.24
 
 -------------------27-09-2019---Main release 3.40-------------- Release Items
 
@@ -183,4 +183,24 @@ Ability to remove a booth from cart from the FloorPlan viewer
 Ablity to set Floorplan's default zoom settings
 Added Level and Booth fields in order reports
 Admin ablity to assign a queue to their end users, and that rank will determine their ability to select a booth
+Includes bugs fixes
+
+
+-------------------0-06-2022 Version:7.00
+
+Admin ablity to manage Orders
+Admin ablity to Clone portals
+Changed Welcome Email text to Email Templates
+Added custom links to open in new tab
+Added validation rule for drop down task type submissions
+Added placeholder text for drop down type user Fields
+Added a unique portal ID 
+Removed Help button in the admin top menu bar
+Changed the content/text for booth Queue behaviour enable toggle popup
+Updated content/text for Entry Wizard settings
+Updated event name in Admin dashboard as links
+Updated remove task submission Content
+Updated link on Registration block in User Entry Wizard
+Added validation rule to prevent Admins from deleting themselves
+Removed legend label icon from tool bar in Floor plan
 Includes bugs fixes

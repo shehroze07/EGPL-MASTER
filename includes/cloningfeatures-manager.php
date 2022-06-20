@@ -1560,6 +1560,30 @@ class ClonefeatureManager {
 
         if($menuarray['page_type'] == 'customlink'){
 
+            if (str_contains($menuarray['link'], '/product-category/add-ons/') ) {
+
+
+                $menuarray['link'] = get_site_url().'/product-category/add-ons/';
+
+            }else if(str_contains($menuarray['link'], 'my-sites')){
+
+                $menuarray['link'] = get_site_url()."/my-sites/";
+
+            }else if(str_contains($menuarray['link'], 'change-password-2/')){
+
+                $menuarray['link'] = get_site_url()."/change-password-2/";
+
+            }else if(str_contains($menuarray['link'], 'my-account/orders/')){
+
+                $menuarray['link'] = get_site_url()."/my-account/orders/";
+
+            }else if(str_contains($menuarray['link'], 'logout/')){
+
+                $menuarray['link'] = get_site_url()."/logout/";
+
+            }
+
+            
             $createdmenuid = wp_update_nav_menu_item($main_menu_id, 0, array(
                 'menu-item-title' => $menuarray['title'],
                 'menu-item-type' => 'custom',
@@ -1605,32 +1629,66 @@ class ClonefeatureManager {
         $siteID = $this->$clonesiteID;
         $validateresult = $this->getAllUsers($siteID);
 
+
         $get_all_roles_array = 'wp_'.get_current_blog_id().'_user_roles';
         $get_all_roles = get_option($get_all_roles_array);
 
 
+        //echo '<pre>';
+        //print_r($validateresult);
+        //print_r($get_all_roles);
+        
 
-        $message = "Users have dependencies on Levels which are not part of the current selection.";
+
+        $finalmessage = "success";
+        $message ="";
         foreach($validateresult as $userkey=>$userdata){
-
-           
+            $message ="";
+            
             foreach ($get_all_roles as $key => $item) {
 
+                
                 if ($item['name'] == $userdata['level']) {
                    
+                    //echo $item['name'] .'=='. $userdata['level'] .'<br>';
                     $message = "success";
 
                 }
 
             }
 
+           
 
+            if(empty($message)){
+
+
+                $statusArray[]="failed";
+            }
 
 
         }
         
-       
-        return $message;
+        //print_r($statusArray);
+
+
+        if(!empty($statusArray)){
+
+
+            foreach ($statusArray as $keyerror => $msg) {
+
+                if ($msg == "failed") {
+
+                    $finalmessage = "Users have dependencies on Levels which are not part of the current selection.";
+
+                }
+
+            }
+
+
+        }
+
+
+        return $finalmessage;
 
 
     }

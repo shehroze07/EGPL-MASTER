@@ -202,6 +202,7 @@ if ($_GET['orderManagerRequest'] == "createOrder") {
           $dis_code = $_POST;
           global $woocommerce;
           $disc_coupon = new WC_Coupon($dis_code['code']);
+         
           $coupon = array(
                'amount' => $disc_coupon->amount,
                'code' => $disc_coupon->code,
@@ -209,8 +210,14 @@ if ($_GET['orderManagerRequest'] == "createOrder") {
                'product_ids' => $disc_coupon->product_ids,
                'excluded_product_ids' => $disc_coupon->excluded_product_ids,
                'product_categories' => $disc_coupon->product_categories,
+               'date_expires'=>$disc_coupon->get_date_expires(),
+               'count'=>$disc_coupon->get_usage_count(),
+               'usage_limit'=>$disc_coupon->get_usage_limit(),
 
           );
+          // print_r($coupon);
+          // echo '<pre>';
+          // print_r($disc_coupon);
           echo json_encode($coupon);
           // echo ($disc_coupon->amount);
 
@@ -245,6 +252,7 @@ if ($_GET['orderManagerRequest'] == "createOrder") {
                     'product_ids' => $disc_coupon->product_ids,
                     'excluded_product_ids' => $disc_coupon->excluded_product_ids,
                     'product_categories' => $disc_coupon->product_categories,
+                  
      
                );
                array_push($product_Array, $coupon);
@@ -320,6 +328,36 @@ if ($_GET['orderManagerRequest'] == "createOrder") {
           $emails = WC_Emails::instance();
           $emails->customer_invoice( wc_get_order( $orderid ) );
           echo 'success';
+          die();
+     } catch (Exception $e) {
+          //throw $th;
+          return $e;
+     }
+}else if ($_GET['orderManagerRequest'] == "order_hisotry_id") {
+
+     require_once('../../../wp-load.php');
+     require_once plugin_dir_path(__DIR__) . 'EGPL/includes/Order-Management.php';
+
+     try {
+          $meta_array = $_POST;
+          $obj = new ordermanagment();
+          $product_array = $obj->getOrderHistory($meta_array);
+          echo json_encode($product_array);
+          die();
+     } catch (Exception $e) {
+          //throw $th;
+          return $e;
+     }
+}
+else if ($_GET['orderManagerRequest'] == "getFloorplanstatus") {
+
+     require_once('../../../wp-load.php');
+
+     try {
+          $contentmanager_settings = get_option( 'ContenteManager_Settings' );
+          $id = $contentmanager_settings['ContentManager']['floorplanactiveid'];
+          $floorplanstatuslockunlock = get_post_meta( $id, 'updateboothpurchasestatus', true );
+          echo $floorplanstatuslockunlock;             
           die();
      } catch (Exception $e) {
           //throw $th;

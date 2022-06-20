@@ -275,14 +275,14 @@ function getOrderProductsdetails($request){
             }
             if($catName == "Uncategorized"){
                 
-                $prodcut_prfixname = "Booth-";
+                $prodcut_prfixname = "Booth- ";
                 
             }else if($catName == "Add-ons"){
                 
-                $prodcut_prfixname = "Add-ons-";
+                $prodcut_prfixname = "Add-ons- ";
             }else{
                 
-                $prodcut_prfixname = "Packages";
+                $prodcut_prfixname = "Packages- ";
             }
            
            
@@ -381,18 +381,95 @@ function updateorderstatus($request){
     try {
         
     $user_ID = get_current_user_id();
-    $user_info = get_userdata($user_ID);  
-    $lastInsertId = floorplan_contentmanagerlogging('Update Order Status',"Admin Action",serialize($request),$user_ID,$user_info->user_email,"");
-     
-    
+    $user_info = get_userdata($user_ID); 
     $OrderID = $request['orderID'];
-    $status = $request['status'];
-    
-    
+    $status = $request['status']; 
     $order = wc_get_order($OrderID);
-    $order->update_status($status);
+    $order_data = $order->get_data();
+    $order_status = $order_data['status'];
+    $lastInsertId = floorplan_contentmanagerlogging('Update Order Status',"Admin Action",serialize($request),$user_ID,$user_info->user_email,"");
+    $firstName=get_user_meta($user_ID, "first_name", true);
+    $lastName= get_user_meta($user_ID, "last_name", true);
+    $fullname= $firstName." ".$lastName;
+    $commentarr = array();
+    $commentarays = array();
+    $newCommentArrays = array();
+    $prevCommentArays = array();
     
-    $Neworder = wc_get_order($OrderID);
+    $xs =  get_comments(intval( $OrderID));
+    foreach ($xs as $key => $notes) {
+        // echo $notes->comment_post_ID;
+        $comment_post_ID = $notes->comment_post_ID;
+        if ( $OrderID == $comment_post_ID) {
+           
+            array_push($prevCommentArays,$notes->comment_ID);
+        }
+
+    }
+    $order->update_status($status);
+    foreach ( $order->get_items() as $item_id => $item ) {
+        $custom_field = wc_get_order_item_meta( $item_id, '_remaining_balance_order_id', true );   
+    }
+    foreach ($order->get_items() as $item) {
+                $itemData= $item['product_id'];
+                $quantity= $item['quantity'];
+            
+            $product_status = get_post_meta($itemData, '_stock_status', true);
+            $total_sales=get_post_meta($itemData, 'total_sales', true);
+            $stock = get_post_meta($itemData, '_stock', true);
+            // echo  $quantity;
+            // echo 'SalesBefore='. $total_sales;
+            // echo 'StockBefore='. $stock;
+            // echo $order_status;
+            if($order_status=='pending-deposit' && empty($custom_field) )
+            {
+                //  echo 'A';
+                $stock=$stock+ $quantity;
+                $total_sales=$total_sales-$quantity;
+            }else if( $order_status=='pending-deposit'  && !empty($custom_field))
+            {
+                //  echo "B";
+                //$stock=$stock+ $quantity;
+                $total_sales=$total_sales-$quantity;   
+            }
+            update_post_meta($itemData, '_stock', $stock);
+            update_post_meta($itemData,'total_sales',$total_sales);
+    }
+   
+   
+    
+    
+ 
+   
+    $note = wc_get_order_notes(intval( $OrderID));
+    $xs =  get_comments(intval( $OrderID));
+    foreach ($xs as $key => $notes) {
+        // echo $notes->comment_post_ID;
+        $comment_post_ID = $notes->comment_post_ID;
+        if ($OrderID == $comment_post_ID) {
+           
+            array_push($commentarays,$notes);
+        }
+
+    }
+  
+    foreach ($commentarays as $key => $value) {
+        $id=$value->comment_ID;
+       if(array_search($id,$prevCommentArays)===false)
+       {
+        array_push($newCommentArrays,$value);
+       }    
+    }
+    foreach ($newCommentArrays as $key => $value) {
+
+      
+            $commentarr['comment_ID'] = $value->comment_ID;
+            $commentarr['comment_author'] = $fullname;
+            $commentarr['comment_date'] =$request['timezone'];
+            $update_success = wp_update_comment($commentarr);
+        
+    }
+    // $Neworder = wc_get_order($OrderID);
     
     
     
@@ -868,166 +945,197 @@ function loadorderreport() {
         $columns_list_order_report[0]['type'] = 'string';
         $columns_list_order_report[0]['key'] = 'action';
         
-        $columns_list_order_report[1]['title'] = 'Order Date';
+        $columns_list_order_report[1]['title'] = 'Created Date';
         $columns_list_order_report[1]['type'] = 'date';
         $columns_list_order_report[1]['key'] = 'post_date';
      
-        $columns_list_order_report_postmeta[2]['title'] = 'Company Name';
+        
+        $columns_list_order_report_postmeta[2]['title'] = 'Order ID';
         $columns_list_order_report_postmeta[2]['type'] = 'string';
-        $columns_list_order_report_postmeta[2]['key'] = '_billing_company';
-        
-        $columns_list_order_report[3]['title'] = 'Order Status';
-        $columns_list_order_report[3]['type'] = 'string';
-        $columns_list_order_report[3]['key'] = 'post_status';
+        $columns_list_order_report_postmeta[2]['key'] = 'ID';
         
         
-        $columns_list_order_report_postmeta[4]['title'] = 'Total Amount';
-        $columns_list_order_report_postmeta[4]['type'] = 'num-fmt';
-        $columns_list_order_report_postmeta[4]['key'] = '_order_total';
-        
-        $columns_list_order_report_postmeta[5]['title'] = 'Order Discount';
-        $columns_list_order_report_postmeta[5]['type'] = 'num-fmt';
-        $columns_list_order_report_postmeta[5]['key'] = '_cart_discount';
-        
-        $columns_list_order_report_postmeta[6]['title'] = 'Total Amount After Discount';
-        $columns_list_order_report_postmeta[6]['type'] = 'num-fmt';    
-        $columns_list_order_report_postmeta[6]['key'] = '_total_amount_after_discount';
-        $columns_list_order_report_postmeta[7]['title'] = 'Paid Amount';
-        $columns_list_order_report_postmeta[7]['type'] = 'num-fmt';
-        $columns_list_order_report_postmeta[7]['key'] = 'paid_amount';
+        $columns_list_order_report_postmeta[3]['title'] = 'Initial Order ID';
+        $columns_list_order_report_postmeta[3]['type'] = 'string';
+        $columns_list_order_report_postmeta[3]['key'] = '_initial_payment_order_id';
 
-        $columns_list_order_report_postmeta[8]['title'] = 'Balance Due';
-        $columns_list_order_report_postmeta[8]['type'] = 'num-fmt';
-        $columns_list_order_report_postmeta[8]['key'] = 'balance_due';
-        
+        $columns_list_order_report_postmeta[4]['title'] = 'Order Status';
+        $columns_list_order_report_postmeta[4]['type'] = 'string';
+        $columns_list_order_report_postmeta[4]['key'] = 'post_status';
+                
+       
+        $columns_list_order_report_postmeta[5]['title'] = 'Company Name';
+        $columns_list_order_report_postmeta[5]['type'] = 'string';
+        $columns_list_order_report_postmeta[5]['key'] = '_billing_company';
+
+       
+
           
-        $columns_list_order_report_postmeta[9]['title'] = 'Products List';
-        $columns_list_order_report_postmeta[9]['type'] = 'string';
-        $columns_list_order_report_postmeta[9]['key'] = 'Productslistexcel';
+        $columns_list_order_report_postmeta[6]['title'] = 'Total Amount';
+        $columns_list_order_report_postmeta[6]['type'] = 'num-fmt';
+        $columns_list_order_report_postmeta[6]['key'] = '_order_total';
+
+        
+        $columns_list_order_report_postmeta[7]['title'] = 'Total Amount After Discount';
+        $columns_list_order_report_postmeta[7]['type'] = 'num-fmt';    
+        $columns_list_order_report_postmeta[7]['key'] = '_total_amount_after_discount';
         
         
-        $columns_list_order_report_postmeta[10]['title'] = 'Product Details';
-        $columns_list_order_report_postmeta[10]['type'] = 'string';
-        $columns_list_order_report_postmeta[10]['key'] = 'Products';
+        $columns_list_order_report_postmeta[8]['title'] = 'Order Discount';
+        $columns_list_order_report_postmeta[8]['type'] = 'num-fmt';
+        $columns_list_order_report_postmeta[8]['key'] = '_cart_discount';
+
+        $columns_list_order_report_postmeta[9]['title'] = 'Paid Amount';
+        $columns_list_order_report_postmeta[9]['type'] = 'num-fmt';
+        $columns_list_order_report_postmeta[9]['key'] = 'paid_amount';
+
+        $columns_list_order_report_postmeta[10]['title'] = 'Balance Due';
+        $columns_list_order_report_postmeta[10]['type'] = 'num-fmt';
+        $columns_list_order_report_postmeta[10]['key'] = 'balance_due';
+        $columns_list_order_report_postmeta[11]['title'] = 'Payment Date';
+        $columns_list_order_report_postmeta[11]['type'] = 'date';
+        $columns_list_order_report_postmeta[11]['key'] = '_paid_date';
         
-        
-        
-        $columns_list_order_report_postmeta[11]['title'] = 'Level';
-        $columns_list_order_report_postmeta[11]['type'] = 'string';
-        $columns_list_order_report_postmeta[11]['key'] = 'level';
-        
-        
-        
-        $columns_list_order_report_postmeta[12]['title'] = 'Booth';
+        $columns_list_order_report_postmeta[12]['title'] = 'Product Details';
         $columns_list_order_report_postmeta[12]['type'] = 'string';
-        $columns_list_order_report_postmeta[12]['key'] = 'boothnumbers';
+        $columns_list_order_report_postmeta[12]['key'] = 'Products';
         
-        
-        
-        
-        $columns_list_order_report_postmeta[13]['title'] = 'Payment Method';
+        $columns_list_order_report_postmeta[13]['title'] = 'Number of Products ';
         $columns_list_order_report_postmeta[13]['type'] = 'string';
-        $columns_list_order_report_postmeta[13]['key'] = '_payment_method_title';
-        
-        
-        $columns_list_order_report_postmeta[14]['title'] = 'Payment Date';
-        $columns_list_order_report_postmeta[14]['type'] = 'date';
-        $columns_list_order_report_postmeta[14]['key'] = '_paid_date';
-        
-        $columns_list_order_report_postmeta[15]['title'] = 'Order Note';
+        $columns_list_order_report_postmeta[13]['key'] = 'Number of Products';
+
+
+        $columns_list_order_report_postmeta[14]['title'] = 'Products List';
+        $columns_list_order_report_postmeta[14]['type'] = 'string';
+        $columns_list_order_report_postmeta[14]['key'] = 'Productslistexcel';
+
+        $columns_list_order_report_postmeta[15]['title'] = 'Payment Method';
         $columns_list_order_report_postmeta[15]['type'] = 'string';
-        $columns_list_order_report_postmeta[15]['key'] = '_order_custome_note';
+        $columns_list_order_report_postmeta[15]['key'] = '_payment_method_title';
         
-        
-        $columns_list_order_report_postmeta[16]['title'] = 'Age';
+        $columns_list_order_report_postmeta[16]['title'] = 'Order Note';
         $columns_list_order_report_postmeta[16]['type'] = 'string';
-        $columns_list_order_report_postmeta[16]['key'] = '_product_age_calculate';
-        
-        $columns_list_order_report_postmeta[17]['title'] = 'First Name';
+        $columns_list_order_report_postmeta[16]['key'] = '_order_custome_note';
+        $columns_list_order_report_postmeta[17]['title'] = 'Account Holder Email';
         $columns_list_order_report_postmeta[17]['type'] = 'string';
-        $columns_list_order_report_postmeta[17]['key'] = '_billing_first_name';
-        
-        $columns_list_order_report_postmeta[18]['title'] = 'Last Name';
+        $columns_list_order_report_postmeta[17]['key'] = 'Account Holder Email'; 
+        $columns_list_order_report_postmeta[18]['title'] = 'Billing Company';
+        $columns_list_order_report_postmeta[18]['key'] = '_billing_company';
         $columns_list_order_report_postmeta[18]['type'] = 'string';
-        $columns_list_order_report_postmeta[18]['key'] = '_billing_last_name';
-        
-        $columns_list_order_report_postmeta[19]['title'] = 'Email';
+
+        $columns_list_order_report_postmeta[19]['title'] = 'Billing First Name';
         $columns_list_order_report_postmeta[19]['type'] = 'string';
-        $columns_list_order_report_postmeta[19]['key'] = '_billing_email';
+        $columns_list_order_report_postmeta[19]['key'] = '_billing_first_name';
         
-        
-        $columns_list_order_report_postmeta[20]['title'] = 'Phone Number';
+        $columns_list_order_report_postmeta[20]['title'] = 'Billing Last Name';
         $columns_list_order_report_postmeta[20]['type'] = 'string';
-        $columns_list_order_report_postmeta[20]['key'] = '_billing_phone';
+        $columns_list_order_report_postmeta[20]['key'] = '_billing_last_name';
         
-        
-
-
-        $columns_list_order_report_postmeta[21]['title'] = 'Order Currency';
+        $columns_list_order_report_postmeta[21]['title'] = 'Billing Email';
         $columns_list_order_report_postmeta[21]['type'] = 'string';
-        $columns_list_order_report_postmeta[21]['key'] = '_order_currency';
-
-        $columns_list_order_report_postmeta[22]['title'] = 'User IP Address';
+        $columns_list_order_report_postmeta[21]['key'] = '_billing_email';
+        $columns_list_order_report_postmeta[22]['title'] = 'Billing Phone Number';
         $columns_list_order_report_postmeta[22]['type'] = 'string';
-        $columns_list_order_report_postmeta[22]['key'] = '_customer_ip_address';
-
-
-        $columns_list_order_report_postmeta[23]['title'] = 'Address Line 1';
+        $columns_list_order_report_postmeta[22]['key'] = '_billing_phone';
+        
+        $columns_list_order_report_postmeta[23]['title'] = 'Billing Address Line 1';
         $columns_list_order_report_postmeta[23]['key'] = '_billing_address_1';
         $columns_list_order_report_postmeta[23]['type'] = 'string';
 
-        $columns_list_order_report_postmeta[24]['title'] = 'Address Line 2';
+        $columns_list_order_report_postmeta[24]['title'] = 'Billing Address Line 2';
         $columns_list_order_report_postmeta[24]['key'] = '_billing_address_2';
         $columns_list_order_report_postmeta[24]['type'] = 'string';
-
-        $columns_list_order_report_postmeta[25]['title'] = 'Zipcode';
-        $columns_list_order_report_postmeta[25]['key'] = '_billing_postcode';
+          
+        
+        
+        
+        
+        $columns_list_order_report_postmeta[25]['title'] = 'Billing City';
+        $columns_list_order_report_postmeta[25]['key'] = '_billing_city';
         $columns_list_order_report_postmeta[25]['type'] = 'string';
-
-        $columns_list_order_report_postmeta[26]['title'] = 'City';
-        $columns_list_order_report_postmeta[26]['key'] = '_billing_city';
+        
+        
+        $columns_list_order_report_postmeta[26]['title'] = 'Billing Post Code / ZIP';
+        $columns_list_order_report_postmeta[26]['key'] = '_billing_postcode';
         $columns_list_order_report_postmeta[26]['type'] = 'string';
 
-        $columns_list_order_report_postmeta[27]['title'] = 'State';
-        $columns_list_order_report_postmeta[27]['key'] = '_billing_state';
+
+        $columns_list_order_report_postmeta[27]['title'] = 'Billing Country / Region';
+        $columns_list_order_report_postmeta[27]['key'] = '_billing_country';
         $columns_list_order_report_postmeta[27]['type'] = 'string';
-
-        $columns_list_order_report_postmeta[28]['title'] = 'Country';
-        $columns_list_order_report_postmeta[28]['key'] = '_billing_country';
+        
+        $columns_list_order_report_postmeta[28]['title'] = 'Billing State / County';
+        $columns_list_order_report_postmeta[28]['key'] = '_billing_state';
         $columns_list_order_report_postmeta[28]['type'] = 'string';
-           
-        $columns_list_order_report_postmeta[29]['title'] = 'Billing Company';
-        $columns_list_order_report_postmeta[29]['key'] = '_billing_company';
+        
+      
+      
+        $columns_list_order_report_postmeta[29]['title'] = 'Level';
         $columns_list_order_report_postmeta[29]['type'] = 'string';
+        $columns_list_order_report_postmeta[29]['key'] = 'level';
+        
+        $columns_list_order_report_postmeta[30]['title'] = 'Booth';
+        $columns_list_order_report_postmeta[30]['type'] = 'string';
+        $columns_list_order_report_postmeta[30]['key'] = 'boothnumbers';
 
-        $columns_list_order_report_postmeta[30]['title'] = 'Stripe Fee';
-        $columns_list_order_report_postmeta[30]['type'] = 'num-fmt';
-        $columns_list_order_report_postmeta[30]['key'] = '_stripe_fee';
-
-        $columns_list_order_report_postmeta[31]['title'] = 'Net Revenue From Stripe';
-        $columns_list_order_report_postmeta[31]['type'] = 'num-fmt';
-        $columns_list_order_report_postmeta[31]['key'] = '_stripe_net';
-
-        $columns_list_order_report_postmeta[32]['title'] = 'Order ID';
+        $columns_list_order_report_postmeta[31]['title'] = 'User IP Address';
+        $columns_list_order_report_postmeta[31]['type'] = 'string';
+        $columns_list_order_report_postmeta[31]['key'] = '_customer_ip_address';
+        
+        
+        $columns_list_order_report_postmeta[32]['title'] = 'Order Currency';
         $columns_list_order_report_postmeta[32]['type'] = 'string';
-        $columns_list_order_report_postmeta[32]['key'] = 'ID';
+        $columns_list_order_report_postmeta[32]['key'] = '_order_currency';
         
-        
-        $columns_list_order_report_postmeta[33]['title'] = 'Initial Order ID';
-        $columns_list_order_report_postmeta[33]['type'] = 'string';
-        $columns_list_order_report_postmeta[33]['key'] = '_initial_payment_order_id';
+        $columns_list_order_report_postmeta[33]['title'] = 'Stripe Fee';
+        $columns_list_order_report_postmeta[33]['type'] = 'num-fmt';
+        $columns_list_order_report_postmeta[33]['key'] = '_stripe_fee';
+
+   
+        $columns_list_order_report_postmeta[34]['title'] = 'Net Revenue From Stripe';
+        $columns_list_order_report_postmeta[34]['type'] = 'num-fmt';
+        $columns_list_order_report_postmeta[34]['key'] = '_stripe_net';
+
         
 
-        $columns_list_order_report_postmeta[34]['title'] = 'Transaction ID';
-        $columns_list_order_report_postmeta[34]['type'] = 'string';
-        $columns_list_order_report_postmeta[34]['key'] = '_transaction_id';
-
-        
-
-        $columns_list_order_report_postmeta[35]['title'] = 'Account Holder Email';
+        $columns_list_order_report_postmeta[35]['title'] = 'Transaction ID';
         $columns_list_order_report_postmeta[35]['type'] = 'string';
-        $columns_list_order_report_postmeta[35]['key'] = 'Account Holder Email';
+        $columns_list_order_report_postmeta[35]['key'] = '_transaction_id';
 
+        
+
+       
+        $columns_list_order_report_postmeta[36]['title'] = 'Discount Code';
+        $columns_list_order_report_postmeta[36]['type'] = 'string';
+        $columns_list_order_report_postmeta[36]['key'] = 'discount_code';
+            
+       
+        
+        
+        
+    
+        
+        
+        
+
+
+        
+        
+      
+      
+        
+
+     
+
+       
+     
+           
+ 
+  // $columns_list_order_report_postmeta[18]['title'] = 'Age';
+        // $columns_list_order_report_postmeta[18]['type'] = 'string';
+        // $columns_list_order_report_postmeta[18]['key'] = '_product_age_calculate';
+
+        
         
         // $columns_list_order_report_postmeta[36]['title'] = 'First Payment';
         // $columns_list_order_report_postmeta[36]['type'] = 'num-fmt';
@@ -1037,13 +1145,7 @@ function loadorderreport() {
         // $columns_list_order_report_postmeta[37]['type'] = 'num-fmt';
         // $columns_list_order_report_postmeta[37]['key'] = 'second_payment';
 
-        $columns_list_order_report_postmeta[38]['title'] = 'Discount Code';
-        $columns_list_order_report_postmeta[38]['type'] = 'string';
-        $columns_list_order_report_postmeta[38]['key'] = 'discount_code';
-
-        $columns_list_order_report_postmeta[39]['title'] = 'Number of Products ';
-        $columns_list_order_report_postmeta[39]['type'] = 'string';
-        $columns_list_order_report_postmeta[39]['key'] = 'Number of Products';
+       
 
         
         
@@ -1110,26 +1212,27 @@ function loadorderreport() {
                 $custom_field = wc_get_order_item_meta( $item_id, '_remaining_balance_order_id', true );   
             }
             
-            $user_id = get_post_meta( $header_array['ID'], '_customer_user', true );
+            //$user_id = get_post_meta( $header_array['ID'], '_customer_user', true );
             $user_data = get_userdata($user_id);
             //echo $user_data->roles[0].'__________';exit;
             
             $demo = new FloorPlanManager();
             $AllBoothsList = $demo->getAllbooths();
             $thisBoothNumber ="";
+            $user_id = $order->get_user_id();
             if(!empty($AllBoothsList)){
             
-            foreach ($AllBoothsList as $boothIndex=>$boothValue ){
-                
-                if($boothValue['bootheOwnerID'] == $user_id){
+                foreach ($AllBoothsList as $boothIndex=>$boothValue ){
                     
+                    if($boothValue['bootheOwnerID'] == $user_id){
+                        
+                        
+                        $thisBoothNumber .= $boothValue['boothNumber'].',';
+                        
+                    }
                     
-                    $thisBoothNumber .= $boothValue['boothNumber'].',';
                     
                 }
-                
-                
-            }
             }else{
                 $thisBoothNumber = "";
             }
@@ -1148,22 +1251,38 @@ function loadorderreport() {
             
             $total_price = $order->get_total();
             $order_items = $order->get_items();
+
+            // if($header_array['ID']==25091)
+            // {
+            //     echo "<pre>";
+            //     print_r($order_items);
+            //     if(!empty($order_items))
+            //     {
+            //         echo 'aaa';
+            //     }
+            //     exit;
+            // }
+            
             foreach ($order_items as $item_id => $item) {
 
                 $product = wc_get_product($item['product_id']);
                 $price= $product->price;
                 $subtotal = $item["subtotal"];
                 $total = $item["total"];
-                $disc = $subtotal - $total;
                 $item_quantity = $order->get_item_meta($item_id, '_qty', true);
+                if($subtotal== 0 || $total==0)
+                {
+                    $price=0;
+                }
                 $item_total =$item_total+($item_quantity*$price) ;
                 $item_totals += $subtotal;
                 $total_prices = $order->get_total();
+                $custom_field = wc_get_order_item_meta( $item_id, '_remaining_balance_order_id', true );
                 $total__refunded_prices = $order->get_total_refunded();
                 $total_pricess = $order->get_formatted_order_total();
-               $total_pricess=$total_prices-$total__refunded_prices;
+                $total_pricess=$total_prices-$total__refunded_prices;
             }
-            $item_total=number_format((float)$item_total, 2, '.', '');
+            // $item_total=number_format($item_total, 2, ',', '');
             $discount_code='';
             foreach ($order->get_coupon_codes() as $coupon_code) {
           
@@ -1181,12 +1300,12 @@ function loadorderreport() {
 
                     $editOrder = site_url()."/manage-order/?orderid=".$orderID;
 
-                    if($header_array['post_status'] !="wc-completed" && $header_array['post_status'] !="wc-partial-payment"){
+                    if($header_array['post_status'] !="wc-completed" && $header_array['post_status'] !="wc-partial-payment" && $header_array['post_status'] !="wc-refunded"){
                         
                         
                         if($header_array['post_status'] == "wc-cancelled"){
                         
-                            $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 217px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a href="'.$editOrder.'" target="_blank"  name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><i style="color:#e5e6e8" title="Cancel Order" class="hi-icon fusion-li-icon fa fa-times-circle" ></i><a onclick="updatecurrentordernotes('.$orderID.')"  name="order-notes" data-toggle="tooltip"  title="Add Note" ><i class="hi-icon fusion-li-icon fa fa-clipboard" ></i></a><a href="'.$revieworderinvoice.'" target="_blank"  name="View Order Invoice" data-toggle="tooltip"  title="View Order Invoice" ><i class="hi-icon fusion-li-icon fa fa-file-text-o" ></i></a></div>';
+                            $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 128px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><a href="'.$editOrder.'"   name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a></div>';
                     
                         }else{
                             if(!empty($actions))
@@ -1198,17 +1317,17 @@ function loadorderreport() {
                                         // echo $action['name'];
                                         // echo '';
     
-                                        $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 217px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><a href="'.$editOrder.'" target="_blank"  name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a href="'.$action['url'].'"  target="_blank" title="Pay Order Invoice" ><i class="hi-icon fusion-li-icon fa fa-eye"></i></a><a onclick="markorderstatuscancel('.$orderID.')"  name="cancel-order" data-toggle="tooltip"  title="Cancel Order" ><i class="hi-icon fusion-li-icon fa fa-times-circle" ></i></a><a onclick="updatecurrentordernotes('.$orderID.')"  name="order-notes" data-toggle="tooltip"  title="Add Note" ><i class="hi-icon fusion-li-icon fa fa-clipboard" ></i></a><a href="'.$revieworderinvoice.'" target="_blank"  name="View Order Invoice" data-toggle="tooltip"  title="View Order Invoice" ><i class="hi-icon fusion-li-icon fa fa-file-text-o" ></i></a></div>';
+                                        $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 128px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><a href="'.$editOrder.'"   name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a href="'.$action['url'].'"  target="_blank" title="Pay Order Invoice" ><i class="hi-icon fusion-li-icon fa fa-eye"></i></a></div>';
                                         break;
                                     }else{
     
-                                        $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 217px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><a href="'.$editOrder.'" target="_blank"  name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a style="color:#e5e6e8"    title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a><a onclick="markorderstatuscancel('.$orderID.')"  name="cancel-order" data-toggle="tooltip"  title="Cancel Order" ><i class="hi-icon fusion-li-icon fa fa-times-circle" ></i></a><a onclick="updatecurrentordernotes('.$orderID.')"  name="order-notes" data-toggle="tooltip"  title="Add Note" ><i class="hi-icon fusion-li-icon fa fa-clipboard" ></i></a><a href="'.$revieworderinvoice.'" target="_blank"  name="View Order Invoice" data-toggle="tooltip"  title="View Order Invoice" ><i class="hi-icon fusion-li-icon fa fa-file-text-o" ></i></a></div>';
+                                        $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 128px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><a href="'.$editOrder.'"   name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a style="color:#e5e6e8"    title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a></div>';
                                     }
                                 }
 
                             }else{
 
-                                $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 217px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><a href="'.$editOrder.'" target="_blank"  name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a style="color:#e5e6e8"    title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a><a onclick="markorderstatuscancel('.$orderID.')"  name="cancel-order" data-toggle="tooltip"  title="Cancel Order" ><i class="hi-icon fusion-li-icon fa fa-times-circle" ></i></a><a onclick="updatecurrentordernotes('.$orderID.')"  name="order-notes" data-toggle="tooltip"  title="Add Note" ><i class="hi-icon fusion-li-icon fa fa-clipboard" ></i></a><a href="'.$revieworderinvoice.'" target="_blank"  name="View Order Invoice" data-toggle="tooltip"  title="View Order Invoice" ><i class="hi-icon fusion-li-icon fa fa-file-text-o" ></i></a></div>';
+                                $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 128px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><a onclick="markorderstatuscompleted('.$orderID.')"  data-toggle="tooltip" title="Complete Order"><i  class="hi-icon fusion-li-icon fa fa-check-circle" ></i></a><a href="'.$editOrder.'"   name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a style="color:#e5e6e8"    title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a></div>';
                             }
                             
                         
@@ -1218,41 +1337,28 @@ function loadorderreport() {
                         
                     }else{
                         
-                        $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 217px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><i  style="color:#e5e6e8" title="Complete Order" class="hi-icon fusion-li-icon fa fa-check-circle"></i><a href="'.$editOrder.'" target="_blank"  name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a style="color:#e5e6e8"    title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a><a onclick="markorderstatuscancel('.$orderID.')"  name="cancel-order" data-toggle="tooltip"  title="Cancel Order" ><i class="hi-icon fusion-li-icon fa fa-times-circle" ></i></a><a onclick="updatecurrentordernotes('.$orderID.')"  name="order-notes" data-toggle="tooltip"  title="Add Note" ><i class="hi-icon fusion-li-icon fa fa-clipboard" ></i></a><a href="'.$revieworderinvoice.'" target="_blank"  name="View Order Invoice" data-toggle="tooltip"  title="View Order Invoice" ><i class="hi-icon fusion-li-icon fa fa-file-text-o" ></i></a></div>';
-                    
+                        if($header_array['post_status'] == "wc-refunded"){
+                            $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 128px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><i  style="color:#e5e6e8" title="Complete Order" class="hi-icon fusion-li-icon fa fa-check-circle"></i><a href="'.$editOrder.'"   name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a style="color:#e5e6e8"    title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a></div>';
+
+
+                        }else{
+
+                            $column_row[$columns_list_order_report[$col_keys_index]['title']] = '<div style="width: 128px !important;"class = "hi-icon-wrap hi-icon-effect-1 hi-icon-effect-1a"><i  style="color:#e5e6e8" title="Complete Order" class="hi-icon fusion-li-icon fa fa-check-circle"></i><a href="'.$editOrder.'"  name="edit-order" data-toggle="tooltip"  title="Edit Order" ><i class="hi-icon fusion-li-icon fa fa-pencil-square" ></i></a><a style="color:#e5e6e8"    title="Pay Order Invoice" ><i style="color:#e5e6e8"  class="hi-icon fusion-li-icon fa fa-eye"></i></a></div>';
+                        }                    
                     }
                    
                 }else if ($columns_list_order_report[$col_keys_index]['key'] == 'post_date') {
 
                     if (!empty($header_array[$columns_list_order_report[$col_keys_index]['key']])) {
-                        $time = strtotime($header_array[$columns_list_order_report[$col_keys_index]['key']]);
-                        $newformat = $time * 1000; // date('d-M-Y  H:i:s', $time);
+                        $time = ($header_array[$columns_list_order_report[$col_keys_index]['key']]);
+                        // $newformat = $time * 1000; // date('d-M-Y  H:i:s', $time);
+                        $newformat=date("F j, Y, g:i A",strtotime( $time));
                     } else {
                         $newformat = '';
                     }
                     $column_row[$columns_list_order_report[$col_keys_index]['title']] = $newformat;
                     // echo '<pre>';
                     //print_r($column_row);exit;
-                }else if ($columns_list_order_report[$col_keys_index]['key'] == 'post_status') {
-                        
-                    
-                    if(esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report[$col_keys_index]['key']])) == 'Partially Paid'){
-                        
-                        
-                        $column_row[$columns_list_order_report[$col_keys_index]['title']] =  'Initial Deposit Completed';//esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report[$col_keys_index]['key']]));
-                 
-                        
-                    }else if(esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report[$col_keys_index]['key']])) == 'Pending Deposit Payment'){
-                        
-                        $remaningAmount = round($post_meta['_order_total'][0]);
-                        $column_row[$columns_list_order_report[$col_keys_index]['title']] =  'Balance Due';//esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report[$col_keys_index]['key']]));
-                       
-                    }else{
-                        
-                        $column_row[$columns_list_order_report[$col_keys_index]['title']] =  esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report[$col_keys_index]['key']]));
-                        
-                    }
-                    
                 }else if ($columns_list_order_report[$col_keys_index]['key'] == '_initial_payment_order_id') {
                         
                      
@@ -1303,11 +1409,40 @@ function loadorderreport() {
                     
                     $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = (int)$header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']];
                     
+                }else if ($columns_list_order_report_postmeta[$col_keys_index]['key'] == 'post_status') {
+                        
+                    
+                    if(esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']])) == 'Partially Paid'){
+                        
+                        
+                        $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =  'Initial Deposit Paid';//esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']]));
+                 
+                        
+                    }else if(esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']])) == 'Pending Deposit Payment'){
+                        
+                        $remaningAmount = round($post_meta['_order_total'][0]);
+                        $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =  'Balance Due';//esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']]));
+                       
+                    }else if(esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']])) == 'Completed'){
+                        
+                        $remaningAmount = round($post_meta['_order_total'][0]);
+                        $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =  'Paid in Full';//esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']]));
+                       
+                    }
+                    else{
+                        
+                        $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =  esc_html( wc_get_order_status_name( $header_array[$columns_list_order_report_postmeta[$col_keys_index]['key']]));
+                        
+                    }
+                    
                 }else if ($columns_list_order_report_postmeta[$col_keys_index]['key'] == '_paid_date') {
 
                     if (!empty($post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0])) {
-                        $time = strtotime($post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0]);
-                        $newformat = $time * 1000; //date('d-M-Y H:i:s', $time);
+                        // $time = strtotime($post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0]);
+                        // $newformat = $time * 1000; //date('d-M-Y H:i:s', $time);
+                        $time = ($post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0]);
+                        // $newformat = $time * 1000; // date('d-M-Y  H:i:s', $time);
+                        $newformat=date("F j, Y, g:i A",strtotime( $time));
                     } else {
                         $newformat = '';
                     }
@@ -1335,7 +1470,7 @@ function loadorderreport() {
                         #a=$item_total
                        
                         $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =$totalAmountOrder;
-                    }else if(wc_get_order_status_name( $header_array['post_status']) == 'Pending Deposit Payment')
+                    }else if(wc_get_order_status_name( $header_array['post_status']) == 'Pending Deposit Payment' ||( $header_array['post_status']) == 'wc-pending')
                     {
                         $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = 0;
                     }else{
@@ -1343,22 +1478,37 @@ function loadorderreport() {
                         $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $totalAmountOrder;
                     }               
                 }else if($columns_list_order_report_postmeta[$col_keys_index]['key']=='balance_due') {
-                    
+                     
+
                     $totalAmountOrder = round($post_meta['_order_total'][0]);  
                     $it=$item_total- $totalAmountOrder;
+                    // if($header_array['ID']==25091)
+                    // {
+                    //     echo $totalAmountOrder;
+                    //     echo '------';
+                    //     echo $it;
+                    // }
+                    
                     if(wc_get_order_status_name( $header_array['post_status']) == 'Partially Paid')
                     {
                         #a=$item_total
                         $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $it;
-                    }else if(wc_get_order_status_name( $header_array['post_status']) == 'Pending Deposit Payment')
+                    }else if(wc_get_order_status_name( $header_array['post_status']) == 'Pending Deposit Payment' || ( $header_array['post_status']) == 'wc-pending')
                     { 
                         
-                        
-                        $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $it;
+                        if(!empty($custom_field))
+                        {
+                            
+                            
+                            $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $total_pricess;
+                        }else{
+                            $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $totalAmountOrder;
+                        }
                     }else{
                         
                         $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = 0;
                     }
+                   
 
                 }else {
                     if ($columns_list_order_report_postmeta[$col_keys_index]['type'] == 'num' || $columns_list_order_report_postmeta[$col_keys_index]['type'] == 'num-fmt') {
@@ -1393,14 +1543,62 @@ function loadorderreport() {
                             
                         }else if ($columns_list_order_report_postmeta[$col_keys_index]['key'] == '_order_total' ) {
                             
-                            
-                            $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = '$'.$item_total ;
-                            $totalAmountOrder = round($post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0]);                    
-                         }else if($columns_list_order_report_postmeta[$col_keys_index]['title'] == 'Total Amount After Discount'){
-                              
+                            $totalAmountOrder = round($post_meta['_order_total'][0]); 
+                            $cart_discount = $post_meta['_cart_discount'][0];
+                            $totalAmountOrder+=$cart_discount;
+                          if( (wc_get_order_status_name( $header_array['post_status']) == 'Pending Deposit Payment' || ( $header_array['post_status']) == 'wc-pending') && (empty($custom_field))){
+                                
+                                //  $newamount=$total_pricess +$totalAmountOrder;
+                                //  $it=$item_total- $totalAmountOrder;
+                                if(!empty($order_items))
+                                {
+                                  
+                                    $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $totalAmountOrder;
+                                }else{
+                                    $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =   $totalAmountOrder;
+
+                                }
+                                
+                            }else if(!empty($custom_field)){
+                                $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =   $totalAmountOrder;
+                                // $totalAmountOrder = round($post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0]);                    
+                                
+                            }else if(wc_get_order_status_name( $header_array['post_status']) == 'Partially Paid'){
+                                #a=$item_total
+                                $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $item_total;
+                            }else{
+                                
+                                // $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =   $item_total;
+                                if(!empty($order_items))
+                                {
+                                  
+                                    $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =$totalAmountOrder;
+                                }else{
+                                    $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =   $totalAmountOrder;
+
+                                }
+                                
+                            }
+                        }else if($columns_list_order_report_postmeta[$col_keys_index]['title'] == 'Total Amount After Discount'){
+
+                                 $totalAmountOrder = round($post_meta['_order_total'][0]); 
+                                // $cart_discount = $post_meta['_cart_discount'][0];
+                                // $totalAmountOrder+=$cart_discount;
                                 $cart_discount = $post_meta['_cart_discount'][0];
-                                $amt_after_disc=$item_total-$cart_discount;                            
-                               $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $amt_after_disc;
+                                $amt_after_disc= $totalAmountOrder-$cart_discount;                            
+                                $totalAmountOrder = round($post_meta['_order_total'][0]); 
+                            //    if(!empty($custom_field)){
+                            //     $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $totalAmountOrder;
+                            //     // $totalAmountOrder = round($post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0]);                    
+                                
+                            // }else{
+                                if(wc_get_order_status_name( $header_array['post_status']) == 'Partially Paid'){
+                                    #a=$item_total
+                                    $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = $item_total;
+                                }else{
+                                
+                                $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] =  $totalAmountOrder;
+                            }
                          }else if ($columns_list_order_report_postmeta[$col_keys_index]['key'] == 'Second Payment' ) {
 
                             $column_row[$columns_list_order_report_postmeta[$col_keys_index]['title']] = '$'. $total_price ;
@@ -1456,12 +1654,32 @@ function loadorderreport() {
             $counter=0;
             foreach ($products as $single_product => $productname) {
                 
+                $terms = get_the_terms( $productname->Pid, 'product_cat' );
                 // echo '<pre>';
-                // print_r($productname);
-                // exit;
+                // print_r($terms);
+                $cat='Uncategorized';
+                if($terms)
+                {
+                    $cat= $terms[0]->name;
+                    
+                }
+                if($cat=='Uncategorized'){
+                    $boothAvailability=$demo->checkBoothAvailability($productname->Pid);
+                    if($boothAvailability=='Available')
+                    {
+                        $delete="";
+                    }else{
+                        $delete="(Deleted)";
+                    }
+                    $cat='Booth';
+                     
+                }
+                $products = get_posts( $argsb );
                 $counter++;
-                $order_productsnames.= $productname->order_item_name.' (x'.$productname->Qty.'),';
+                $order_productsnames .= $cat . '-' . $productname->order_item_name . $delete . ',';
+                $delete="";
             }
+            // exit;
             //$column_row['Products List'] = $order_productsnames;
             $column_row['Products List'] = rtrim($order_productsnames,",");
             $column_row['Product Details'] = '<a style="cursor: pointer;" onclick="getOrderproductdetail('.$header_array['ID'].','.$remaningAmount.')">Product Details</a>';//$order_productsnames;
@@ -1470,6 +1688,7 @@ function loadorderreport() {
             // print_r($column_row);
             // exit;
             array_push($columns_rows_data, $column_row);
+            $thisBoothNumber=null;
         }
 
         $orderreport_all_col_rows_data['columns'] = $columns_headers;
@@ -1489,13 +1708,16 @@ function loadorderreport() {
 }
 
 function manageproducts() {
-
     require_once('../../../wp-load.php');
     require_once('temp/lib/woocommerce-api.php');
     
     try {
 
         global $wpdb;
+        global $wp_roles;
+      
+       
+        $all_roles = $wp_roles->roles;
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
         $site_url  = get_site_url();
@@ -1516,6 +1738,7 @@ function manageproducts() {
         $all_products= $woocommerce_object->products->get( '', ['filter[limit]' => -1,'filter[post_status]' => 'any']);
         global $wp_roles;
         $get_all_roles = $wp_roles->roles;
+      
        // $get_all_roles = get_option($get_all_roles_array);
         
        // echo '<pre>';
@@ -1535,7 +1758,7 @@ function manageproducts() {
 //        $columns_list_order_report[0]['type'] = 'string';
 //        $columns_list_order_report[0]['key'] = 'ID';
 
-        $columns_list_order_report[0]['title'] = 'Name';
+        $columns_list_order_report[0]['title'] = 'Label';
         $columns_list_order_report[0]['type'] = 'string';
         $columns_list_order_report[0]['key'] = 'title';
 
@@ -1544,31 +1767,40 @@ function manageproducts() {
         $columns_list_order_report[1]['title'] = 'Category';
         $columns_list_order_report[1]['type'] = 'string';
         $columns_list_order_report[1]['key'] = 'product_category';
-        
 
-        $columns_list_order_report[2]['title'] = 'Stock';
+        $columns_list_order_report[2]['title'] = 'Level Assignment';
         $columns_list_order_report[2]['type'] = 'string';
-        $columns_list_order_report[2]['key'] = 'in_stock';
-
+        $columns_list_order_report[2]['key'] = 'productlevel';
+        
+        
         $columns_list_order_report[3]['title'] = 'Price';
         $columns_list_order_report[3]['type'] = 'num';
         $columns_list_order_report[3]['key'] = 'price';
-        
-        $columns_list_order_report[4]['title'] = 'Total Sales';
+     
+        $columns_list_order_report[4]['title'] = 'Stock Status';
         $columns_list_order_report[4]['type'] = 'string';
-        $columns_list_order_report[4]['key'] = 'total_sales';
-        
-        $columns_list_order_report[5]['title'] = 'Status';
+        $columns_list_order_report[4]['key'] = 'in_stock';
+
+        $columns_list_order_report[5]['title'] = 'Stock Quantity';
         $columns_list_order_report[5]['type'] = 'string';
-        $columns_list_order_report[5]['key'] = 'status';
+        $columns_list_order_report[5]['key'] = 'stock_quantity';
+
+        
+        $columns_list_order_report[6]['title'] = 'Total Sales';
+        $columns_list_order_report[6]['type'] = 'string';
+        $columns_list_order_report[6]['key'] = 'total_sales';
+        
+        $columns_list_order_report[7]['title'] = 'Status';
+        $columns_list_order_report[7]['type'] = 'string';
+        $columns_list_order_report[7]['key'] = 'status';
         
 //        $columns_list_order_report[6]['title'] = 'Assign Level';
 //        $columns_list_order_report[6]['type'] = 'string';
 //        $columns_list_order_report[6]['key'] = 'tax_class';
         
-       $columns_list_order_report[6]['title'] = 'Publish Date';
-        $columns_list_order_report[6]['type'] = 'date';
-        $columns_list_order_report[6]['key'] = 'created_at';
+        $columns_list_order_report[8]['title'] = 'Publish Date';
+        $columns_list_order_report[8]['type'] = 'date';
+        $columns_list_order_report[8]['key'] = 'created_at';
 
 
         $colums_array_data['title'] = 'Action';
@@ -1592,7 +1824,9 @@ function manageproducts() {
 
         foreach ($all_products->products as $single_product) {
 
-           
+          
+
+            $stock_quantity = get_post_meta($single_product->id, '_stock', true);
            
           if($single_product->categories[0] == "Packages" || $single_product->categories[0] == "Add-ons" || $single_product->categories[0] == "Bundles"){
             
@@ -1622,11 +1856,7 @@ function manageproducts() {
 
             foreach ($columns_list_order_report as $col_keys_index => $col_keys_title) {
                 
-                
-                
-                
-              
-                
+ 
                 $findingvaluekey = $columns_list_order_report[$col_keys_index]['key'];
                 
                 if ($columns_list_order_report[$col_keys_index]['key'] == 'tax_class') {
@@ -1650,7 +1880,18 @@ function manageproducts() {
                     
                     
                     
-                }else  if ($columns_list_order_report[$col_keys_index]['key'] == 'in_stock') {
+               
+                }else  if ($columns_list_order_report[$col_keys_index]['key'] == 'productlevel') {
+                    
+                    
+                    $get_results = get_post_meta($single_product->id, "productlevel",true);
+                    $column_row[$columns_list_order_report[$col_keys_index]['title']] =  $get_results;
+                    
+                    
+                }else  if ($columns_list_order_report[$col_keys_index]['key'] == 'stock_quantity') {
+                    $column_row[$columns_list_order_report[$col_keys_index]['title']] = $stock_quantity;
+                
+                } else  if ($columns_list_order_report[$col_keys_index]['key'] == 'in_stock') {
                        
                     if ($single_product->$findingvaluekey == '1') {
                         // echo $post_meta[$columns_list_order_report_postmeta[$col_keys_index]['key']][0].'<br>';

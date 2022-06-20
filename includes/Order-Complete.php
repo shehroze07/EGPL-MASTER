@@ -1,36 +1,99 @@
 <?php
 class orderComplete{
 
-public function create_new_partial_order($orderid){
+public function create_new_partial_order($orderid,$orderTime,$order_array){
     
     $order = wc_get_order($orderid);
     foreach( $order->get_items() as $item ) {
-
-        if ( 'line_item' === $item['type'] && ! empty( $item['is_deposit'] ) ) {
+       
+        if ( 'line_item' === $item['type'] && !empty( $item['is_deposit'] ) ) {
+            $itemData= $item['product_id'];
+            // echo '<pre>';
+            // print_r($item);
             $deposit_full_amount       = (float) $item['_deposit_full_amount_ex_tax'];
             $deposit_deposit_amount    = (float) $item['_deposit_deposit_amount_ex_tax'];
             $deposit_deferred_discount = (float) $item['_deposit_deferred_discount'];
             if ( ( $deposit_full_amount - $deposit_deposit_amount ) > $deposit_deferred_discount ) {
-                                        $productremaningProductsID[] = $item['product_id'];
-                $remmaningamount =  $deposit_full_amount - $deposit_deposit_amount;
+                $productremaningProductsID[] = $item['product_id'];
+                $wc_deposit_type = get_post_meta($itemData, '_wc_deposit_type', true);   
+                $wc_amount = get_post_meta($itemData, '_price', true);
+                if( $wc_deposit_type =='fixed')
+                {
+                    $remmaningamount =  $deposit_full_amount - $deposit_deposit_amount;
+                }else{
+                    $remmaningamount= ($deposit_full_amount/100)* $deposit_deposit_amount;
+                    // $remmaningamount=$wc_amount-$remmaningamount;
+                }       
             }
         }
     }
     $user_id = $order->get_user_id(); 
+    //  echo "A".$remmaningamount;
     if($remmaningamount !=0){
-    
-        $original_order = wc_get_order( $orderid );
-        $items     = false;
-        $status = "";
-            foreach ( $original_order->get_items() as $order_item_id => $order_item ) {
-                        
-                $order_item_pro_id = wc_get_order_item_meta($order_item_id, '_product_id', true);                       
-                if (in_array($order_item_pro_id, $productremaningProductsID)) {            
-                    $order_item_id_update = $order_item_id;
-                    $items[] = $order_item;
-                    $itemscheck = $order_item;
-                }                
+        $user_ID = get_current_user_id();
+        $historyName='OrderHistory';
+        $my_post = array(
+            'post_title' => $historyName,
+            'post_content' => '',
+            'post_date' => $orderTime,
+            'post_status' => 'draft',
+            'post_author' =>   $user_ID,
+            'post_type'=>'EGPL_Order_History',
+           
+        );
+
+        // Insert the post into the database.
+            $tasksID = wp_insert_post($my_post);
+            $original_order = wc_get_order( $orderid );
+            $items     = false;
+            $status = "";
+                foreach ( $original_order->get_items() as $order_item_id => $order_item ) {
+                            
+                    $order_item_pro_id = wc_get_order_item_meta($order_item_id, '_product_id', true);                       
+                    if (in_array($order_item_pro_id, $productremaningProductsID)) {            
+                        $order_item_id_update = $order_item_id;
+                        $items[] = $order_item;
+                        $itemscheck = $order_item;
+                    }                
+                }
+            $product_Array = array();
+            $status_log='Order Created';  
+            $order_array['payment_date']='';    
+            $order_array['payment_method']='';    
+            $order_array['Transaction_ID']='';  
+            // echo '<pre>';
+            // print_r($order_array["productArray"]);
+            $productArray =  $order_array["productArray"];
+            foreach ($productArray as $key => $values) { 
+
+                $itemData = $values['id'];
+                $quantity = $values['quantity'];
+                $price = $values['price'];
+                $Name = $values['Name'];
+                // echo $itemData;
+                $index =array_search($itemData,$productremaningProductsID);
+                if ($index !== false) {
+                    // echo 'False';
+                    $coupon = array(
+                        'id' =>  $itemData,
+                        'Name' =>  $Name,
+                        'quantity' =>  $quantity,
+                        'price' => $price,
+                   );
+                 
+                   array_push($product_Array, $coupon);  
+                }
+                // if(in_array($itemData, $items))
+                // $item_ids_arrays[] = $itemData;
+                
             }
+            $order_array['productArray']=$product_Array;   
+            $order_array['order_status']='wc-pending-deposit';   
+
+            update_post_meta($tasksID, 'status_log',  $status_log );
+            update_post_meta($tasksID, 'history_id', 1 );
+            update_post_meta($tasksID, 'custome_meta',$order_array );
+        
             $new_order      = wc_create_order( array(
             'status'        => $status,
             'customer_id'   => $user_id,
@@ -70,30 +133,44 @@ public function create_new_partial_order($orderid){
                         'postcode'   => $original_order->shipping_postcode,
                         'country'    => $original_order->shipping_country,
                     ), 'shipping' );
+                    $new_order->set_date_created( $orderTime );
 
                                                   // Handle items
         
                     foreach($items as $itemKey=>$itemData){
                             
+                    
                                 if ( ! $itemData || empty( $itemData['is_deposit'] ) ) {
                                     return;
                                 }
+                                // echo '<pre>';
+                                // print_r($itemData);
                                 $full_amount_excl_tax = floatval( $itemData['deposit_full_amount_ex_tax'] );
 
                                     // Next, get the initial deposit already paid, excluding tax
                                 $amount_already_paid = floatval( $itemData['deposit_deposit_amount_ex_tax'] );
                                         // Then, set the item subtotal that will be used in create order to the full amount less the amount already paid
                                 $subtotal = $full_amount_excl_tax - $amount_already_paid;
+                                // echo 'Subtotal='. $subtotal;
+                                // echo 'Amount_already_Paid='. $amount_already_paid;
+                                // echo 'Amount_Full='. $full_amount_excl_tax;
                                 
                                 if( version_compare( WC_VERSION, '3.2', '>=' ) ){
                                     // Lastly, subtract the deferred discount from the subtotal to get the total to be used to create the order
+                                   
                                     $discount_excl_tax = isset($items['deposit_deferred_discount_ex_tax']) ? floatval( $items['deposit_deferred_discount_ex_tax'] ) : 0;
                                     $total = $subtotal - $discount_excl_tax;
                                 } else {
+                                  
                                     $discount = floatval( $items['deposit_deferred_discount'] );
                                     $total = empty( $discount ) ? $subtotal : $subtotal - $discount;
                                 }
                             
+                                // echo 'Amount_already_Paid='. $amount_already_paid;
+                                // echo 'Amount_Full='. $full_amount_excl_tax;
+                                //   echo 'Subtotal='. $subtotal;
+                                //   echo 'Total='. $total;
+                                
                             
                                     $item = array(
                                     'product'   => $original_order->get_product_from_item( $itemData ),
@@ -141,7 +218,10 @@ public function create_new_partial_order($orderid){
                         }
                     }
                     $new_order_ID =  $new_order->id;
+                   
+                   
                 }
+                update_post_meta($tasksID, 'order_id',   $new_order_ID);
         
     }
     // die();
@@ -204,6 +284,8 @@ public function updateuser_role_on_purches($order,$porduct_ids_array,$customer_i
 
                 if (count($porduct_ids_array) > 0) {
                     $getpackagelevel = [];
+                    $order_data = $orders->get_data();
+                    $order_status = $order_data['status'];
                     foreach ($porduct_ids_array as $item=>$ids) {
                        
                         $productID =  $ids;
@@ -221,10 +303,16 @@ public function updateuser_role_on_purches($order,$porduct_ids_array,$customer_i
                             }
 
                             $total_sales=get_post_meta($productID, 'total_sales', true);
+                            //  echo 'SalesBefore='. $total_sales;
+                            // echo 'StockBefore='. $stock;
                             $total_sales=$total_sales +$item_quantity;
-                            update_post_meta($productID,'total_sales',$total_sales);
                             $new_stock= $stock-$item_quantity;
-                            update_post_meta($productID, '_stock', $new_stock);
+                            if( $order_status=='partial-payment' ||  $order_status=='pending-deposit')
+                            {
+                                update_post_meta($productID,'total_sales',$total_sales);
+                                update_post_meta($productID, '_stock', $new_stock);
+
+                            }
                             if($new_stock==0)
                             {
                                 update_post_meta( $productID, '_stock_status', wc_clean( $out_of_stock_staus ) );

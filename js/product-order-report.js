@@ -116,128 +116,35 @@ jQuery(document).ready(function () {
               type: columsheader[key].type,
               render: function (data) {
                 if (data !== null && data !== "") {
-                  var javascriptDate = new Date(data);
-                  javascriptDate =
-                    months[javascriptDate.getMonth()] +
-                    " " +
-                    javascriptDate.getDate() +
-                    " " +
-                    javascriptDate.getFullYear();
-                  return javascriptDate;
+                  console.log(data);
+                  // var curdate = new Date();
+                  // var usertimezone = curdate.getTimezoneOffset() / 60;
+                  // var javascriptDate = new Date(data);
+                  // javascriptDate =
+                  //   months[javascriptDate.getMonth()] +
+                  //   " " +
+                  //   javascriptDate.getDate() +
+                  //   "," +
+                  //   javascriptDate.getFullYear() +
+                  //   " " +
+                  //   "@ " +
+                  //   javascriptDate.getHours() +
+                  //   ":" +
+                  //   javascriptDate.getMinutes();
+
+                  return data;
                 } else {
                   return "";
                 }
               },
             });
-            jQuery('#orderreportcolumns').select2();
-            if (data != '') {
-                jQuery('body').css('cursor', 'default');
-                ordertablereport = jQuery('#orderreport');
-                ordertablereport.dataTable({
-                    order: [[ 1, "desc" ]],
-                    data: rowsdata,
-                    columns: columnsheaderarrayfortable,
-                    "columnDefs": [
-                        { "class": "noExport noclick", "targets": 0 },
-                        { "type": "date", "targets": 1 },
-                        { "class": "noExport", "targets": 6 },
-                        
-                        { "type": "num", "targets": 25 }
-                        
-                    ],
-                    dom: 'fBrlpt',
-                    initComplete: function () {
-                            this.api().columns().every( function () {
-                                var column = this;
-                               
-                                jQuery('.dataTables_filter input').on( 'keyup click', function () {
-                                     var searchTerm = this.value.toLowerCase();
-                                     regex = '\\b' + searchTerm + '\\b';
-                                    //  ordertablereport.api().search(regex, true, false).draw();
-                                } );   
-                            });
-                    },
-                    
-                    search: {
-                        "smart": false
-                    },
-                    buttons: [
-                        {
-                            extend: 'excelHtml5',
-                            title: 'orderreport_' + jQuery.now(),
-                            exportOptions: {
-                                columns: "thead th:not(.noExport)",
-                                format: {
-                                body: function ( rowsdata, row, column, node ) {
-                                    
-                                    var href = jQuery('<div>').append(rowsdata).find('a:first').attr('href');
-                                        if(href !== undefined){
-                                            rowsdata = href;
-                                        }
-                                        return  rowsdata;
-                                    }
-                                }
-                            },
-                        },
-                        {
-                            extend: 'csvHtml5',
-                            title: 'orderreport_' + jQuery.now(),
-                            exportOptions: {
-                                columns: "thead th:not(.noExport)",
-                                format: {
-                                body: function ( rowsdata, row, column, node ) {
-                                    
-                                    var href = jQuery('<div>').append(rowsdata).find('a:first').attr('href');
-                                        if(href !== undefined){
-                                            rowsdata = href;
-                                        }
-                                        return  rowsdata;
-                                    }
-                                }
-                            },
-                        },
-                        
-                        {
-                            extend: 'print',
-                             title: 'orderreport_' + jQuery.now(),
-                            
-                            
-                            exportOptions: {
-                                columns: "thead th:not(.noExport)",
-                                format: {
-                                body: function ( rowsdata, row, column, node ) {
-                                    
-                                    var href = jQuery('<div>').append(rowsdata).find('a:first').attr('href');
-                                        if(href !== undefined){
-                                            rowsdata = href;
-                                        }
-                                        return  rowsdata;
-                                    }
-                                }
-                            },
-                        }
-                    ]
-
-                });
-
-                jQuery('#filteredordercount').empty();
-                var filterrowscount = ordertablereport.api().rows({filter: 'applied'});
-                jQuery('#filteredordercount').append(filterrowscount[0].length);
-                jQuery('#builder').queryBuilder('setRules', JSON.parse('{"condition":"AND","rules":[],"valid":true}'));
-                if (orderreportstatusloading != undefined) {
-                    
-                   
-                    
-                    jQuery("body").css({'cursor': 'wait'});
-                    loadorderreport(decodeURIComponent(orderreportstatusloading));
-                    jQuery("#loadorderreport option:selected").prop("selected", false);
-                    jQuery('#loadorderreport').val(decodeURIComponent(orderreportstatusloading));  
-                    getapplyfiltersonordereport();
-                    
-                }
-
-            }
-
+          } else {
+            columnsheaderarrayfortable.push({
+              title: columsheader[key].title,
+              data: columsheader[key].title,
+              type: columsheader[key].type,
+            });
+          }
         }
       });
       jQuery.each(columsheader, function (key, value) {
@@ -304,7 +211,7 @@ jQuery(document).ready(function () {
         }
         if (
           columsheader[key].title == "Order ID" ||
-          columsheader[key].title == "Order Date" ||
+          columsheader[key].title == "Created Date" ||
           columsheader[key].title == "Order Status" ||
           columsheader[key].title == "Email" ||
           columsheader[key].title == "Company Name" ||
@@ -332,13 +239,15 @@ jQuery(document).ready(function () {
       if (data != "") {
         jQuery("body").css("cursor", "default");
         ordertablereport = jQuery("#orderreport");
-        ordertablereport.dataTable({
+        ordertablereport.DataTable({
           order: [[1, "desc"]],
           data: rowsdata,
           columns: columnsheaderarrayfortable,
           columnDefs: [
             { class: "noExport noclick", targets: 0 },
             { type: "date", targets: 1 },
+            { class: "min-width", targets: 1 },
+            { class: "min-width", targets: 11 },
             { class: "noExport", targets: 6 },
 
             { type: "num", targets: 25 },
@@ -428,16 +337,19 @@ jQuery(document).ready(function () {
         });
 
         var link =
-          '<a style="    margin-left: 40px;" class="btn btn-lg mycustomwidth btn-success" href="' +
+          '<a style="margin-left: 40px;" id="create-new-order" egid="create-new-order" class="btn btn-lg mycustomwidth btn-success" href="' +
           currentsiteurl +
           '/manage-order/" role="button">Create New Order</a>';
+        // var dropdown_Search =
+        //   '<div style="width: 12%;margin-left: 20px;"><select style="    width: 185px;" onchange="getQuickLinkReport()" id="dropdown_Search"  aria-invalid="false" class="js-example-basic-single form-control " required>   <option style="color" value="All"  >All</option><option style="color" value="Balance Due"  >Balance Due</option><option style="color" value="Initial Deposit Paid"  >Initial Deposit Paid</option><option style="color" value="Paid in full"  >Paid In Full</option><option style="color" value="Cancelled"  >Cancelled</option><option style="color" value="Refunded"  >Refunded</option><option style="color" value="Failed"  >Failed </option><option style="color" value="0"  >Today </option> <option style="color" value="7"  >Last 7 Days </option><option style="color" value="30"  >Last 30 Days </option><option style="color" value="90"  >Last 90 Days </option></div>';
 
         jQuery("#orderreport_filter").append(link);
+        // jQuery("#orderreport_length").append(dropdown_Search);
         jQuery("#filteredordercount").empty();
-        var filterrowscount = ordertablereport
-          .api()
-          .rows({ filter: "applied" });
-        jQuery("#filteredordercount").append(filterrowscount[0].length);
+        // var filterrowscount = ordertablereport
+        //   .api()
+        //   .rows({ filter: "applied" });
+        // jQuery("#filteredordercount").append(filterrowscount[0].length);
         jQuery("#builder").queryBuilder(
           "setRules",
           JSON.parse('{"condition":"AND","rules":[],"valid":true}')
@@ -613,7 +525,13 @@ function confrim_Ordermarkascompleted(orderID, status) {
     url +
     "wp-content/plugins/EGPL/orderreport.php?floorplanRequest=updateorderstatus";
   var data = new FormData();
-
+  var today = new Date();
+  var date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  var time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  currentime = date.toString() + " " + time.toString();
+  data.append("timezone", currentime);
   data.append("orderID", orderID);
   data.append("status", status);
 
@@ -745,7 +663,9 @@ function getapplyfiltersonordereport() {
                 data,
                 dataIndex
               ) {
-                var datetime = data[datatableheaderid].split(" ");
+                var datetime = data[datatableheaderid];
+                datetime = datetime.replaceAll(",", "");
+                datetime = datetime.split(" ");
                 var gettimecol = new Date(
                   datetime[1] + "-" + datetime[0] + "-" + datetime[2]
                 ).getTime();
@@ -806,7 +726,9 @@ function getapplyfiltersonordereport() {
                 data,
                 dataIndex
               ) {
-                var datetime = data[datatableheaderid].split(" ");
+                var datetime = data[datatableheaderid];
+                datetime = datetime.replaceAll(",", "");
+                datetime = datetime.split(" ");
                 var gettimecol = new Date(
                   datetime[1] + "-" + datetime[0] + "-" + datetime[2]
                 ).getTime();
@@ -838,7 +760,9 @@ function getapplyfiltersonordereport() {
                 data,
                 dataIndex
               ) {
-                var datetime = data[datatableheaderid].split(" ");
+                var datetime = data[datatableheaderid];
+                datetime = datetime.replaceAll(",", "");
+                datetime = datetime.split(" ");
                 var gettimecol = new Date(
                   datetime[1] + "-" + datetime[0] + "-" + datetime[2]
                 ).getTime();
@@ -870,13 +794,19 @@ function getapplyfiltersonordereport() {
                 data,
                 dataIndex
               ) {
-                var datetime = data[datatableheaderid].split(" ");
+                var datetime = data[datatableheaderid];
+                datetime = datetime.replaceAll(",", "");
+                datetime = datetime.split(" ");
                 if (datetime[1].length == 1) {
                   datetime[1] = "0" + datetime[1];
                 }
                 //var gettimecol = new Date(datetime[1] + "-" + datetime[0] + "-" + datetime[2]).getTime();
                 var gettimecol =
-                  datetime[1] + "-" + datetime[0] + "-" + datetime[2];
+                  datetime[1] +
+                  "-" +
+                  datetime[0].substring(0, 3) +
+                  "-" +
+                  datetime[2];
                 console.log("gettimecol--: " + gettimecol);
                 var filterstartdate = oData[key].filtervalue.split("-");
                 var startdatemonth =
@@ -1103,7 +1033,14 @@ function order_report_savefilters() {
 
 function removeeorderreport() {
   var orderreportname = jQuery("#orderreportname").val();
-  if (orderreportname != "") {
+  if (
+    orderreportname != "Paid in Full" &&
+    orderreportname != "Balance Due" &&
+    orderreportname != "Initial Deposit Paid" &&
+    orderreportname != "Refunded" &&
+    orderreportname != "Cancelled" &&
+    orderreportname != "Failed"
+  ) {
     swal(
       {
         title: "Are you sure?",
@@ -1141,6 +1078,13 @@ function removeeorderreport() {
         }
       }
     );
+  } else if (orderreportname != "") {
+    swal({
+      title: "Error",
+      text: "You cannot remove this default report.",
+      type: "error",
+      confirmButtonClass: "btn-danger",
+    });
   }
 }
 
@@ -1289,4 +1233,136 @@ function customeloadorderreport() {
     window.location.href =
       url + "order-report/?orderreport=" + encodeURI(loadreportname);
   }
+}
+function customeloadorderreportLink(loadreportname) {
+  var url = currentsiteurl + "/";
+
+  if (loadreportname == "All") {
+    window.location.href = url + "order-report/";
+  } else {
+    window.location.href =
+      url + "order-report/?orderreport=" + encodeURI(loadreportname);
+  }
+}
+function getQuickLinkReport(dropdownvalue) {
+  // var dropdownvalue = jQuery("#dropdown_Search option:selected").val();
+  jQuery(".filtersarraytooltip").empty();
+  jQuery.fn.dataTableExt.afnFiltering.length = 0;
+  ordertablereport.dataTable().fnDraw();
+  var tablesettings = jQuery("#orderreport").DataTable().settings();
+  ordertablereport.api().search("").columns().search("").draw();
+  var title = "Order Date";
+  if (
+    dropdownvalue == 7 ||
+    dropdownvalue == 30 ||
+    dropdownvalue == 90 ||
+    dropdownvalue == 0
+  ) {
+    title = "Order Date";
+  } else {
+    title = "Order Status";
+  }
+  var today = new Date();
+  var priorDate = new Date(new Date().setDate(today.getDate() - dropdownvalue));
+  console.log(priorDate);
+  priorDate = priorDate.toString();
+  let a = priorDate.split(" ");
+  var date =
+    today.getDate() +
+    "-" +
+    months[today.getMonth()] +
+    "-" +
+    today.getFullYear();
+  console.log(date);
+
+  for (var i = 0, iLen = tablesettings[0].aoColumns.length; i < iLen; i++) {
+    if (tablesettings[0].aoColumns[i].sTitle == title) {
+      var datatableheaderid = tablesettings[0].aoColumns[i].idx;
+
+      if (
+        dropdownvalue == 7 ||
+        dropdownvalue == 30 ||
+        dropdownvalue == 90 ||
+        dropdownvalue == 0
+      ) {
+        var filterstart = date;
+        jQuery.fn.dataTable.ext.search.push(function (
+          settings,
+          data,
+          dataIndex
+        ) {
+          var datetime = data[datatableheaderid].split(" ");
+          var gettimecol = new Date(
+            datetime[1] + "-" + datetime[0] + "-" + datetime[2]
+          ).getTime();
+
+          var filterstartdate = filterstart.split("-");
+          var startdatemonth =
+            "JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(filterstartdate[1]) /
+              3 +
+            1;
+          var filterstartdatetime = new Date(
+            filterstartdate[0] +
+              " " +
+              filterstartdate[1] +
+              " " +
+              filterstartdate[2]
+          ).getTime();
+
+          var filterenddatetime = new Date(
+            a[2] + "-" + a[1] + "-" + a[3]
+          ).getTime();
+
+          console.log(
+            filterenddatetime + " " + filterstartdatetime + " " + gettimecol
+          );
+
+          if (
+            gettimecol <= filterstartdatetime &&
+            gettimecol >= filterenddatetime
+          ) {
+            console.log(
+              gettimecol +
+                ">=" +
+                filterstartdatetime +
+                "&&" +
+                gettimecol +
+                "<=" +
+                filterenddatetime
+            );
+            return true;
+          }
+          return false;
+        });
+      } else if (dropdownvalue !== "All") {
+        jQuery.fn.dataTable.ext.search.push(function (
+          settings,
+          data,
+          dataIndex
+        ) {
+          var status = data[datatableheaderid];
+
+          if (status == dropdownvalue) {
+            return true;
+          }
+          return false;
+        });
+      } else {
+        jQuery.fn.dataTable.ext.search.push(function (
+          settings,
+          data,
+          dataIndex
+        ) {
+          var status = data[datatableheaderid];
+
+          if (status) {
+            return true;
+          }
+          return false;
+        });
+      }
+    }
+  }
+
+  ordertablereport.api().column().order().draw();
 }

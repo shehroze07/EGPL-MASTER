@@ -30,10 +30,10 @@
 
 
 <!--        <script type="text/javascript" src="/wp-content/plugins/EGPL/js/exporting.js?v=2.95"></script>-->
-<script type="text/javascript" src="/wp-content/plugins/EGPL/js/contentmanager.js?v=2.99"></script>
+<script type="text/javascript" src="/wp-content/plugins/EGPL/js/contentmanager.js?v=3.03"></script>
 <script type="text/javascript" src="/wp-content/plugins/EGPL/js/orderhistory.js?v=3.01"></script>
 <!---             Order-Managemnt    -->
-<script type="text/javascript" src="/wp-content/plugins/EGPL/js/ordermanagment/create-new-order.js?v=7.32"></script>
+<script type="text/javascript" src="/wp-content/plugins/EGPL/js/ordermanagment/create-new-order.js?v=10.40"></script>
 <!---             Order-Managemnt    -->
 <script type="text/javascript" src="/wp-content/plugins/EGPL/js/jquery.watable.js?v=2.95"></script>
 <script type="text/javascript" src="/wp-content/plugins/EGPL/js/bootstrap-datepicker.min.js?v=2.95"></script>
@@ -181,6 +181,42 @@ tinymce.init({
         '/wp-content/plugins/EGPL/css/editorstyle.css'
     ]
 });
+
+tinymce.init({
+  selector: '#pshortdescription',
+  height: 300,
+  branding: false,
+  plugins: [
+    'table code link hr paste lists'
+  ],table_default_attributes: {
+    
+    
+           border:1, class:'table'
+  },
+  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+  convert_urls: false,
+        content_css: [
+    '/wp-content/plugins/EGPL/css/editorstyle.css'
+  ]
+});
+tinymce.init({
+  selector: '#pdescription',
+  height: 300,
+  branding: false,
+  plugins: [
+    'table code link hr paste lists'
+  ],table_default_attributes: {
+    
+    
+           border:1, class:'table'
+  },
+  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+  convert_urls: false,
+        content_css: [
+    '/wp-content/plugins/EGPL/css/editorstyle.css'
+  ]
+});
+
 </script>
 
 <script>

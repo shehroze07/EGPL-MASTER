@@ -6,11 +6,7 @@ function create_order() {
   var curdate = new Date();
   var today = new Date();
   var date =
-    today.getFullYear() +
-    "-" +
-    ("0" + (today.getMonth() + 1)).slice(-2) +
-    "-" +
-    today.getDate();
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
   var time =
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   currentime = date.toString() + " " + time.toString();
@@ -18,10 +14,7 @@ function create_order() {
     var fieldID = jQuery(this).attr("id");
     if (jQuery(this).val() != null) {
       if (fieldID == "payment_date") {
-        var times =
-          jQuery(this).val().toString().replaceAll("-", "/") +
-          " " +
-          time.toString();
+        var times = jQuery(this).val().toString() + " " + time.toString();
         data.append(fieldID, times);
       } else {
         data.append(fieldID, jQuery(this).val());
@@ -44,12 +37,7 @@ function create_order() {
     AllNoteArray.push(dataArray);
   });
   data.append("noteArray", JSON.stringify(AllNoteArray));
-  var cartdisct = jQuery("#cartDiscount").html();
-  cartdisct = cartdisct.trim();
-  var cartdic = cartdisct.substr(1);
-  var productdisct = jQuery("#productDiscount").html();
-  productdisct = productdisct.trim();
-  var prodic = productdisct.substr(1);
+
   data.append("timezone", currentime);
   var customer_id = jQuery("#order_user  option:selected").val();
   data.append("customer_id", customer_id);
@@ -61,7 +49,7 @@ function create_order() {
   date = date.toString();
   hour = hour.toString();
   mint = mint.toString();
-  date = date.replaceAll("-", "/") + " " + hour + ":" + mint + ":" + "02";
+  date = date + " " + hour + ":" + mint + ":" + "02";
   console.log(date);
   data.append("orderDate", date);
   var check = check_validations();
@@ -126,26 +114,12 @@ function create_order() {
     });
   } else if (check == "status") {
     var status = jQuery("#order_status  option:selected").val();
-    if (
-      status == "wc-partial-payment" &&
-      parseInt(cartdic) == 0 &&
-      parseInt(prodic) == 0
-    ) {
+    if (status == "wc-partial-payment") {
       Swal.fire({
         icon: "error",
         confirmButtonClass: " btn btn-primary",
         title: "Oops",
         text: "The Status cannot be Initial Deposit Paid if there are no partial payment items in your order!",
-      });
-    } else if (
-      status == "wc-partial-payment" &&
-      (parseInt(cartdic) !== 0 || parseInt(prodic) !== 0)
-    ) {
-      Swal.fire({
-        icon: "error",
-        confirmButtonClass: " btn btn-primary",
-        title: "Oops",
-        text: "Cannot apply Discount code on orders which includes Partial payments",
       });
     } else {
       Swal.fire({
@@ -405,7 +379,6 @@ function packageadd() {
   for (let obj of productArray) {
     if (packageSelected && packageSelected == obj["id"]) {
       let stock_check = checkstockstatus(obj, packageQuantity);
-
       if (stock_check == true) {
         checks = checkQuantity(obj, packageQuantity);
       }
@@ -450,7 +423,7 @@ function packageadd() {
             price_partialP +
             ">" +
             "$" +
-            price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+            price +
             "</td><td id=" +
             obj["stock"] +
             ">" +
@@ -459,7 +432,7 @@ function packageadd() {
             "$" +
             0 +
             "</td><td >" +
-            price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+            price +
             "</td><td listofBooths=" +
             obj["boothList"] +
             '><span ><i class="fusion-li-icon fa fa-pencil-square fas fa-2x" title="Edit"  onclick=editProduct(' +
@@ -550,7 +523,7 @@ function addOneadd() {
             price_partialA +
             ">" +
             "$" +
-            price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+            price +
             "</td><td id=" +
             obj["stock"] +
             ">" +
@@ -559,7 +532,7 @@ function addOneadd() {
             "$" +
             0 +
             "</td><td>" +
-            price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+            price +
             '</td><td><span ><i class="fusion-li-icon fa fas fa-pencil-square fa-2x" title="Edit"  onclick="editProduct(' +
             obj["id"] +
             "," +
@@ -646,24 +619,6 @@ function boothAdd() {
                   }
                 }
               }
-              var listofbooth = [];
-              jQuery("#productTable tbody")
-                .find("tr")
-                .each(function () {
-                  id = jQuery(this).find("td").eq(5).attr("listofbooths");
-                  if (id != undefined) {
-                    listofbooth = id;
-                  }
-                });
-              listofbooth = listofbooth.toString();
-              listofbooth = listofbooth.split(",");
-              console.log(listofbooth);
-              var check = jQuery("#productTable").attr("zero");
-              if (jQuery.inArray(obj["id"].toString(), listofbooth) !== -1) {
-                price = 0;
-                price_partialB = 0;
-                jQuery("#productTable").attr("zero", 0);
-              }
 
               var appendProduct =
                 "<tr id=" +
@@ -674,13 +629,13 @@ function boothAdd() {
                 price_partialB +
                 ">" +
                 "$" +
-                price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                price +
                 "</td><td>" +
                 1 +
                 '</td><td id="packageDiscount">' +
                 0 +
                 "</td><td >" +
-                price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                price +
                 '</td><td>-</td><td><span ><i class=" fusion-li-icon fa fas fa-times-circle fa-2x" title="Remove"onclick="deleteProduct(' +
                 obj["id"] +
                 ')"></i></span></td></tr>';
@@ -752,78 +707,70 @@ function editProduct(id, name, qty, stock) {
       var check_per = jQuery("#cartDiscount").attr("Percent");
       cartdisct = cartdisct.trim();
       var cartdic = cartdisct.substr(1);
-      if (qtn_change > stock) {
-        var div =
-          '<div id="message_div_booths" style="padding: 11px;background: #fa424a;color: white !important;"><span>Product Not Updated!</span></div>';
-        jQuery("#swal2-html-container").append(div);
-        setTimeout(() => {
-          jQuery("#message_div_booths").remove();
-        }, 1000);
-      } else {
-        var disc_total = 0;
-        jQuery("#productTable tbody")
-          .find("tr")
-          .each(function () {
-            if (id == jQuery(this).attr("id")) {
-              if (pro_id == id) {
-                var disc = jQuery(this).find("td").eq(3).html();
-                var Price = jQuery(this).find("td").eq(1).html();
-                disc = disc.substr(1);
-                Price = Price.substr(1);
-                var Qty = jQuery(this).find("td").eq(2).html();
-                disc = disc / Qty;
-                disc = disc * qtn_change;
-                jQuery(this)
-                  .find("td")
-                  .eq(3)
-                  .html("$" + disc);
-                disc_total += disc;
-                jQuery("#productDiscount").html("$" + disc_total);
-              }
-              jQuery(this).find("td").eq(2).html(qtn_change);
-              jQuery(this).find("td").eq(5).html("");
-              jQuery(this).find("td").eq(6).html("");
-              var tabelData =
-                '<span ><i class="fusion-li-icon fa fa-pencil-square fas fa-2x" title="Edit"  onclick=editProduct(' +
-                id +
-                "," +
-                "'" +
-                name +
-                "'" +
-                "," +
-                qtn_change +
-                "," +
-                stock +
-                ")></i></span>";
-              var deleteBtn =
-                '<span><i class="fusion-li-icon fa fas  fa-times-circle fa-2x" title="Remove" onclick="deleteProduct(' +
-                id +
-                "," +
-                qtn_change +
-                ')"></i></span>';
-              jQuery(this).find("td").eq(5).append(tabelData);
-              jQuery(this).find("td").eq(6).append(deleteBtn);
-            }
-            var Qty = jQuery(this).find("td").eq(2).html();
-            Qty = parseInt(Qty);
-            var Price = jQuery(this).find("td").eq(1).html();
-            Price = Price.substr(1);
-            if (Price != 0) {
-              Qauntity += Qty;
-            }
-            // Qauntity += Qty;
-          });
-        if (cartdic !== "0" && check_per == "") {
-          var per_item_discount = cartdic / Qauntity;
-          recalculateDiscount(per_item_discount.toFixed(2));
-        } else if (check_per !== "") {
-          var code = jQuery("#productDiscount").attr("disc");
-          var total = apply_coupon_percent_cart(check_per, code, null);
-          jQuery("#cartDiscount").html("$" + total);
-        }
 
-        updateTable();
+      var disc_total = 0;
+      jQuery("#productTable tbody")
+        .find("tr")
+        .each(function () {
+          if (id == jQuery(this).attr("id")) {
+            if (pro_id == id) {
+              var disc = jQuery(this).find("td").eq(3).html();
+              var Price = jQuery(this).find("td").eq(1).html();
+              disc = disc.substr(1);
+              Price = Price.substr(1);
+              var Qty = jQuery(this).find("td").eq(2).html();
+              disc = disc / Qty;
+              disc = disc * qtn_change;
+              jQuery(this)
+                .find("td")
+                .eq(3)
+                .html("$" + disc);
+              disc_total += disc;
+              jQuery("#productDiscount").html("$" + disc_total);
+            }
+            jQuery(this).find("td").eq(2).html(qtn_change);
+            jQuery(this).find("td").eq(5).html("");
+            jQuery(this).find("td").eq(6).html("");
+            var tabelData =
+              '<span ><i class="fusion-li-icon fa fa-pencil-square fas fa-2x" title="Edit"  onclick=editProduct(' +
+              id +
+              "," +
+              "'" +
+              name +
+              "'" +
+              "," +
+              qtn_change +
+              "," +
+              stock +
+              ")></i></span>";
+            var deleteBtn =
+              '<span><i class="fusion-li-icon fa fas  fa-times-circle fa-2x" title="Remove" onclick="deleteProduct(' +
+              id +
+              "," +
+              qtn_change +
+              ')"></i></span>';
+            jQuery(this).find("td").eq(5).append(tabelData);
+            jQuery(this).find("td").eq(6).append(deleteBtn);
+          }
+          var Qty = jQuery(this).find("td").eq(2).html();
+          Qty = parseInt(Qty);
+          var Price = jQuery(this).find("td").eq(1).html();
+          Price = Price.substr(1);
+          if (Price != 0) {
+            Qauntity += Qty;
+          }
+          // Qauntity += Qty;
+        });
+      if (cartdic !== "0" && check_per == "") {
+        var per_item_discount = cartdic / Qauntity;
+        recalculateDiscount(per_item_discount.toFixed(2));
+      } else if (check_per !== "") {
+        var code = jQuery("#productDiscount").attr("disc");
+        var total = apply_coupon_percent_cart(check_per, code, null);
+        jQuery("#cartDiscount").html("$" + total);
       }
+
+      updateTable();
     }
   });
 }
@@ -880,8 +827,6 @@ function deleteProduct(id, quant = 0) {
     jQuery("#cartDiscount").html("$" + total);
   }
   var length = jQuery("#productTable tbody tr").length;
-  var order_id = jQuery("#date").attr("order_id");
-
   if (length == 0) {
     jQuery("#productTable tbody")
       .find("tr")
@@ -891,25 +836,21 @@ function deleteProduct(id, quant = 0) {
           .eq(3)
           .html("$" + 0);
       });
-    if (order_id == "required") {
-      jQuery("#disocuntLabels li").each(function () {
-        console.log(jQuery(this).attr("id"));
+    jQuery("#disocuntLabels li").each(function () {
+      console.log(jQuery(this).attr("id"));
 
-        jQuery(this).remove();
-      });
-
-      jQuery("#productDiscount ").attr("disc", "");
-      jQuery("#cartDiscount").attr("disc", "");
-      jQuery("#cartDiscount").html("$" + 0);
-      jQuery("#productDiscount").html("$" + 0);
-    }
+      jQuery(this).remove();
+    });
+    jQuery("#productDiscount ").attr("disc", "");
+    jQuery("#cartDiscount").attr("disc", "");
+    jQuery("#cartDiscount").html("$" + 0);
+    jQuery("#productDiscount").html("$" + 0);
   }
   updateTable();
 }
 
 function apply_discount() {
   var length = jQuery("#productTable tbody tr").length;
-  var status = jQuery("#order_status  option:selected").val();
   if (length == 0) {
     Swal.fire({
       icon: "error",
@@ -1037,57 +978,13 @@ function apply_discount() {
               success: function (data) {
                 // console.log(data);
                 // console.log(JSON.parse(data));
-                var today = new Date();
-                var date =
-                  today.getFullYear() +
-                  "-" +
-                  (today.getMonth() + 1) +
-                  "-" +
-                  today.getDate();
                 var datas = JSON.parse(data);
-                console.log(datas["date_expires"]);
-                var filterstartdatetime = 1;
-                var datetime = 0;
-                let count = datas["count"];
-
-                let date_expires = datas["date_expires"];
-                if (date_expires != null) {
-                  let ex_date = date_expires["date"];
-                  ex_date = ex_date.split(" ");
-                  console.log(ex_date[0]);
-                  // var date = ex_date[0].split("-");
-                  filterstartdatetime = new Date(ex_date[0]).getTime();
-                  datetime = new Date(date).getTime();
-                }
-                console.log(filterstartdatetime);
-                console.log(datetime);
                 var disc_code = datas["code"];
-                if (filterstartdatetime <= datetime) {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Discount Code Expired!",
-                  });
-                } else if (datas["amount"] == 0) {
+                if (datas["amount"] == 0) {
                   Swal.fire({
                     icon: "error",
                     title: "Oops...",
                     text: "Code did not match!",
-                  });
-                } else if (
-                  datas["count"] >= datas["usage_limit"] &&
-                  datas["usage_limit"] !== 0
-                ) {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Discount code useage limit reached!",
-                  });
-                } else if (status == "wc-partial-payment") {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Cannot apply discount on Initial Deposit Status",
                   });
                 } else {
                   var flag = true;
@@ -1113,22 +1010,13 @@ function apply_discount() {
                       }
                     });
                   var cartdisct = jQuery("#cartDiscount").html();
-                  var cartdisctStill =
-                    jQuery("#cartDiscount").attr("discStill");
                   var productdisct = jQuery("#productDiscount").html();
-                  var productdisctStill =
-                    jQuery("#productDiscount").attr("discStill");
                   var totalAmt = jQuery("#totalPrice").html();
                   cartdisct = cartdisct.trim();
                   productdisct = productdisct.trim();
                   var cartdic = cartdisct.substr(1);
                   var prodic = productdisct.substr(1);
-                  if (
-                    cartdic !== "0" ||
-                    prodic !== "0" ||
-                    cartdisctStill !== "" ||
-                    productdisctStill !== ""
-                  ) {
+                  if (cartdic !== "0" || prodic !== "0") {
                     Swal.fire({
                       icon: "error",
                       title: "Oops...",
@@ -1350,15 +1238,14 @@ function updateTable() {
   var totalAmount = 0;
   var totalAmountPartial = 0;
   var cartdisct = jQuery("#cartDiscount").html();
-  cartdisct = cartdisct.trim();
-  var cartdic = cartdisct.substr(1);
   var productdisct = jQuery("#productDiscount").html();
-  productdisct = productdisct.trim();
-  var prodic = productdisct.substr(1);
   var firstPayment = jQuery("#firstPayment").html();
   var secondPayment = jQuery("#secondPayment").html();
   var balanceDue = jQuery("#balanceDue").html();
-
+  cartdisct = cartdisct.trim();
+  productdisct = productdisct.trim();
+  var cartdic = cartdisct.substr(1);
+  var prodic = productdisct.substr(1);
   var firstPayment = firstPayment.substr(1);
   var secondPayment = secondPayment.substr(1);
   var balanceDue = balanceDue.substr(1);
@@ -1371,7 +1258,6 @@ function updateTable() {
       var Discount = jQuery(this).find("td").eq(3).html();
       var price = Price.substr(1);
       Discount = Discount.substr(1);
-      price = parseInt(price.replace(/,/g, ""));
       var SalesPrice = Qty * price - Discount;
       var totalPrice = Qty * price;
       if (Partial_Price == undefined) {
@@ -1381,12 +1267,7 @@ function updateTable() {
       jQuery(this)
         .find("td")
         .eq(4)
-        .html(
-          "$" +
-            SalesPrice.toFixed(2)
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        );
+        .html("$" + SalesPrice.toFixed(2));
 
       var totalAmount_partial = Qty * Partial_Price;
       totalPriceSum += totalPrice;
@@ -1394,9 +1275,7 @@ function updateTable() {
     });
   console.log(totalPriceSum);
   console.log(totalPrice);
-  jQuery("#totalPrice").html(
-    "$" + totalPriceSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  );
+  jQuery("#totalPrice").html("$" + totalPriceSum);
 
   totalAmount = totalPriceSum - (parseFloat(cartdic) + parseFloat(prodic));
   console.log(totalAmount);
@@ -1405,28 +1284,18 @@ function updateTable() {
     totalAmount = 0;
     firstPayment = 0;
   }
-  jQuery("#totalAmount").html(
-    "$" + totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  );
-  jQuery("#firstPayment").html(
-    "$" + firstPayment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  );
-  jQuery("#secondPayment").html(
-    "$" + totalAmountPartial.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  );
+  jQuery("#totalAmount").html("$" + totalAmount);
+  jQuery("#firstPayment").html("$" + firstPayment);
+  jQuery("#secondPayment").html("$" + totalAmountPartial);
   var status = jQuery("#order_status  option:selected").val();
   var payment_method = jQuery("#payment_method option:selected").val();
   if (status == "wc-pending") {
-    jQuery("#balanceDue").html(
-      "$" + totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    );
+    jQuery("#balanceDue").html("$" + totalAmount);
     jQuery("#firstPayment").html("$" + 0);
     jQuery("#secondPayment").html("$" + 0);
   } else {
     jQuery("#balanceDue").html("$" + 0);
-    jQuery("#balanceDue").html(
-      "$" + totalAmountPartial.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    );
+    jQuery("#balanceDue").html("$" + totalAmountPartial);
   }
 }
 
@@ -1435,12 +1304,6 @@ function check_validations() {
   if (date == "") {
     return false;
   }
-  var cartdisct = jQuery("#cartDiscount").html();
-  cartdisct = cartdisct.trim();
-  var cartdic = cartdisct.substr(1);
-  var productdisct = jQuery("#productDiscount").html();
-  productdisct = productdisct.trim();
-  var prodic = productdisct.substr(1);
   var status = jQuery("#order_status  option:selected").val();
   var customer_id = jQuery("#order_user  option:selected").val();
   var firstPayment = jQuery("#firstPayment").html();
@@ -1452,21 +1315,19 @@ function check_validations() {
   var balanceDue = balanceDue.replace("$", "");
   if (status == "") {
     return "status";
+  } else if (length != 0) {
+    return true;
   } else if (length == 0) {
     return false;
   } else if (
     (status == "wc-partial-payment" && balanceDue == 0) ||
     (status == "wc-pending" && balanceDue == 0) ||
     status == "" ||
-    (status == "wc-completed" && balanceDue != 0) ||
-    (status == "wc-partial-payment" &&
-      (parseInt(cartdic) !== 0 || parseInt(prodic) !== 0))
+    (status == "wc-completed" && balanceDue != 0)
   ) {
     return "status";
   } else if (customer_id == "") {
     return "no_customer";
-  } else if (length != 0) {
-    return true;
   }
 }
 function check_validationsForUpdate() {
@@ -1475,12 +1336,6 @@ function check_validationsForUpdate() {
   if (date == "") {
     return false;
   }
-  var cartdisct = jQuery("#cartDiscount").html();
-  cartdisct = cartdisct.trim();
-  var cartdic = cartdisct.substr(1);
-  var productdisct = jQuery("#productDiscount").html();
-  productdisct = productdisct.trim();
-  var prodic = productdisct.substr(1);
   var status = jQuery("#order_status  option:selected").val();
   var customer_id = jQuery("#order_user  option:selected").val();
   var firstPayment = jQuery("#firstPayment").html();
@@ -1494,24 +1349,13 @@ function check_validationsForUpdate() {
     .find("tr")
     .each(function () {
       let deposit_check = jQuery(this).find("td").eq(1).attr("deposit_check");
-      if (
-        deposit_check != "no" &&
-        deposit_check != "" &&
-        deposit_check != undefined
-      ) {
+      if (deposit_check != "no" && deposit_check != "") {
         deposit = true;
       }
     });
   if (status == "") {
     return "status";
   } else if (status == "wc-partial-payment" && deposit == false) {
-    return "status";
-  } else if (status == "wc-completed" && balanceDue != 0) {
-    return "status";
-  } else if (
-    status == "wc-partial-payment" &&
-    (parseInt(cartdic) !== 0 || parseInt(prodic) !== 0)
-  ) {
     return "status";
   } else if (customer_id == "") {
     return "no_customer";
@@ -1899,16 +1743,14 @@ jQuery("#sendEmail").click(function () {
   });
 });
 
-function update_order(id, status_preset, refunded_amount, check, initial_id) {
+function update_order(id, status_preset, initial_id) {
   var status = jQuery("#order_status  option:selected").val();
   var prev_status = jQuery("#prev_status").attr("value");
   var flag = true;
   if (
     status_preset != "cancelled" &&
     (status == "wc-refunded" || status == "wc-cancelled") &&
-    initial_id == undefined &&
-    refunded_amount <= 0 &&
-    check != "restock"
+    initial_id == undefined
   ) {
     flag = false;
     Swal.fire({
@@ -1951,7 +1793,7 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
         var date =
           today.getFullYear() +
           "-" +
-          ("0" + (today.getMonth() + 1)).slice(-2) +
+          (today.getMonth() + 1) +
           "-" +
           today.getDate();
         var time =
@@ -1968,20 +1810,7 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
             console.log(fieldID + "=" + jQuery(this).val());
             // console.log(jQuery(this).val());
             if (fieldID == "payment_date") {
-              var Time = jQuery(this).val().toString();
-              Time = Time.split("-");
-              if (Time.length > 1) {
-                var times =
-                  Time[1] +
-                  "/" +
-                  Time[2] +
-                  "/" +
-                  Time[0] +
-                  " " +
-                  time.toString();
-              } else {
-                var times = Time[0] + " " + time.toString();
-              }
+              var times = jQuery(this).val().toString() + " " + time.toString();
               data.append(fieldID, times);
             } else {
               data.append(fieldID, jQuery(this).val());
@@ -1996,17 +1825,9 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
         });
         data.append("noteArray", JSON.stringify(AllNoteArray));
         data.append("orderStatus", prev_status);
-        var cartdisct = jQuery("#cartDiscount").html();
-        cartdisct = cartdisct.trim();
-        var cartdic = cartdisct.substr(1);
-        var productdisct = jQuery("#productDiscount").html();
-        productdisct = productdisct.trim();
-        var prodic = productdisct.substr(1);
-        data.append("cartdic", cartdic);
-        data.append("prodic", prodic);
+
         var usertimezone = curdate.getTimezoneOffset() / 60;
         currentime = date.toString() + " " + time.toString();
-
         data.append("usertimezone", usertimezone);
         data.append("timezone", currentime);
         console.log("--------------------------------");
@@ -2026,33 +1847,15 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
           "coupon_code_prdt",
           jQuery("#productDiscount ").attr("disc")
         );
-
         data.append("coupon_code_cart", jQuery("#cartDiscount").attr("disc"));
         data.append("order_id", id);
-        var date = jQuery("#date").val().toString();
-        date = date.split("-");
+        var date = jQuery("#date").val();
         var hour = jQuery("#time-hour").val();
         var mint = jQuery("#time-mins").val();
-        // date = date.toString();
+        date = date.toString();
         hour = hour.toString();
         mint = mint.toString();
-        if (date.length > 1) {
-          date =
-            date[1] +
-            "/" +
-            date[2] +
-            "/" +
-            date[0] +
-            " " +
-            hour +
-            ":" +
-            mint +
-            ":" +
-            "02";
-        } else {
-          date = date[0] + " " + hour + ":" + mint + ":" + "02";
-        }
-
+        date = date + " " + hour + ":" + mint + ":" + "02";
         console.log(date);
         data.append("orderDate", date);
 
@@ -2126,7 +1929,7 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
     var date =
       today.getFullYear() +
       "-" +
-      ("0" + (today.getMonth() + 1)).slice(-2) +
+      (today.getMonth() + 1) +
       "-" +
       today.getDate();
     var time =
@@ -2137,14 +1940,7 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
         console.log(fieldID + "=" + jQuery(this).val());
         // console.log(jQuery(this).val());
         if (fieldID == "payment_date") {
-          var Time = jQuery(this).val().toString();
-          Time = Time.split("-");
-          if (Time.length > 1) {
-            var times =
-              Time[1] + "/" + Time[2] + "/" + Time[0] + " " + time.toString();
-          } else {
-            var times = Time[0] + " " + time.toString();
-          }
+          var times = jQuery(this).val().toString() + " " + time.toString();
           data.append(fieldID, times);
         } else {
           data.append(fieldID, jQuery(this).val());
@@ -2159,14 +1955,7 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
     });
     data.append("noteArray", JSON.stringify(AllNoteArray));
     data.append("orderStatus", prev_status);
-    var cartdisct = jQuery("#cartDiscount").html();
-    cartdisct = cartdisct.trim();
-    var cartdic = cartdisct.substr(1);
-    var productdisct = jQuery("#productDiscount").html();
-    productdisct = productdisct.trim();
-    var prodic = productdisct.substr(1);
-    data.append("cartdic", cartdic);
-    data.append("prodic", prodic);
+
     var usertimezone = curdate.getTimezoneOffset() / 60;
     currentime = date.toString() + " " + time.toString();
     data.append("usertimezone", usertimezone);
@@ -2187,37 +1976,15 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
     data.append("coupon_code_prdt", jQuery("#productDiscount ").attr("disc"));
     data.append("coupon_code_cart", jQuery("#cartDiscount").attr("disc"));
     data.append("order_id", id);
-    var date = jQuery("#date").val().toString();
-    date = date.split("-");
+    var date = jQuery("#date").val();
     var hour = jQuery("#time-hour").val();
     var mint = jQuery("#time-mins").val();
-    // date = date.toString();
+    date = date.toString();
     hour = hour.toString();
     mint = mint.toString();
-    if (date.length > 1) {
-      date =
-        date[1] +
-        "/" +
-        date[2] +
-        "/" +
-        date[0] +
-        " " +
-        hour +
-        ":" +
-        mint +
-        ":" +
-        "02";
-    } else {
-      date = date[0] + " " + hour + ":" + mint + ":" + "02";
-    }
+    date = date + " " + hour + ":" + mint + ":" + "02";
     console.log(date);
     data.append("orderDate", date);
-    var cartdisct = jQuery("#cartDiscount").html();
-    cartdisct = cartdisct.trim();
-    var cartdic = cartdisct.substr(1);
-    var productdisct = jQuery("#productDiscount").html();
-    productdisct = productdisct.trim();
-    var prodic = productdisct.substr(1);
     var check = check_validationsForUpdate();
     if (check == true) {
       jQuery("body").css("cursor", "progress");
@@ -2284,26 +2051,12 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
       });
     } else if (check == "status") {
       var status = jQuery("#order_status  option:selected").val();
-      if (
-        status == "wc-partial-payment" &&
-        parseInt(cartdic) == 0 &&
-        parseInt(prodic) == 0
-      ) {
+      if (status == "wc-partial-payment") {
         Swal.fire({
           icon: "error",
           confirmButtonClass: " btn btn-primary",
           title: "Oops",
           text: "The Status cannot be Initial Deposit Paid if there are no partial payment items in your order!",
-        });
-      } else if (
-        status == "wc-partial-payment" &&
-        (parseInt(cartdic) !== 0 || parseInt(prodic) !== 0)
-      ) {
-        Swal.fire({
-          icon: "error",
-          confirmButtonClass: " btn btn-primary",
-          title: "Oops",
-          text: "Cannot apply Discount code on orders which includes Partial payments",
         });
       } else {
         Swal.fire({
@@ -2345,16 +2098,11 @@ function update_order(id, status_preset, refunded_amount, check, initial_id) {
   //   });
   // }
 }
-function delete_order(order_id, status, refunded_amount, check, custome_id) {
+function delete_order(order_id, custome_id) {
   var data = new FormData();
 
   // var order_id = jQuery(e).attr("order_id");
-  if (
-    custome_id == undefined &&
-    status != "refunded" &&
-    refunded_amount <= 0 &&
-    check != "restock"
-  ) {
+  if (custome_id == undefined) {
     Swal.fire({
       title: "Are you sure?",
       icon: "warning",
@@ -2507,10 +2255,10 @@ function delete_order(order_id, status, refunded_amount, check, custome_id) {
     });
   }
 }
-function refund_order(id, total, refunded_Amt, check, initial_id) {
+function refund_order(id, total, refunded_Amt) {
   Swal.fire({
     didOpen: () => {
-      if (refunded_Amt > 0 || check == "restock" || initial_id !== undefined) {
+      if (refunded_Amt > 0) {
         jQuery("#restock-div").empty();
       }
     },
@@ -2566,8 +2314,6 @@ function refund_order(id, total, refunded_Amt, check, initial_id) {
       var amount = jQuery("#refunded-amount").val();
       if (amount > total) {
         Swal.showValidationMessage("Invalid Amount");
-      } else if (amount == "") {
-        Swal.showValidationMessage("Enter Amount");
       }
     },
   }).then((result) => {
@@ -2581,21 +2327,10 @@ function refund_order(id, total, refunded_Amt, check, initial_id) {
       } else {
         restore_check = jQuery("#restore:checked").val();
       }
-      var today = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        ("0" + (today.getMonth() + 1)).slice(-2) +
-        "-" +
-        today.getDate();
-      var time =
-        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      currentime = date.toString() + " " + time.toString();
       data.append("ID", id);
       data.append("amount", amount);
       data.append("reason", reason);
       data.append("check", restore_check);
-      data.append("orderDate", currentime);
 
       var url = currentsiteurl + "/";
       var urlnew =
@@ -2852,14 +2587,12 @@ function OrderHistory($id, $history_id, order_id) {
             }
           });
         } else {
-          let result = 1;
+          let result;
           currentHistory = datas[0];
           previousHistory = datas[1];
           jQuery.each(currentHistory, function (i, l) {
             if (
               i !== "noteArray" &&
-              i !== "cartdic" &&
-              i !== "prodic" &&
               i !== "orderDate" &&
               i !== "orderStatus" &&
               i !== "order_id" &&
@@ -2925,16 +2658,10 @@ function OrderHistory($id, $history_id, order_id) {
                   "<div id='productDiv' style='margin-left: 13px;'><label> Qty</label>";
                 l.forEach((element) => {
                   l1.forEach((element1) => {
-                    if (
-                      element.id == element1.id &&
-                      element.quantity == element1.quantity
-                    ) {
+                    if (element.id == element1.id) {
                       result = 0;
                     }
                   });
-                  if (l.length !== l1.length) {
-                    result = 1;
-                  }
                   if (result != 0) {
                     div +=
                       "<p style='    margin: 0px !important;color: red;'> " +
@@ -3030,7 +2757,7 @@ function OrderHistory($id, $history_id, order_id) {
                     "</td></tr>";
                 }
               }
-              result = 1;
+              result = "";
             }
           });
         }
@@ -3052,28 +2779,6 @@ function OrderHistory($id, $history_id, order_id) {
     },
   });
 }
-
-// function dicsount_check(obj){
-//   let deposit = false;
-//   var cartdisct = jQuery("#cartDiscount").html();
-//   cartdisct = cartdisct.trim();
-//   var cartdic = cartdisct.substr(1);
-//   var productdisct = jQuery("#productDiscount").html();
-//   productdisct = productdisct.trim();
-//   var prodic = productdisct.substr(1);
-//   jQuery("#productTable tbody")
-//   .find("tr")
-//   .each(function () {
-//     let deposit_check = jQuery(this).find("td").eq(1).attr("deposit_check");
-//     if (
-//       deposit_check != "no" &&
-//       deposit_check != "" &&
-//       deposit_check != undefined
-//     ) {
-//       deposit = true;
-//     }
-//   });
-// }
 // jQuery("#order_status").on("change", function () {
 //   var selected = jQuery(this).val();
 

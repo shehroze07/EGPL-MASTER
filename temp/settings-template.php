@@ -1743,7 +1743,7 @@ height: 50% !important;
                                        <label style="margin-left: 9px;" > Hide Exhibitor Details</label><br>
                                        </div>
                                        <div style="margin-left: 21px;font-size: 14px;">
-                                       <p>Hides All exhibitor details from public floor plan view.<br>Booths will just be labeled "Available, Reserved, or Occupied'</p>
+                                       <p>Hides all exhibitor details from public floor plan view.<br>Booths will just be labeled "Available, Reserved, or Occupied'</p>
                                      </div> 
                                       <div style="display: flex;">
                                         <input id="Hide_reserved_Details" <?php echo $selected4=='Hide_Reserved_Booth'?'checked':''?> type="checkbox" value="Hide_Reserved_Booth" egid="Hide_reserved_Details">

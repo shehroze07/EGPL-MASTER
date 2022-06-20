@@ -287,133 +287,145 @@ function add_new_product_package() {
   data.append("roleassign", roleassign);
   data.append("menu_order", menu_order);
   if (
-    (depositstype == "fixed" || depositstype == "percent") &&
-    depositsamount == ""
+    wc_deposit_enabled != "no" &&
+    (depositstype == "0" || depositsamount == "")
   ) {
+    if (depositstype == "0") {
+      jQuery("#depositstype").css("border", "2px solid red");
+      jQuery(".depositeerrorType").empty();
+      jQuery(".depositeerrorType").append(
+        "<label style='margin-top: 10px;color:red'>This field is required.</label>"
+      );
+      window.top.scrollTo({ top: 0, behavior: "smooth" });
+      jQuery("body").css("cursor", "default");
+    }
+    if (depositsamount == "") {
+      jQuery(".depositeerror").empty();
+      jQuery(".depositeerror").append(
+        "<label style='margin-top: 10px;color:red'>This field is required.</label>"
+      );
+      window.top.scrollTo({ top: 0, behavior: "smooth" });
+      jQuery("#depositamount").css("border", "2px solid red");
+      jQuery("body").css("cursor", "default");
+    }
+  } else if (
+    depositstype == "fixed" &&
+    parseInt(depositsamount) >= parseInt(pprice)
+  ) {
+    // jQuery("#depositamount").after(
+    //   "<p >Deposit Amount must be less than price.</p>"
+    // );
+    jQuery(".depositeerror").empty();
     jQuery(".depositeerror").append(
-      "<label style='margin-top: 10px;color:red'>Deposit Amount must be greater than zero.</label>"
+      "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
     );
+    window.top.scrollTo({ top: 0, behavior: "smooth" });
     jQuery("body").css("cursor", "default");
     setTimeout(function () {
       // reset CSS
       jQuery(".depositeerror").empty();
     }, 5000);
   } else {
-    if (
-      depositstype == "fixed" &&
-      parseInt(depositsamount) > parseInt(pprice)
-    ) {
+    if (depositstype == "percent" && parseInt(depositsamount) >= 100) {
       // jQuery("#depositamount").after(
       //   "<p >Deposit Amount must be less than price.</p>"
       // );
+      jQuery(".depositeerror").empty();
+      window.top.scrollTo({ top: 0, behavior: "smooth" });
+      jQuery("body").css("cursor", "default");
       jQuery(".depositeerror").append(
         "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
       );
-      jQuery("body").css("cursor", "default");
       setTimeout(function () {
         // reset CSS
         jQuery(".depositeerror").empty();
       }, 5000);
     } else {
-      if (depositstype == "percent" && parseInt(depositsamount) >= 100) {
-        // jQuery("#depositamount").after(
-        //   "<p >Deposit Amount must be less than price.</p>"
-        // );
-        jQuery("body").css("cursor", "default");
-        jQuery(".depositeerror").append(
-          "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
-        );
-        setTimeout(function () {
-          // reset CSS
-          jQuery(".depositeerror").empty();
-        }, 5000);
-      } else {
-        if (productid != "") {
-          var updateproductimage = jQuery("#updateproductimage")[0].files[0];
-          if (!updateproductimage) {
-            if (jQuery("#productimage")[0]) {
-              var updateproductimage = jQuery("#productimage")[0].files[0];
-            }
+      if (productid != "") {
+        var updateproductimage = jQuery("#updateproductimage")[0].files[0];
+        if (!updateproductimage) {
+          if (jQuery("#productimage")[0]) {
+            var updateproductimage = jQuery("#productimage")[0].files[0];
           }
-
-          data.append("productid", productid);
-          data.append("productimageurl", productimageurl);
-          data.append("updateproductimage", updateproductimage);
-
-          jQuery.ajax({
-            url: urlupdateproduct,
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: "POST",
-            success: function (data) {
-              jQuery("body").css("cursor", "default");
-
-              var data = data.replace(/\s/g, "");
-              console.log(data);
-              if (data == "updatesuccessfully") {
-                swal(
-                  {
-                    title: "Success",
-                    text: "Package has been saved successfully.",
-                    type: "success",
-                    confirmButtonClass: "btn-success",
-                    confirmButtonText: "Ok",
-                  },
-                  function () {
-                    window.location.href = currentsiteurl + "/manage-products/";
-                  }
-                );
-              } else {
-                swal({
-                  title: "Error",
-                  text: "Package could not be saved. Please try again.",
-                  type: "error",
-                  confirmButtonClass: "btn-danger",
-                  confirmButtonText: "Ok",
-                });
-              }
-            },
-          });
-        } else {
-          var productimage = jQuery("#productimage")[0].files[0];
-          data.append("productimage", productimage);
-          jQuery.ajax({
-            url: urlnewproduct,
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: "POST",
-            success: function (data) {
-              jQuery("body").css("cursor", "default");
-              var data = data.replace(/\s/g, "");
-              if (data == "createdsuccessfully") {
-                swal(
-                  {
-                    title: "Success",
-                    text: "Product saved successfully.",
-                    type: "success",
-                    confirmButtonClass: "btn-success",
-                    confirmButtonText: "Ok",
-                  },
-                  function () {
-                    window.location.href = currentsiteurl + "/manage-products/";
-                  }
-                );
-              } else {
-                swal({
-                  title: "Error",
-                  text: "Product could not be saved successfully. Please try again.",
-                  type: "error",
-                  confirmButtonClass: "btn-danger",
-                  confirmButtonText: "Ok",
-                });
-              }
-            },
-          });
         }
+
+        data.append("productid", productid);
+        data.append("productimageurl", productimageurl);
+        data.append("updateproductimage", updateproductimage);
+
+        jQuery.ajax({
+          url: urlupdateproduct,
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          type: "POST",
+          success: function (data) {
+            jQuery("body").css("cursor", "default");
+
+            var data = data.replace(/\s/g, "");
+            console.log(data);
+            if (data == "updatesuccessfully") {
+              swal(
+                {
+                  title: "Success",
+                  text: "Package has been saved successfully.",
+                  type: "success",
+                  confirmButtonClass: "btn-success",
+                  confirmButtonText: "Ok",
+                },
+                function () {
+                  window.location.href = currentsiteurl + "/manage-products/";
+                }
+              );
+            } else {
+              swal({
+                title: "Error",
+                text: "Package could not be saved. Please try again.",
+                type: "error",
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Ok",
+              });
+            }
+          },
+        });
+      } else {
+        var productimage = jQuery("#productimage")[0].files[0];
+        data.append("productimage", productimage);
+        jQuery.ajax({
+          url: urlnewproduct,
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          type: "POST",
+          success: function (data) {
+            jQuery("body").css("cursor", "default");
+            var data = data.replace(/\s/g, "");
+            if (data == "createdsuccessfully") {
+              swal(
+                {
+                  title: "Success",
+                  text: "Product saved successfully.",
+                  type: "success",
+                  confirmButtonClass: "btn-success",
+                  confirmButtonText: "Ok",
+                },
+                function () {
+                  window.location.href = currentsiteurl + "/manage-products/";
+                }
+              );
+            } else {
+              swal({
+                title: "Error",
+                text: "Product could not be saved successfully. Please try again.",
+                type: "error",
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Ok",
+              });
+            }
+          },
+        });
       }
     }
   }
@@ -507,25 +519,56 @@ function add_new_product() {
   data.append("roleassign", roleassign);
   data.append("menu_order", menu_order);
 
-  if (depositstype == "fixed" && parseInt(depositsamount) > parseInt(pprice)) {
+  if (
+    wc_deposit_enabled != "no" &&
+    (depositstype == "0" || depositsamount == "")
+  ) {
+    if (depositstype == "0") {
+      jQuery(".depositeerrorType").empty();
+      jQuery("#depositstype").css("border", "2px solid red");
+      jQuery(".depositeerrorType").append(
+        "<label style='margin-top: 10px;color:red'>This field is required.</label>"
+      );
+      window.top.scrollTo({ top: 0, behavior: "smooth" });
+      jQuery("body").css("cursor", "default");
+    }
+    if (depositsamount == "") {
+      jQuery(".depositeerror").empty();
+      jQuery(".depositeerror").append(
+        "<label style='margin-top: 10px;color:red'>This field is required.</label>"
+      );
+      window.top.scrollTo({ top: 0, behavior: "smooth" });
+      jQuery("#depositamount").css("border", "2px solid red");
+      jQuery("body").css("cursor", "default");
+    }
+  } else if (
+    depositstype == "fixed" &&
+    parseInt(depositsamount) >= parseInt(pprice)
+  ) {
     // jQuery("#depositamount").after(
     //   "<p >Deposit Amount must be less than price.</p>"
     // );
+    jQuery(".depositeerror").empty();
     jQuery(".depositeerror").append(
-      "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
+      "<label style='margin-top: 10px;color:red'>The deposit amount cannot be equal or greater than the price.</label>"
     );
+    window.top.scrollTo({ top: 0, behavior: "smooth" });
+    jQuery("body").css("cursor", "default");
     setTimeout(function () {
       // reset CSS
       jQuery(".depositeerror").empty();
     }, 5000);
   } else {
-    if (depositstype == "percent" && depositsamount > 100) {
+    if (depositstype == "percent" && depositsamount >= 100) {
       // jQuery("#depositamount").after(
       //   "<p >Deposit Amount must be less than price.</p>"
       // );
+      jQuery(".depositeerror").empty();
       jQuery(".depositeerror").append(
-        "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
+        "<label style='margin-top: 10px;color:red'>The deposit amount cannot be equal or greater than the price.</label>"
       );
+      window.top.scrollTo({ top: 0, behavior: "smooth" });
+      jQuery("body").css("cursor", "default");
       setTimeout(function () {
         // reset CSS
         jQuery(".depositeerror").empty();
@@ -768,3 +811,13 @@ function checkstockstatus() {
     jQuery(".quanititybox").empty("");
   }
 }
+jQuery("#depositamount").keyup(function () {
+  jQuery("#depositamount").css("border", "1px solid rgba(197,214,222,.7)");
+  jQuery(".depositeerror").empty();
+});
+jQuery("#depositstype").change(function () {
+  if (jQuery("#depositstype option:selected").val() != "") {
+    jQuery("#depositstype").css("border", "1px solid rgba(197,214,222,.7)");
+    jQuery(".depositeerrorType").empty();
+  }
+});

@@ -8,7 +8,7 @@ $oldvalues = get_option( 'ContenteManager_Settings' );
 $logo_imag = $oldvalues['ContentManager']['adminsitelogo'];
 $expogeniefloorplanstatus = $oldvalues['ContentManager']['expogeniefloorplan'];
 $autoreviewstatus = $oldvalues['ContentManager']['boothpurchasestatus'];
-
+$whitelabledstatus = strtolower($oldvalues['ContentManager']['whitelabledsitestatus']);
 
 $event_id = $oldvalues['ContentManager']['eventid'];
 
@@ -58,7 +58,7 @@ $getsiteurl = get_site_url();
 
 	<header class="site-header">
 	    <div class="container-fluid">
-           <?php if(!empty($logo_imag)){?>
+           <?php if(!empty($logo_imag) && $whitelabledstatus != "checked"){?>
 	        <a   class="site-logo" style="cursor: default;" egid="site-logo">
 	            <img class="hidden-md-down" src="<?php echo $logo_imag;?>" alt="">
 	            <img class="hidden-lg-up"   src="<?php echo $logo_imag;?>" alt="">
@@ -132,14 +132,15 @@ $getsiteurl = get_site_url();
                                             <i class="font-icon fa fa-lock"></i>
                                             <span class="lbl">Change Password</span>
                                         </a>
-                                        <a class="dropdown-item" target="_blank" href="https://expo-genie.com/release-notes/">
-                                            <i class="font-icon fa fa-sticky-note-o"></i>
-                                            <span class="lbl">Release Notes</span>
-                                        </a>
                                         <a class="dropdown-item" href="<?php echo $site_url; ?>/clone-features/">
                                             <i class="font-icon fa fa-clone"></i>
                                             <span class="lbl">Clone</span>
                                         </a>
+                                        <a class="dropdown-item" target="_blank" href="https://expo-genie.com/release-notes/">
+                                            <i class="font-icon fa fa-sticky-note-o"></i>
+                                            <span class="lbl">Release Notes</span>
+                                        </a>
+                                        
                                         <div class="dropdown-divider"></div>
                                         
                                         <a class="dropdown-item" href="<?php echo $site_url; ?>/logout/">
@@ -411,24 +412,6 @@ $getsiteurl = get_site_url();
                        
                     </ul>
                 </li>
-
-                <li class="mythemestyle with-sub" egid="item-manage-order">
-            <span>
-                <i style="color:#004598 !important;" class="font-icon fa fa-plus-square"></i>
-                <span class="lbl">Manage Order</span>
-            </span>
-            <ul class="mynav" egid="manage-order">
-
-                <li class="mythemestyle">
-                    <a href="<?php echo $site_url; ?>/manage-order/">
-                        <i class="font-icon fa fa-shopping-cart"></i>
-                        <span class="lbl menumargine">Add new Order</span>
-                    </a>
-                </li>
-
-            </ul>
-        </li>
-
              <?php if($expogeniefloorplanstatus == 'enable'){?>
                  <li class="mythemestyle with-sub" egid="item-floor-plan">
 	            <span>

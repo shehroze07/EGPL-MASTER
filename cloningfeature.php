@@ -36,7 +36,7 @@ function datavalidateurl($requestData){
 
                 $responce['users']['msg'] = $validating->validateusers($requestData);
             
-            }
+           }
         }
 
         if($requestData['levels'] == "checked" || $requestData['levels'] == "checked-add"){

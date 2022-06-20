@@ -111,7 +111,7 @@ if (current_user_can('administrator') || current_user_can('contentmanager')) {
                 <div class="tbl">
                     <div class="tbl-row">
                         <div class="tbl-cell">
-                            <h3>Users Report</h3>
+                            <h3>User Report</h3>
 
                         </div>
                     </div>

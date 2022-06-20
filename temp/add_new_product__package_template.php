@@ -191,7 +191,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Price <strong>*</strong></label>
                           <div class="col-sm-9">
 
-                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pprice" name="pprice" value="<?php echo $update_product->regular_price; ?>" egid="pprice" placeholder="<?php echo $product_name_for_fields_lebal;?> Price" required>
+                              <input type="number" min="1" oninput="validity.valid||(value='');"  class="form-control" id="pprice" name="pprice" value="<?php echo $update_product->regular_price; ?>" egid="pprice" placeholder="<?php echo $product_name_for_fields_lebal;?> Price" required>
 
 
                           </div>
@@ -232,7 +232,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                               
                               
                               
-                              
+                        
                              
                           </div>
                    </div>
@@ -257,19 +257,21 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                   
                                 <?php if (isset($_GET['productid'])) { 
                                   if($get_deposit_type == "percent"){  ?> 
+                                     <option value="0"></option>
                                    <option value="percent" selected="true">Percentage</option>
                                    <option value="fixed">Fixed Amount</option>
                                 <?php }else{ ?>
-                                  
+                                    <option value="0"></option>
                                    <option value="percent" >Percentage</option>
                                    <option value="fixed" selected="true">Fixed Amount</option>
                                 <?php }}else{?>
-                                   
+                                    <option value="0"></option>
                                   <option value="percent" >Percentage</option>
                                   <option value="fixed">Fixed Amount</option>
                                 <?php } ?>
                                   
                               </select>
+                              <p class="depositeerrorType"></p>
 
                           </div>
                    </div>
@@ -284,7 +286,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Deposit Amount <i data-toggle="tooltip" title = ' <?php echo' Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types';?> ' class="fa fa-question-circle" aria-hidden="true"></i></label>
                           <div class="col-sm-9">
 
-                               <input  id="depositamount" class="form-control"  value="<?php echo $get_deposit_amount;?>" type="number" >	
+                               <input  id="depositamount" class="form-control" min="1" oninput="validity.valid||(value='');" value="<?php echo $get_deposit_amount;?>" type="number" >	
                                <p class="depositeerror"></p>
 
                           </div>
@@ -366,7 +368,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                           <label class="col-sm-3 form-control-label">Stock Quantity<strong>*</strong></label>
                           <div class="col-sm-9">
 
-                              <input type="number" min="0" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" name="pquanitity" placeholder="Stock Quantity"  egid="pquanitity" required>
+                              <input type="number" min="1" oninput="validity.valid||(value='');"  class="form-control" id="pquanitity" name="pquanitity" placeholder="Stock Quantity"  egid="pquanitity" required>
 
 
                           </div></div>
@@ -563,7 +565,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
                                                                                  
                                                                                  $value_label = get_post_meta( $tasksID, 'label' , false);
                                                                                 
-                                                                                 if (in_array($tasksID, $selectedTaskList['selectedtasks'])) {
+                                                                                 if (in_array($tasksID, (array)$selectedTaskList['selectedtasks'])) {
                                                                                      
                                                                                      echo '<option value="' . $tasksID . '" selected="selected">' . $value_label[0] . '</option>';
                                                                                      
@@ -685,7 +687,7 @@ if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
     </div>
 
     <?php }include 'cm_footer.php'; ?>
-    <script type="text/javascript" src="/wp-content/plugins/EGPL/js/manage-products.js?v=5.0"></script>
+    <script type="text/javascript" src="/wp-content/plugins/EGPL/js/manage-products.js?v=8.0"></script>
    
         
    <?php }else{

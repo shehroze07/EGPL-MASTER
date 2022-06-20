@@ -5,7 +5,7 @@
  * Plugin Name:       EGPL
  * Plugin URI:        https://github.com/QasimRiaz/EGPL
  * Description:       EGPL
- * Version:           6.13
+ * Version:           7.24
  * Author:            EG
  * License:           GNU General Public License v2
  * Text Domain:       EGPL
@@ -5330,7 +5330,7 @@ add_action( 'init', 'add_contentmanager_settings' );
 
 function add_contentmanager_settings() {
     
-    wp_register_script('adminjs', plugins_url('js/admin-cmanager.js?v=2.42', __FILE__), array('jquery'));
+    wp_register_script('adminjs', plugins_url('js/admin-cmanager.js?v=2.43', __FILE__), array('jquery'));
     wp_enqueue_script('adminjs');
     //$settings_array['ContentManager']['sponsor-name']='Exhibitor';
     //update_option( 'ContenteManager_Settings', $settings_array);
@@ -5431,6 +5431,7 @@ function updatecmanagersettings($object_data){
     $oldvalues['ContentManager']['boothpurchasestatus']=$object_data['boothpurchasestatus'];
     $oldvalues['ContentManager']['redirectcatname']=$object_data['redirectcatname'];
     $oldvalues['ContentManager']['sitebuttonslables']=stripslashes($sitebuttonslables);
+    $oldvalues['ContentManager']['whitelabledsitestatus']=$object_data['whitelabledsitestatus'];
     
     
     $oldvalues['ContentManager']['oldregistrationstatus']=$object_data['oldregistrationstatus'];
@@ -5573,6 +5574,8 @@ function excludes_sponsor_meta(){
      $oldregistrationstatus = $oldvalues['ContentManager']['oldregistrationstatus'];
      
      $frontendbuttonslables = $oldvalues['ContentManager']['sitebuttonslables'];
+     
+     $whitelabledsitestatus = $oldvalues['ContentManager']['whitelabledsitestatus'];
      $aptycode = $oldvalues['ContentManager']['aptycode'];
      
      if(empty($frontendbuttonslables)){
@@ -5746,6 +5749,10 @@ function excludes_sponsor_meta(){
         <td><input type="text"  title="checked/unchecked" id="oldregistrationstatus" name="vehicle" value="'.$oldregistrationstatus.'"></td>
        </tr>
 
+       <tr><td><h4>White Labled Site</h4></td>
+ 
+       <td><input type="text"  title="checked/unchecked" id="whitelabledsitestatus" name="vehicle" value="'.$whitelabledsitestatus.'"></td>
+      </tr>
 
        <tr>
        <td style="text-align: center;"><a style="margin-top: 20px;
@@ -7980,9 +7987,34 @@ function isValidEmail($email){
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
+include_once('updater.php');
+
+
+if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
+        $config = array(
+            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+            'proper_folder_name' => 'EGPL', // this is the name of the folder your plugin lives in
+            'api_url' => 'https://api.github.com/repos/QasimRiaz/EGPL', // the GitHub API url of your GitHub repo
+            'raw_url' => 'https://raw.github.com/QasimRiaz/EGPL/master', // the GitHub raw url of your GitHub repo
+            'github_url' => 'https://github.com/QasimRiaz/EGPL', // the GitHub url of your GitHub repo
+            'zip_url' => 'https://github.com/QasimRiaz/EGPL/zipball/master', // the zip url of the GitHub repo
+            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+            'requires' => '3.0', // which version of WordPress does your plugin require?
+            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+            'readme' => 'README.md', // which file to use as the readme for the version number
+            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+        );
+        new WP_GitHub_Updater($config);
+    }
 
 //add_filter('woocommerce_payment_complete_order_status', 'exp_autocomplete_paid_orders', 10, 2);
 add_action('woocommerce_thankyou', 'exp_autocomplete_all_orders',10,2);
+
+//add_filter('woocommerce_payment_complete_order_status', 'exp_autocomplete_paid_orders', 10, 2);
+add_action('woocommerce_thankyou', 'exp_autocomplete_all_orders',10,2);
+// Code By AD//
+add_action( 'woocommerce_order_status_processing_to_on-hold', 'exp_autocomplete_all_orders', 10, 2 );
+add_action( 'woocommerce_order_status_pending', 'exp_autocomplete_all_orders',10,2 );
 
 function exp_autocomplete_all_orders($order_id) {
 
@@ -8055,7 +8087,23 @@ function exp_autocomplete_all_orders($order_id) {
 					}
 				}
                     }
-        if($remmaningamount !=0){
+                    $initial_id='';
+                    $orders = wc_get_orders( array('numberposts' => -1) );
+                    
+                    // Loop through each WC_Order object
+                    foreach( $orders as $ordR ){
+
+                        $orderID= $ordR->get_id() ; // The order ID
+                        $ORDER = wc_get_order($orderID);    
+                        $order_items = $ORDER->get_items();
+                        foreach ($order_items as $item_id => $item) {
+                            $initial_id = wc_get_order_item_meta( $item_id, '_remaining_balance_order_id', true );
+                            $porduct_ids_arrays[] = $initial_id;
+                        }
+    
+                    }
+                    $index = array_search( $order_id, $porduct_ids_arrays);
+        if($remmaningamount !=0  && $index ==false){
             
             $original_order = wc_get_order( $order_id );
             $items     = false;
@@ -8215,8 +8263,30 @@ function exp_autocomplete_all_orders($order_id) {
                  //echo '<pre>';
                  //print_r($porduct_ids_array);exit;
                  exp_updateuser_role_onmpospurches($order->id,$porduct_ids_array);
-                 $order->update_status($orderstatus);
-     
+                 $order_data = $order->get_data();
+                 $order_status = $order_data['status'];
+                //  echo $order_status;
+                if ( $order_status!='processing' ) {
+                    // echo $order_status;
+                        
+                        if($index!==false)
+                        {
+                            $orderstatus = "partial-payment";
+
+                        }
+                        $order->update_status($orderstatus);
+                        //  echo 'B';
+                        $order_data = $order->get_data();
+                        $payment_methods = $order_data['payment_method_title'];
+                        // echo $payment_methods;
+                        $orderstatus = "wc-pending-deposit";
+                        if($payment_methods == 'Pay by Check')
+                        {
+                    
+                            $order->update_status($orderstatus);
+                    
+                        }
+                }
 }
 function exp_autocomplete_paid_orders($order_status, $order_id) {
         
@@ -8318,6 +8388,8 @@ function reviewboothproducts($order){
     
 }
 
+
+
 function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
         
       
@@ -8351,7 +8423,7 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
             }
         }
          $lastInsertId = contentmanagerlogging('New Order Placed',"User Action",serialize($order_ID),$current_user,'',"pre_action_data");
-   
+       
        // $lastInsertId = contentmanagerlogging('Purches MPOs',"User Action",serialize($order),''.$current_user->id,$current_user->user_email,"pre_action_data");
         require_once( 'temp/lib/woocommerce-api.php' );
         
@@ -8389,6 +8461,7 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
 
                             $getproduct_detail = $woocommerce->products->get( $ids );
                             $productID =  $ids;
+                          
                             if($getproduct_detail->product->categories[0] != 'Package' && $getproduct_detail->product->categories[0] != 'Add-ons'){
                                 
                                 
@@ -8400,6 +8473,7 @@ function exp_updateuser_role_onmpospurches($order,$porduct_ids_array){
                                 update_post_meta( $id, 'OrderUserID', $current_user);
 
                                 if(!empty($boothpurchaseenablestatus) && $boothpurchaseenablestatus == "enabled"){
+                                    // echo '8897';
 
                                     $OrderUserID = $current_user;
                                     $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
@@ -9356,9 +9430,14 @@ add_action('rest_api_init', function() {
         register_rest_route('w1/v1', 'cventgetrequest', [
 		'methods' => 'POST',
 		'callback' => 'cventgetrequest',
-	]);
+	    ]);
         
-        
+        register_rest_route('w1/v1', 'cventupdaterequest', [
+            'methods' => 'POST',
+            'callback' => 'cventupdaterequest',
+        ]);
+    
+
         register_rest_route('w1/v1', 'getuserinfo', [
 		'methods' => 'POST',
 		'callback' => 'getuserinfo',
@@ -9383,7 +9462,14 @@ add_action('rest_api_init', function() {
         register_rest_route('w1/v1', 'getuserfields', [
 		'methods' => 'GET',
 		'callback' => 'getuserfields',
-	]);
+	    ]);
+
+        register_rest_route('w1/v1', 'zapiergetusersfields', [
+            'methods' => 'GET',
+            'callback' => 'zapiergetusersfields',
+        ]);
+
+
         register_rest_route('w1/v1', 'getuserfieldsdata', [
 		'methods' => 'GET',
 		'callback' => 'getuserfieldsdata',
@@ -9395,6 +9481,67 @@ add_action('rest_api_init', function() {
 	]);
 	
 });
+
+function zapiergetusersfields(){
+    
+    
+    try {
+    
+        require_once plugin_dir_path( __DIR__ ) . 'EGPL/includes/egpl-custome-functions.php';
+        $GetAllcustomefields = new EGPLCustomeFunctions();
+        $additional_fields = $GetAllcustomefields->getAllcustomefields();
+        //$additional_tasks_list = $GetAllcustomefields->getAllcustometasks();
+        usort($additional_fields, 'sortByOrder');
+    
+        $index_count=0;
+
+        //echo '<pre>';
+        //print_r($additional_fields);
+
+
+        foreach ($additional_fields as $key=>$value){
+            
+           
+            if($value['fieldType']!="html" && $value['SystemfieldInternal']!="checked"){
+                
+                if($value['fielduniquekey'] != "first_name"&& $value['fielduniquekey'] !="last_name" && $value['fielduniquekey'] !="company_name" && $value['fielduniquekey'] !="Role" && $value['fielduniquekey'] !="Semail"){
+                    $requiredStatus = $value['fieldrequriedstatus'];
+                    if($requiredStatus == "checked"){
+                        
+                    //$columns_list_attitional[$index_count]['required']  = true; 
+                    }
+                    $columns_list_attitional[$index_count]['key']  = $value['fielduniquekey'];
+                    //$columns_list_attitional[$index_count]['type']= $value['fieldType'];
+                    $columns_list_attitional[$index_count]['label']= $value['fieldName'];
+                
+                    
+                    $index_count++;
+                }
+            }
+            
+        }
+     
+     
+     
+    
+    
+    
+        //return (object)$columns_list_attitional;
+        echo json_encode($columns_list_attitional);
+     
+    }catch (Exception $e) {
+
+      
+
+        return $e;
+    }
+    
+    
+    
+    
+}
+
+
 function getuserfields(){
     
     
@@ -9433,8 +9580,8 @@ function getuserfields(){
     
     
     
-     
-     echo json_encode($columns_list_attitional);
+        
+        echo json_encode($columns_list_attitional);
      die();
     }catch (Exception $e) {
 
@@ -9948,21 +10095,13 @@ function cventgetrequest(){
     //update_option("cventuserdata",$newContactUserData);
     
     
-   $lastInsertId = contentmanagerlogging('Cvent Action Create User', "Admin Action", "", "", "", $newContactUserData);
+   $lastInsertId = contentmanagerlogging('Zapier Action Create User', "Admin Action", "", "", "", $newContactUserData);
  
    
     
     if(!empty($newContactUserData)){
         
         
-    
-        
-        //foreach($newContactUserData as $usersdata2=>$userdata){
-            
-            
-           
-                
-                
                 $userinformationupdatearray['username']  = $newContactUserData->Semail;
                 $userinformationupdatearray['Semail'] = $newContactUserData->Semail;
                 $userinformationupdatearray['Role'] = $newContactUserData->role;
@@ -9975,16 +10114,15 @@ function cventgetrequest(){
                 $userinformationupdatearray['register_date']  = $newContactUserData->register_date;
                 
                 $userinformationupdatearray = (object)$userinformationupdatearray;
-                $lastInsertId = contentmanagerlogging('testin', "Admin Action", "", "", "", $userinformationupdatearray);
+                
     
-            //print_r($userinformationupdatearray);exit;
+           
             
-                $resultRegistratedUser[$usersdata]['result'] = CreateNewUser($userinformationupdatearray);
+                $resultRegistratedUser[$usersdata]['result'] = CreateNewUser($userinformationupdatearray,$newContactUserData);
+               
             
             
-            
-            
-        //}
+        
         
         
     }else{
@@ -10006,6 +10144,80 @@ function cventgetrequest(){
     
     
 }
+
+
+
+function cventupdaterequest(){
+    
+    try {
+    
+      
+    //$newContactUserData =   json_decode(get_option("cventuserdata"));
+      
+    //echo '<pre>';
+    //print_r($newContactUserData);exit;
+     
+     
+     
+    $newContactUserData =  json_decode(file_get_contents('php://input')) ;
+    
+    
+    //update_option("cventuserdata",$newContactUserData);
+    
+    
+   $lastInsertId = contentmanagerlogging('Zapier Action Update User', "Admin Action", "", "", "", $newContactUserData);
+ 
+   
+    
+    if(!empty($newContactUserData)){
+        
+                $userinformationupdatearray['username']  = $newContactUserData->Semail;
+                $userinformationupdatearray['Semail'] = $newContactUserData->Semail;
+                $userinformationupdatearray['Role'] = $newContactUserData->role;
+                $userinformationupdatearray['external_reference_id_zapier']  = $newContactUserData->cvent_id;
+                $userinformationupdatearray['first_name']  = $newContactUserData->first_name;
+                $userinformationupdatearray['last_name']  =$newContactUserData->last_name;
+                $userinformationupdatearray['company_name']  = $newContactUserData->company_name;
+                $userinformationupdatearray['confirmation_number']  = $newContactUserData->confirmation_number;
+                $userinformationupdatearray['send_welcome_email']  = $newContactUserData->send_welcome_email;
+                $userinformationupdatearray['register_date']  = $newContactUserData->register_date;
+                
+                $userinformationupdatearray = (object)$userinformationupdatearray;
+                
+    
+            
+            
+                //$resultRegistratedUser[$usersdata]['result'] = CreateNewUser($userinformationupdatearray);
+                $resultRegistratedUser[$usersdata]['result'] = UpdateNewUser($userinformationupdatearray,$newContactUserData);
+            
+            
+            
+       
+        
+        
+    }else{
+        
+        $resultRegistratedUser["error"] = "Something went going wrong. Please Connect with App administrative.";
+        
+    }
+    
+    
+    
+    return (object)$resultRegistratedUser;
+    
+    }catch (Exception $e) {
+
+      
+
+        return $e;
+    }
+    
+    
+}
+
+
+
+
 
 function createuser(){
     
@@ -10170,7 +10382,7 @@ function updateuser(){
 }
 
 
-function UpdateNewUser($updateContactUserData){
+function UpdateNewUser($updateContactUserData,$newContactUserData){
     
      try{
          
@@ -10182,17 +10394,17 @@ function UpdateNewUser($updateContactUserData){
         $external_reference_id_zapier = $updateContactUserData->external_reference_id_zapier;
           
         $args = array(
-	'order'          => 'ASC',
-	'orderby'        => 'display_name',
-	'meta_query'     => array(
-		'relation' => 'AND',
-		array(
-			'key'     => $site_prefix.'external_reference_id_zapier',
-			'value'   => $external_reference_id_zapier,
-			'compare' => '=',
-		),
+            'order'          => 'ASC',
+            'orderby'        => 'display_name',
+            'meta_query'     => array(
+                'relation' => 'AND',
+                array(
+                    'key'     => $site_prefix.'external_reference_id_zapier',
+                    'value'   => $external_reference_id_zapier,
+                    'compare' => '=',
+                ),
 		
-	)
+	        )
         );
 
 
@@ -10269,9 +10481,11 @@ function UpdateNewUser($updateContactUserData){
                 
             }
             //$t = time();
-            //update_user_option($user_id, 'profile_updated', $t*1000);
+            //update_user_option($user_id, 'profile_updated', $t*1000);updatezapiercustomfields($userID,$userMetaData)
             updateregistredUserMeta($user_id,$updateContactUserData,$role);
-            
+            updatezapiercustomfields($user_id,$newContactUserData);
+
+
             $responce['id'] = time()*1000;
             $responce['message'] = "Requested data has been updated successfully.";
             
@@ -10296,7 +10510,7 @@ function UpdateNewUser($updateContactUserData){
 }
 
 
-function CreateNewUser($newContactUserData){
+function CreateNewUser($newContactUserData,$newContactUserMetaData){
     
     try{
     
@@ -10367,7 +10581,7 @@ function CreateNewUser($newContactUserData){
         $useremail='';
         
         updateregistredUserMeta($user_id,$newContactUserData,$role);
-        
+        updatezapiercustomfields($user_id,$newContactUserMetaData);
         
         if($newContactUserData->send_welcome_email == true){
             custome_email_send($user_id,$newContactUserData->Semail,"welcome_email_template");
@@ -10443,6 +10657,7 @@ function CreateNewUser($newContactUserData){
                     $useremail='';
                     
                     updateregistredUserMeta($user_id,$newContactUserData,$role);
+                    updatezapiercustomfields($user_id,$newContactUserMetaData);
                     if($newContactUserData->send_welcome_email == true){
                         custome_email_send($user_id,$email,"welcome_email_template");
                     }
@@ -10468,6 +10683,47 @@ function CreateNewUser($newContactUserData){
         return $e;
     }
     
+}
+
+
+
+function updatezapiercustomfields($userID,$userMetaData){
+    
+    try {
+        
+       
+        
+        foreach($userMetaData as $keyIndex=>$valueDataIndex){
+            
+            if (is_numeric($valueDataIndex)) {
+                
+                $valueDataIndex =  str_replace(".00","",$valueDataIndex);
+                $valueDataIndex =  str_replace(".0","",$valueDataIndex);
+                
+            }
+            
+            if ($keyIndex !="Role" && $keyIndex !="Semail" && $keyIndex !="first_name" && $keyIndex !="last_name")  {
+                
+                
+                
+                update_user_option($userID, $keyIndex, $valueDataIndex); 
+                
+            }
+            
+            
+            
+            
+        }
+        
+        
+       
+    
+     }catch (Exception $e) {
+
+        contentmanagerlogging_file_upload($lastInsertId, serialize($e));
+
+        return $e;
+    }
 }
 
 function updateregistredUserMeta($userID,$userMetaData,$role){

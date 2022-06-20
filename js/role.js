@@ -660,13 +660,13 @@ function editrolename(e){
             '<div class = "row" style="display:flex; justify-content:center;">'+  
 
             '<div  class="col-sm-6">'+
-            '<p>Custom Link &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "check" class="toggle-one" data-toggle="toggle" data-size="small"></p>'+
+            '<p>Custom Link &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "customlinkCheck" class="toggle-one" data-toggle="toggle" data-size="small"></p>'+
             '</div>'+  
 
             
 
             '<div class = "col-sm-6">'+
-            '<p>Visible On Registration   &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "checktwo" class="toggle-one" data-toggle="toggle" data-size="small"></p>'+
+            '<p>Visible On Registration   &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "visibilityCheck" class="toggle-one" data-toggle="toggle" data-size="small"></p>'+
             '</div>'+ 
 
            
@@ -693,7 +693,7 @@ function editrolename(e){
            jQuery('#lin').hide();
             jQuery('#link').hide();
         
-            jQuery('#check').change(function(){
+            jQuery('#customlinkCheck').change(function(){
                 if(jQuery(this).is(":checked")){
 
                     jQuery('#lbl').hide();
@@ -720,7 +720,7 @@ function editrolename(e){
             var inputValueUrl = jQuery('#link').val();
             var selectpage = jQuery('#selectpage').val();
             var validateurl = "";
-            if(jQuery('#check').is(':checked')){
+            if(jQuery('#customlinkCheck').is(':checked')){
                       
                       validateurl = inputValueUrl;
                       
@@ -789,7 +789,7 @@ function editrolename(e){
             // }
         
 
-           if(jQuery('#check').is(':checked')){
+           if(jQuery('#customlinkCheck').is(':checked')){
 
             var customlinkurl = jQuery('#link').val();
             var type = "customlink";
@@ -803,7 +803,7 @@ function editrolename(e){
             
     }
 
-         if(jQuery('#checktwo').is(':checked')){
+         if(jQuery('#visibilityCheck').is(':checked')){
             var public_visibility = "public";
             console.log(public_visibility);
     }
@@ -960,24 +960,24 @@ function editrolename(e){
             
          if(finalresult['page_type'] == "customlink" || slug == 'account' || slug == 'account-2' || slug == 'add-ons' || slug == 'add-ons-2' || slug =='order-history' || slug =='order-history-2' ){
               
-              popuphtml += '<div  class="col-sm-4"><p>Custom Link &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "check" class="toggle-one" data-toggle="toggle" data-size="small" checked></p></div>';
+              popuphtml += '<div  class="col-sm-4"><p>Custom Link &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "customlinkCheck" class="toggle-one" data-toggle="toggle" data-size="small" checked></p></div>';
               
           }else{
               
               
-              popuphtml += '<div  class="col-sm-4"><p>Custom Link &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "check" class="toggle-one" data-toggle="toggle" data-size="small"></p></div>';
+              popuphtml += '<div  class="col-sm-4"><p>Custom Link &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "customlinkCheck" class="toggle-one" data-toggle="toggle" data-size="small"></p></div>';
               
           } 
           
           
           if(finalresult['page_visibility'] == "public"){
               
-              popuphtml += '<div  class="col-sm-4"><p>Visible On Registration &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "checktwo" class="toggle-one" data-toggle="toggle" data-size="small" checked></p></div>';
+              popuphtml += '<div  class="col-sm-4"><p>Visible On Registration &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "visibilityCheck" class="toggle-one" data-toggle="toggle" data-size="small" checked></p></div>';
               
               
           }else{
               
-              popuphtml += '<div  class="col-sm-4"><p>Visible On Registration &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "checktwo" class="toggle-one" data-toggle="toggle" data-size="small" ></p></div>';
+              popuphtml += '<div  class="col-sm-4"><p>Visible On Registration &nbsp;&nbsp;&nbsp;<input type="checkbox" id= "visibilityCheck" class="toggle-one" data-toggle="toggle" data-size="small" ></p></div>';
               
           }
 
@@ -1038,7 +1038,7 @@ function editrolename(e){
         if (slug == 'add-ons' || slug == 'add-ons-2' || slug == 'account' || slug == 'account-2' || slug == 'cart' || slug == 'floor-plan' || slug == 'my-portals' || slug == 'my-sites' || slug == 'order-history' || slug == 'order-history-2' ||  slug == 'change-password' || slug == 'change-password-2' || slug == 'logout') {
 
             
-            jQuery('#check').prop('disabled', true);
+            jQuery('#customlinkCheck').prop('disabled', true);
             
             jQuery('#link').hide();
             jQuery('#menu-url').hide();
@@ -1048,7 +1048,7 @@ function editrolename(e){
 
 
         
-            jQuery('#check').change(function(){
+            jQuery('#customlinkCheck').change(function(){
                 if(jQuery(this).is(":checked")){
 
                     jQuery('#lbl').hide();
@@ -1075,7 +1075,7 @@ function editrolename(e){
              var inputValueUrl = jQuery('#link').val();
              var selectpage = jQuery('#selectpage').val();
              var validateurl = "";
-             if(jQuery('#check').is(':checked')){
+             if(jQuery('#customlinkCheck').is(':checked')){
                        
                        validateurl = inputValueUrl;
                        
@@ -1125,8 +1125,8 @@ function editrolename(e){
            var selectpage = jQuery('#selectpage').val();
 
 
-           if(jQuery('#check').is(':checked')){
-            jQuery('#check').val('checked');
+           if(jQuery('#customlinkCheck').is(':checked')){
+            jQuery('#customlinkCheck').val('checked');
             var customlinkurl = jQuery('#link').val();
             var type = "customlink";
     }else{
@@ -1134,8 +1134,8 @@ function editrolename(e){
             var type = "page";
             console.log(pageiddropdown);
     }
-         if(jQuery('#checktwo').is(':checked')){
-            jQuery('#checktwo').val('checked');
+         if(jQuery('#visibilityCheck').is(':checked')){
+            jQuery('#visibilityCheck').val('checked');
             var public_visibility = "public";
             console.log(public_visibility);
     }

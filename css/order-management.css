@@ -80,8 +80,13 @@ td {
 }
 
 .partial-div {
-  padding: 6px;
   display: flex;
+  font-size: 13px;
+  width: 146px;
+  text-align: center;
+  margin-left: -21px;
+  justify-content: center;
+  align-content: stretch;
   /* justify-content: center; */
 }
 
@@ -100,12 +105,16 @@ td {
   color: #c0c0c0 !important;
   background-color: #ffffff !important;
 }
-
+.min-width {
+  min-width: 130px;
+}
 .quan {
   width: 62%;
   margin-left: 50px;
 }
-
+.partial-div > label {
+  margin-top: 3px;
+}
 .cross {
   color: #3e4246;
   font-size: 15px;
@@ -135,9 +144,45 @@ li.code {
 
 .quantity-ip {
   width: 50%;
-  margin-left: 30px;
 }
 
 .disp {
   display: flex !important;
+}
+
+#headingOnes {
+  height: 43px;
+}
+
+.send-button {
+  /* margin-left: 4px; */
+  margin-top: 3px;
+  /* margin-right: 103px; */
+  /* position: relative; */
+  float: right;
+  margin-right: -69px;
+}
+
+@media (min-width: 768px) and (max-width: 1539px) {
+  .datestyle {
+    display: inline-block !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1539px) {
+  .hour {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1539px) {
+  .minute {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1076px) {
+  .actionstyle {
+    width: 120% !important;
+  }
 }

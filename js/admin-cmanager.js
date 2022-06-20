@@ -35,6 +35,8 @@ function updatecontentsettings() {
    var cventusername = jQuery("#cventusername").val();
    var cventapipassword = jQuery("#cventapipassword").val();
    var sitebuttonslables = jQuery("#sitebuttonslables").val();
+   var whitelabledsitestatus = jQuery("#whitelabledsitestatus").val();
+
    
    var oldregistrationstatus = jQuery("#oldregistrationstatus").val();
    var aptycode = jQuery("#aptycode").val();
@@ -92,6 +94,7 @@ function updatecontentsettings() {
        data.append('cventapipassword', cventapipassword);
        data.append('customfieldstatus', customfieldstatus);
        data.append('sitebuttonslables', sitebuttonslables);
+       data.append('whitelabledsitestatus', whitelabledsitestatus);
        
        data.append('oldregistrationstatus', oldregistrationstatus);
        data.append('aptycode', aptycode);
